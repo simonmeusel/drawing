@@ -1,27 +1,43 @@
 import { Point } from '../../../../shared/Point';
 import { moveScreen } from '../../../store/actions/screen/moveScreen';
-import { Tool } from './Tool';
+import { Tool, ToolProperties, ToolMoveEvent } from './Tool';
 
 export class MoveTool extends Tool {
     private startingPoint?: Point;
+    private startX: number | undefined;
+    private startY: number | undefined;
 
-    onMouseDown(point: Point) {
-        this.startingPoint = point;
+    onMouseDown(
+        _point: Point,
+        _toolProperties: ToolProperties,
+        event: ToolMoveEvent
+    ) {
+        this.startX = event.clientX;
+        this.startY = event.clientY;
     }
 
-    onMouseMove(point: Point) {
-        if (!this.startingPoint) {
+    onMouseMove(
+        _point: Point,
+        _toolProperties: ToolProperties,
+        event: ToolMoveEvent
+    ) {
+        if (this.startX == undefined || this.startY == undefined) {
             return;
         }
         this.dispatch(
             moveScreen(
-                this.startingPoint.x - point.x,
-                this.startingPoint.y - point.y
+                (this.startX - event.clientX) /
+                    this.graphics.canvasWidthMultiplier,
+                -(this.startY - event.clientY) /
+                    this.graphics.canvasHeightMultiplier
             )
         );
+        this.startX = event.clientX;
+        this.startY = event.clientY;
     }
 
     onMouseUp() {
-        this.startingPoint = undefined;
+        this.startX = undefined;
+        this.startY = undefined;
     }
 }

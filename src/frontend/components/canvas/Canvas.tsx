@@ -90,6 +90,7 @@ export class UnconnectedCanvas extends React.Component<
 
     onMouseMove(event: React.MouseEvent) {
         this.onToolEvent('onMouseMove', event);
+
         const mousePosition = this.state.graphics!.getPoint(
             event.clientX,
             event.clientY
@@ -114,7 +115,8 @@ export class UnconnectedCanvas extends React.Component<
         event.preventDefault();
         this.state.tools![this.props.activeToolIndices[button]][type](
             this.state.graphics!.getPoint(event.clientX, event.clientY),
-            this.props.toolProperties
+            this.props.toolProperties,
+            event
         );
     }
 

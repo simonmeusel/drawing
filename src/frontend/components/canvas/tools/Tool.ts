@@ -7,13 +7,27 @@ export interface ToolProperties {
     fillColor: string;
 }
 
+export type ToolMoveEvent = React.MouseEvent<Element, MouseEvent>;
+
 export abstract class Tool {
     constructor(
         protected dispatch: RootDispatch,
         protected graphics: Graphics
     ) {}
 
-    abstract onMouseDown(point: Point, toolProperties: ToolProperties);
-    abstract onMouseMove(point: Point, toolProperties: ToolProperties);
-    abstract onMouseUp(point: Point, toolProperties: ToolProperties);
+    abstract onMouseDown(
+        point: Point,
+        toolProperties: ToolProperties,
+        event: ToolMoveEvent
+    );
+    abstract onMouseMove(
+        point: Point,
+        toolProperties: ToolProperties,
+        event: ToolMoveEvent
+    );
+    abstract onMouseUp(
+        point: Point,
+        toolProperties: ToolProperties,
+        event: ToolMoveEvent
+    );
 }
