@@ -18,12 +18,12 @@ export class Database {
     private db?: Db;
     private rawShapesCollection?: Collection<RawShape>;
 
-    constructor(private connectionString: string) {
+    public constructor(private connectionString: string) {
         const parts = URI.parse(connectionString);
         this.dbName = parts.path!.substring(1);
     }
 
-    async connect() {
+    public async connect() {
         this.mongoClient = await MongoClient.connect(this.connectionString, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -36,7 +36,7 @@ export class Database {
         await migrate(this.rawShapesCollection);
     }
 
-    parseShape(shape: Shape | any, roomID: Binary): RawShape {
+    public parseShape(shape: Shape | any, roomID: Binary): RawShape {
         if (typeof shape != 'object' || Array.isArray(shape)) {
             throw new Error('Shapes are not of type object');
         }
@@ -49,7 +49,7 @@ export class Database {
         return rs;
     }
 
-    updateShape(rawShape: RawShape) {
+    public updateShape(rawShape: RawShape) {
         this.rawShapesCollection!.updateOne(
             { _id: rawShape._id },
             { $set: rawShape },
@@ -57,8 +57,8 @@ export class Database {
         );
     }
 
-    serializeShape(rawShape: RawShape[]) {
-        return rawShape.map((rs) => {
+    public serializeShapes(rawShapes: RawShape[]) {
+        return rawShapes.map((rs) => {
             const s: any = {
                 ...rs,
                 id: BackendUUID.convertBinaryToString(rs._id),
@@ -69,7 +69,7 @@ export class Database {
         });
     }
 
-    async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {
+    public async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {
         if (!this.rawShapesCollection) {
             throw new Error();
         }
@@ -82,7 +82,7 @@ export class Database {
             .toArray();
     }
 
-    async createIndexes() {
+    public async createIndexes() {
         if (!this.rawShapesCollection) {
             throw new Error();
         }
