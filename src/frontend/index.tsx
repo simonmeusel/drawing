@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
 export const defaultDebounceDelay = 100;
 const webSocketManager = new WebSocketManager(defaultDebounceDelay);
 const store = createPersistentStore(webSocketManager);
+onRoomIDUpdate(store);
 webSocketManager.dispatch = store.dispatch;
 webSocketManager.setRoomID(store.getState().roomID);
 

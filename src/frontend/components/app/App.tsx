@@ -3,6 +3,8 @@ import { WebSocketManager } from '../../api/WebSocketManager';
 import { Canvas } from '../canvas/Canvas';
 import { RoomPanel } from '../panels/roomPanel/RoomPanel';
 import { ToolPanel } from '../panels/toolPanel/ToolPanel';
+import { Hotkeys } from './hotkeys/Hotkeys';
+import { WelcomeModal } from './welcomeModal/WelcomeModal';
 
 export interface AppProps {
     webSocketManager: WebSocketManager;
@@ -24,6 +26,7 @@ export class App extends React.Component<AppProps, AppState> {
     render() {
         return (
             <div>
+                <Hotkeys/>
                 <div
                     style={
                         this.state.drawing
@@ -38,6 +41,7 @@ export class App extends React.Component<AppProps, AppState> {
                               }
                     }
                 >
+                    <WelcomeModal />
                     <ToolPanel />
                     <RoomPanel />
                 </div>

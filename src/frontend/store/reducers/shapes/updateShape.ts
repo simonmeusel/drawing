@@ -5,7 +5,21 @@ export function reduceUpdateShape(
     state: RootState,
     action: UpdateShapeAction
 ): RootState {
-    return {
+    const oldStateShape = state.document.shapes[action.shape.id];
+    const historyOldShape =
+        action.shape.id in state.document.history.editedShapes
+            ? state.document.history.editedShapes[action.shape.id]
+            : oldStateShape;
+
+    const editedShapes = {
+        ...state.document.history.editedShapes,
+        [action.shape.id]: historyOldShape,
+    };
+    if (action.addToHistory) {
+        delete editedShapes[action.shape.id];
+    }
+
+    const newState = {
         ...state,
         document: {
             ...state.document,
@@ -13,6 +27,26 @@ export function reduceUpdateShape(
                 ...state.document.shapes,
                 [action.shape.id]: action.shape,
             },
+            history: {
+                ...state.document.history,
+                undoHistory: state.document.history.undoHistory.concat(
+                    action.addToHistory
+                        ? [
+                              {
+                                  newShape: action.shape,
+                                  oldShape: historyOldShape,
+                              },
+                          ]
+                        : []
+                ),
+                editedShapes,
+            },
         },
     };
+
+    if (action.addToHistory) {
+        newState.document.history.redoHistory = [];
+    }
+
+    return newState;
 }

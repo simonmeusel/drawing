@@ -18,6 +18,21 @@ export function getPersistentState(state: RootState): RootState {
         }
     }
 
+    // Add empty undo and redo history for backwards compatibility
+    if (!state.document.history) {
+        state = {
+            ...state,
+            document: {
+                ...state.document,
+                history: {
+                    undoHistory: [],
+                    redoHistory: [],
+                    editedShapes: {},
+                },
+            },
+        };
+    }
+
     const greyedShapes: Shapes = {};
 
     for (const id in state.document.shapes) {

@@ -3,6 +3,11 @@ import { BasicShape } from './shapes/BasicShape';
 import { PencilShape } from './shapes/PencilShape';
 
 export interface GenericShape {
+    // TODO: Add JSON schema validator: UUID
+    /**
+     * @minLength 36
+     * @maxLength 36
+     */
     id: string;
     boundingBox: BoundingBox;
     type: string;
@@ -18,5 +23,5 @@ export function getShapeType(shape: Shape) {
 }
 
 export interface Shapes {
-    [roomID: string]: Shape;
+    [shapeID: string]: Shape;
 }

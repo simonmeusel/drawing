@@ -1,23 +1,30 @@
 import { IncomingMessage, Server } from 'http';
 import { Binary } from 'mongodb';
 import * as WebSocket from 'ws';
-import { database, schemaManager } from '.';
+import { schemaManager } from '.';
 import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Message } from '../shared/Message';
 import { Request } from '../shared/Request';
 import { BackendUUID } from './BackendUUID';
+import { RequestHandler } from './commandHandlers/RequestHandler';
 
-export const uuidRegexp = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
+export const uuidRegexp =
+    /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
 
-type ExtendedWebSocket = WebSocket & {
+export type ExtendedWebSocket = WebSocket & {
     boundingBox?: BoundingBox;
     roomID?: Binary;
 };
 
+export type RoomIDWebSocket = ExtendedWebSocket & {
+    roomID: Binary;
+};
+
 export class WebSocketServer {
     private server?: WebSocket.Server;
+    private handlers: { [command: string]: RequestHandler } = {};
 
-    initialize(httpServer: Server) {
+    public initialize(httpServer: Server) {
         this.server = new WebSocket.Server({ server: httpServer });
         this.server.on(
             'connection',
@@ -63,14 +70,13 @@ export class WebSocketServer {
     /**
      * Executes a function for each websocket in a room seeing a part of a given bounding box
      */
-    private async forEachWebSocket(
+    public async forEachWebSocket(
         roomID: Binary,
         boundingBox: BoundingBox | undefined,
         f: (clientWebSocket: ExtendedWebSocket) => Promise<void> | void
     ) {
-        for (const clientWebSocket of this.server!.clients as Set<
-            ExtendedWebSocket
-        >) {
+        for (const clientWebSocket of this.server!
+            .clients as Set<ExtendedWebSocket>) {
             if (
                 clientWebSocket.roomID &&
                 roomID.buffer.equals(clientWebSocket.roomID.buffer) &&
@@ -90,7 +96,7 @@ export class WebSocketServer {
         }
     }
 
-    private sendMessage(webSocket: ExtendedWebSocket, message: Message) {
+    public sendMessage(webSocket: ExtendedWebSocket, message: Message) {
         webSocket.send(JSON.stringify(message));
     }
 
@@ -112,58 +118,11 @@ export class WebSocketServer {
             const request: Request = JSON.parse(data.toString());
             schemaManager.validateData('Request', request);
 
-            if (request.command == 'setBoundingBox') {
-                webSocket.boundingBox = request.boundingBox;
-                this.sendMessage(webSocket, {
-                    command: 'updateShapes',
-                    shapes: database.serializeShape(
-                        await database.findRawShapes(
-                            webSocket.roomID,
-                            webSocket.boundingBox
-                        )
-                    ),
-                });
-            } else if (request.command == 'setMousePosition') {
-                this.forEachWebSocket(
-                    webSocket.roomID,
-                    webSocket.boundingBox,
-                    async (clientWebSocket) => {
-                        if (webSocket == clientWebSocket) {
-                            return;
-                        }
-                        this.sendMessage(clientWebSocket, {
-                            command: 'setMousePosition',
-                            mouseID: request.mouseID,
-                            mousePosition: request.mousePosition,
-                        });
-                    }
-                );
-            } else if (request.command == 'updateShape') {
-                const rawShape = database.parseShape(
-                    request.shape,
-                    webSocket.roomID
-                );
-
-                database.updateShape(rawShape);
-                /* TODO fetch old bounding box from database
-                    (request.oldBoundingBox &&
-                        doBoundingBoxesOverlap(
-                            request.oldBoundingBox,
-                            clientWebSocket.boundingBox!
-                        ))*/
-                this.forEachWebSocket(
-                    webSocket.roomID,
-                    rawShape.boundingBox,
-                    async (clientWebSocket) => {
-                        if (webSocket == clientWebSocket) {
-                            return;
-                        }
-                        this.sendMessage(clientWebSocket, {
-                            command: 'updateShapes',
-                            shapes: database.serializeShape([rawShape]),
-                        });
-                    }
-                );
+            const handler = this.handlers[request.command];
+            if (handler) {
+                await handler.onRequest(request, webSocket as RoomIDWebSocket);
+            } else {
+                // TODO: Handle invalid command
             }
         } catch (error) {
             console.warn(error);
@@ -175,5 +134,17 @@ export class WebSocketServer {
         console.log('Disconnected websocket');
 
         webSocket.close(1003);
+    }
+
+    public addRequestHandlers(handlers: RequestHandler[]) {
+        for (const handler of handlers) {
+            const command = handler.getCommand();
+            if (this.handlers[command]) {
+                throw new Error(
+                    `Handler for command ${command} already exists`
+                );
+            }
+            this.handlers[command] = handler;
+        }
     }
 }

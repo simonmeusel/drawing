@@ -10,6 +10,11 @@ export function reduceSetShapes(
         document: {
             ...state.document,
             shapes: action.shapes,
+            history: {
+                editedShapes: {},
+                undoHistory: [],
+                redoHistory: [],
+            },
         },
     };
 }

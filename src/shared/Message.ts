@@ -7,6 +7,10 @@ export type Message =
           shapes: Shape[];
       }
     | {
+          command: 'deleteShape';
+          shapeID: string;
+      }
+    | {
           command: 'setMousePosition';
           mouseID: string;
           mousePosition: Point;

@@ -40,7 +40,7 @@ To reduce complexity, this application does not support HTTPS out of the box. Wh
 -   Start [MongoDB](https://www.mongodb.com/)
     -   Using Docker
         -   Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-        -   Run `docker-compose up mongo` inside the repository folder to start MongoDB
+        -   Run `docker-compose -f docker-compose-mongo.yml up` inside the repository folder to start MongoDB
     -   [Directly](https://www.mongodb.com/download-center/community)
 -   Configure the [connection string](https://docs.mongodb.com/manual/reference/connection-string/)
     -   By default this application expects a MongoDB server at `mongodb://localhost:27017/db`
