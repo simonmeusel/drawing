@@ -1,11 +1,6 @@
 import { RootState } from '../..';
-import { reduceUndo } from './undo';
 
-export function reduceRedo(state: RootState): RootState {
-    return swapHistories(reduceUndo(swapHistories(state)));
-}
-
-function swapHistories(state: RootState): RootState {
+export function reduceSwapHistories(state: RootState): RootState {
     return {
         ...state,
         document: {

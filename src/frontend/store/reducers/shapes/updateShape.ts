@@ -19,7 +19,7 @@ export function reduceUpdateShape(
         delete editedShapes[action.shape.id];
     }
 
-    return {
+    const newState = {
         ...state,
         document: {
             ...state.document,
@@ -43,4 +43,10 @@ export function reduceUpdateShape(
             },
         },
     };
+
+    if (action.addToHistory) {
+        newState.document.history.redoHistory = [];
+    }
+
+    return newState;
 }

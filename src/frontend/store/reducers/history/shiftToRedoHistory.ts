@@ -1,27 +1,12 @@
 import { RootState } from '../..';
-import { deleteShape } from '../../actions/shapes/deleteShape';
-import { updateShape } from '../../actions/shapes/updateShape';
-import { reduceDeleteShape } from '../shapes/deleteShape';
-import { reduceUpdateShape } from '../shapes/updateShape';
 
-export function reduceUndo(state: RootState): RootState {
+export function reduceShiftToRedoHistory(state: RootState): RootState {
     const historyElement =
         state.document.history.undoHistory[
             state.document.history.undoHistory.length - 1
         ];
     if (!historyElement) {
         return state;
-    }
-    if (historyElement.newShape) {
-        state = reduceDeleteShape(
-            state,
-            deleteShape(historyElement.newShape.id, false, true)
-        );
-    } else {
-        state = reduceUpdateShape(
-            state,
-            updateShape(historyElement.oldShape, false, true)
-        );
     }
 
     return {

@@ -29,5 +29,10 @@ export function reduceDeleteShape(
         },
     };
     delete newState.document.shapes[action.shapeID];
+
+    if (action.addToHistory) {
+        newState.document.history.redoHistory = [];
+    }
+
     return newState;
 }

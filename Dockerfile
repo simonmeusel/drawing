@@ -5,7 +5,7 @@ ARG WEB_SOCKET_BASE_URI
 WORKDIR /app
 
 # Install build dependencies
-RUN apk add nodejs npm
+RUN apk add make g++ nodejs npm python3
 COPY package*.json ./
 RUN npm install
 
@@ -16,7 +16,7 @@ RUN npm run build:prod
 
 FROM alpine
 
-RUN apk add nodejs npm shadow
+RUN apk add make g++ nodejs npm python3 shadow
 
 RUN useradd --create-home --home /app drawing
 
