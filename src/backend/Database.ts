@@ -1,10 +1,4 @@
-import {
-    Binary,
-    Collection,
-    Db,
-    IndexSpecification,
-    MongoClient,
-} from 'mongodb';
+import { Binary, Collection, Db, IndexDescription, MongoClient } from 'mongodb';
 import * as URI from 'urijs';
 import { BoundingBox } from '../shared/BoundingBox';
 import { Shape } from '../shared/Shape';
@@ -24,10 +18,7 @@ export class Database {
     }
 
     public async connect() {
-        this.mongoClient = await MongoClient.connect(this.connectionString, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        this.mongoClient = await MongoClient.connect(this.connectionString);
         this.db = this.mongoClient.db(this.dbName);
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
@@ -122,7 +113,7 @@ export class Database {
             throw new Error();
         }
 
-        const indexes: IndexSpecification[] = [];
+        const indexes: IndexDescription[] = [];
         for (const field of [
             'roomID',
             'boundingBox.maxX',

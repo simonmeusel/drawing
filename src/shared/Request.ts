@@ -16,6 +16,10 @@ export interface UpdateShapeRequest {
 export interface DeleteShapeRequest {
     command: 'deleteShape';
     // TODO: Add JSON schema validator: UUID
+    /**
+     * @minLength 36
+     * @maxLength 36
+     */
     shapeID: string;
 }
 
@@ -27,6 +31,10 @@ export interface SetBoundingBoxRequest {
 export interface SetMousePositionRequest {
     command: 'setMousePosition';
     // TODO: Add JSON schema validator: UUID
+    /**
+     * @minLength 36
+     * @maxLength 36
+     */
     mouseID: string;
     mousePosition: Point;
 }

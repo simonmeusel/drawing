@@ -11,7 +11,7 @@ import { WebSocketManager } from '../../api/WebSocketManager';
 import { REDO } from '../actions/history/redo';
 import { shiftToRedoHistory } from '../actions/history/shiftToRedoHistory';
 import { swapHistories } from '../actions/history/swapHistories';
-import { undo, UNDO } from '../actions/history/undo';
+import { UNDO } from '../actions/history/undo';
 import { SetRoomIDAction, SET_ROOM_ID } from '../actions/rooms/setRoomID';
 import {
     SetMousePositionAction,
@@ -80,7 +80,7 @@ export function createWebSocketSaga(webSocketManager: WebSocketManager) {
 
     function* onRedo() {
         yield putResolve(swapHistories());
-        yield putResolve(undo());
+        yield* onUndo();
         yield putResolve(swapHistories());
     }
 

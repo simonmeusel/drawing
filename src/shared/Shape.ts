@@ -4,6 +4,10 @@ import { PencilShape } from './shapes/PencilShape';
 
 export interface GenericShape {
     // TODO: Add JSON schema validator: UUID
+    /**
+     * @minLength 36
+     * @maxLength 36
+     */
     id: string;
     boundingBox: BoundingBox;
     type: string;

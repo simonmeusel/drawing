@@ -8,7 +8,8 @@ import { Request } from '../shared/Request';
 import { BackendUUID } from './BackendUUID';
 import { RequestHandler } from './commandHandlers/RequestHandler';
 
-export const uuidRegexp = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
+export const uuidRegexp =
+    /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
 
 export type ExtendedWebSocket = WebSocket & {
     boundingBox?: BoundingBox;

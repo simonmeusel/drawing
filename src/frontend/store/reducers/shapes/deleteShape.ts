@@ -22,9 +22,8 @@ export function reduceDeleteShape(
             },
             history: {
                 ...state.document.history,
-                undoHistory: state.document.history.undoHistory.concat(
-                    historyElements
-                ),
+                undoHistory:
+                    state.document.history.undoHistory.concat(historyElements),
             },
         },
     };
