@@ -83,15 +83,36 @@ export class Database {
         });
     }
 
-    public async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {
+    public async findRawShapes(roomID: Binary, boundingBox: BoundingBox) {
         if (!this.rawShapesCollection) {
             throw new Error();
         }
 
-        // TODO: Only return shapes inside of bounding box
         return this.rawShapesCollection
             .find({
                 roomID,
+                $and: [
+                    {
+                        'boundingBox.upperRightPoint.x': {
+                            $gte: boundingBox.lowerLeftPoint.x,
+                        },
+                    },
+                    {
+                        'boundingBox.lowerLeftPoint.x': {
+                            $lte: boundingBox.upperRightPoint.x,
+                        },
+                    },
+                    {
+                        'boundingBox.upperRightPoint.y': {
+                            $gte: boundingBox.lowerLeftPoint.y,
+                        },
+                    },
+                    {
+                        'boundingBox.lowerLeftPoint.y': {
+                            $lte: boundingBox.upperRightPoint.y,
+                        },
+                    },
+                ],
             })
             .toArray();
     }
