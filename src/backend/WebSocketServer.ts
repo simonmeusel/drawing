@@ -68,9 +68,8 @@ export class WebSocketServer {
         boundingBox: BoundingBox | undefined,
         f: (clientWebSocket: ExtendedWebSocket) => Promise<void> | void
     ) {
-        for (const clientWebSocket of this.server!.clients as Set<
-            ExtendedWebSocket
-        >) {
+        for (const clientWebSocket of this.server!
+            .clients as Set<ExtendedWebSocket>) {
             if (
                 clientWebSocket.roomID &&
                 roomID.buffer.equals(clientWebSocket.roomID.buffer) &&

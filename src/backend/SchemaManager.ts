@@ -2,7 +2,7 @@ import Ajv from 'ajv';
 import RequestSchema from './schemas/Request.json';
 
 export class SchemaManager {
-    private ajv?: Ajv.Ajv;
+    private ajv?: Ajv;
 
     constructor() {}
 
@@ -34,7 +34,7 @@ export class SchemaManager {
                 let errorMessage;
                 if (errors.length > 0) {
                     const e = errors[0];
-                    errorMessage = `${e.dataPath} ${e.message || ''} (${
+                    errorMessage = `${e.instancePath} ${e.message || ''} (${
                         e.keyword
                     })`;
                     const params: any = e.params;

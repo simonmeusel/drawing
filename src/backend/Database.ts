@@ -58,8 +58,8 @@ export class Database {
     }
 
     serializeShape(rawShape: RawShape[]) {
-        const shapes: Shape[] = rawShape.map((rs) => {
-            const s = {
+        return rawShape.map((rs) => {
+            const s: any = {
                 ...rs,
                 id: BackendUUID.convertBinaryToString(rs._id),
             };
@@ -67,7 +67,6 @@ export class Database {
             delete s.roomID;
             return s as Shape;
         });
-        return shapes as any[];
     }
 
     async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {
