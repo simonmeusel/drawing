@@ -3,7 +3,7 @@ import { Shape, Shapes } from '../../shared/Shape';
 import { UUID } from '../../shared/UUID';
 import { ToolProperties } from '../components/canvas/tools/Tool';
 import { getPersistentState } from './localStorage';
-import { getOrGenerateRoomID } from './roomID';
+import { generateRoomID } from './roomID';
 
 export interface Screen {
     centerPoint: Point;
@@ -78,7 +78,7 @@ export function getInitialState() {
             strokeColor: '#000000ff',
         },
         selectedTool: 2,
-        roomID: getOrGenerateRoomID(),
+        roomID: generateRoomID(),
         roomIDHistory: [],
         mouseID: UUID.generateString(),
         mousePositions: {},

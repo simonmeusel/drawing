@@ -11,10 +11,6 @@ export function generateRoomID() {
     return UUID.generateString();
 }
 
-export function getOrGenerateRoomID() {
-    return getRoomID() || generateRoomID();
-}
-
 export function onRoomIDUpdate(store: RootStore) {
     setTimeout(() => {
         const roomID = getRoomID();
