@@ -7,19 +7,12 @@ import { setRoomID } from '../../../store/actions/rooms/setRoomID';
 import { setScreen } from '../../../store/actions/screen/setScreen';
 import { generateRoomID, getURLWithRoomID } from '../../../store/roomID';
 import { Panel } from '../Panel';
+import { CopyContainer } from './CopyContainer';
 
 export class UnconnectedRoomPanel extends React.Component<
     ReturnType<typeof mapStateToProps> & DispatchProps,
     {}
 > {
-    private textAreaRef = React.createRef<HTMLTextAreaElement>();
-
-    copy(roomID: string) {
-        this.textAreaRef.current!.value = getURLWithRoomID(roomID);
-        this.textAreaRef.current!.select();
-        document.execCommand('copy');
-    }
-
     trimRoomID(roomID: string) {
         return roomID.substring(0, 8);
     }
@@ -85,16 +78,13 @@ export class UnconnectedRoomPanel extends React.Component<
                     </p>
                 }
             >
-                <div style={{ opacity: 0, height: 0, overflow: 'hidden' }}>
-                    <textarea ref={this.textAreaRef}></textarea>
-                </div>
                 <div className="field has-addons">
                     <div className="control is-expanded">
                         <div className="select is-fullwidth">
                             <select
                                 name="country"
                                 value="currentRoom"
-                                onChange={event =>
+                                onChange={(event) =>
                                     this.onSelectRoom(event.target.value)
                                 }
                             >
@@ -108,7 +98,7 @@ export class UnconnectedRoomPanel extends React.Component<
                                         {this.props.roomIDHistory
                                             .slice()
                                             .reverse()
-                                            .map(id => (
+                                            .map((id) => (
                                                 <option value={id} key={id}>
                                                     {this.trimRoomID(id)}
                                                 </option>
@@ -123,13 +113,13 @@ export class UnconnectedRoomPanel extends React.Component<
                         </div>
                     </div>
                     <div className="control">
-                        <button
-                            type="button"
-                            className="button is-info"
-                            onClick={() => this.copy(this.props.roomID)}
+                        <CopyContainer
+                            copyText={getURLWithRoomID(this.props.roomID)}
                         >
-                            Copy
-                        </button>
+                            <button type="button" className="button is-info">
+                                Copy
+                            </button>
+                        </CopyContainer>
                     </div>
                 </div>
                 <hr />
@@ -139,7 +129,7 @@ export class UnconnectedRoomPanel extends React.Component<
                     </p>
                     <p className="control">
                         <input
-                            onChange={event =>
+                            onChange={(event) =>
                                 this.setPosition(
                                     parseFloat(event.target.value),
                                     undefined
@@ -156,7 +146,7 @@ export class UnconnectedRoomPanel extends React.Component<
                     </p>
                     <p className="control">
                         <input
-                            onChange={event =>
+                            onChange={(event) =>
                                 this.setPosition(
                                     undefined,
                                     parseFloat(event.target.value)
@@ -192,7 +182,7 @@ export class UnconnectedRoomPanel extends React.Component<
                     </p>
                     <p className="control">
                         <input
-                            onChange={event =>
+                            onChange={(event) =>
                                 this.setWidth(parseFloat(event.target.value))
                             }
                             value={this.props.screen.width}

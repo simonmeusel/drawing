@@ -18,7 +18,6 @@ export class App extends React.Component<AppProps, AppState> {
         drawing: false,
     };
 
-
     onDrawingChange(drawing: boolean) {
         this.setState({ drawing });
     }
@@ -40,7 +39,7 @@ export class App extends React.Component<AppProps, AppState> {
                               }
                     }
                 >
-                    <WelcomeModal/>
+                    <WelcomeModal />
                     <ToolPanel />
                     <RoomPanel />
                 </div>
