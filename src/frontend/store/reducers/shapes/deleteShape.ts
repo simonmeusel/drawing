@@ -9,6 +9,7 @@ export function reduceDeleteShape(
     const historyElements: ShapeHistoryElement[] = [];
     if (action.addToHistory && state.document.shapes[action.shapeID]) {
         historyElements.push({
+            newShape: undefined,
             oldShape: state.document.shapes[action.shapeID],
         });
     }
@@ -19,7 +20,12 @@ export function reduceDeleteShape(
             shapes: {
                 ...state.document.shapes,
             },
-            undoHistory: state.document.undoHistory.concat(historyElements),
+            history: {
+                ...state.document.history,
+                undoHistory: state.document.history.undoHistory.concat(
+                    historyElements
+                ),
+            },
         },
     };
     delete newState.document.shapes[action.shapeID];
