@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { WebSocketManager } from '../../api/WebSocketManager';
-import { WelcomeModal } from './welcomeModal/WelcomeModal';
 import { Canvas } from '../canvas/Canvas';
 import { RoomPanel } from '../panels/roomPanel/RoomPanel';
 import { ToolPanel } from '../panels/toolPanel/ToolPanel';
+import { WelcomeModal } from './welcomeModal/WelcomeModal';
 
 export interface AppProps {
     webSocketManager: WebSocketManager;
