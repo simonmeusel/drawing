@@ -5,6 +5,7 @@ import { Request } from '../../shared/Request';
 import { Shape } from '../../shared/Shape';
 import { RootDispatch } from '../store';
 import { setMousePosition } from '../store/actions/setMousePosition';
+import { deleteShape } from '../store/actions/shapes/deleteShape';
 import { updateShape } from '../store/actions/shapes/updateShape';
 import { addRoomIDToBrowserHistory } from '../store/roomID';
 
@@ -70,6 +71,9 @@ export class WebSocketManager {
                     this.dispatch!(updateShape(shape, false, false));
                 }
                 break;
+            case 'deleteShape':
+                this.dispatch!(deleteShape(data.shapeID, false, false));
+                break;
             case 'setMousePosition':
                 this.dispatch!(
                     setMousePosition(data.mouseID, data.mousePosition, false)
@@ -101,7 +105,7 @@ export class WebSocketManager {
         this.discardShape(shapeID);
         this.sendRequest({
             command: 'deleteShape',
-            shapeID: shapeID,
+            shapeID,
         });
     }
 

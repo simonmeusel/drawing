@@ -49,12 +49,19 @@ export class Database {
         return rs;
     }
 
-    public updateShape(rawShape: RawShape) {
-        this.rawShapesCollection!.updateOne(
-            { _id: rawShape._id },
+    public async updateShape(roomID: Binary, rawShape: RawShape) {
+        await this.rawShapesCollection!.updateOne(
+            { _id: rawShape._id, roomID },
             { $set: rawShape },
             { upsert: true }
         );
+    }
+
+    public async deleteShape(roomID: Binary, shapeID: Binary) {
+        await this.rawShapesCollection!.deleteOne({
+            _id: shapeID,
+            roomID,
+        });
     }
 
     public serializeShapes(rawShapes: RawShape[]) {
@@ -66,6 +73,13 @@ export class Database {
             delete s._id;
             delete s.roomID;
             return s as Shape;
+        });
+    }
+
+    public async findRawShape(roomID: Binary, shapeID: Binary) {
+        return await this.rawShapesCollection!.findOne({
+            _id: shapeID,
+            roomID,
         });
     }
 

@@ -137,7 +137,13 @@ export class WebSocketServer {
 
     public addRequestHandlers(handlers: RequestHandler[]) {
         for (const handler of handlers) {
-            this.handlers[handler.getCommand()] = handler;
+            const command = handler.getCommand();
+            if (this.handlers[command]) {
+                throw new Error(
+                    `Handler for command ${command} already exists`
+                );
+            }
+            this.handlers[command] = handler;
         }
     }
 }

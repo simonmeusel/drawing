@@ -15,7 +15,7 @@ export function reduceUndo(state: RootState): RootState {
     if (historyElement.newShape) {
         state = reduceDeleteShape(
             state,
-            deleteShape(historyElement.newShape.id, false)
+            deleteShape(historyElement.newShape.id, false, true)
         );
     } else {
         state = reduceUpdateShape(

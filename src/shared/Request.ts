@@ -4,7 +4,7 @@ import { Shape } from './Shape';
 
 export type Request =
     | UpdateShapeRequest
-    | DeleteShapeBoxRequest
+    | DeleteShapeRequest
     | SetBoundingBoxRequest
     | SetMousePositionRequest;
 
@@ -13,8 +13,9 @@ export interface UpdateShapeRequest {
     shape: Shape;
 }
 
-export interface DeleteShapeBoxRequest {
+export interface DeleteShapeRequest {
     command: 'deleteShape';
+    // TODO: Add JSON schema validator: UUID
     shapeID: string;
 }
 

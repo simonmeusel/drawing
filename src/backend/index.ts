@@ -1,6 +1,10 @@
 import express from 'express';
 import { createServer } from 'http';
 import { join } from 'path';
+import { DeleteShapeHandler } from './commandHandlers/DeleteShapeHandler';
+import { SetBoundingBoxHandler } from './commandHandlers/SetBoundingBoxHandler';
+import { SetMousePositionHandler } from './commandHandlers/SetMousePositionHandler';
+import { UpdateShapeHandler } from './commandHandlers/UpdateShapeHandler';
 import { Database } from './Database';
 import { SchemaManager } from './SchemaManager';
 import { WebSocketServer } from './WebSocketServer';
@@ -34,6 +38,13 @@ async function start() {
     const server = createServer(app);
 
     webSocketServer.initialize(server);
+
+    webSocketServer.addRequestHandlers([
+        new DeleteShapeHandler(webSocketServer, database),
+        new SetBoundingBoxHandler(webSocketServer, database),
+        new SetMousePositionHandler(webSocketServer),
+        new UpdateShapeHandler(webSocketServer, database),
+    ]);
 
     server.listen(parseInt(process.env.DRAWING_HTTP_PORT || '8080'));
 

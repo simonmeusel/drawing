@@ -20,7 +20,7 @@ export class UpdateShapeHandler extends RequestHandler {
             webSocket.roomID
         );
 
-        this.database.updateShape(rawShape);
+        this.database.updateShape(webSocket.roomID, rawShape);
         /* TODO fetch old bounding box from database
             (request.oldBoundingBox &&
                 doBoundingBoxesOverlap(
