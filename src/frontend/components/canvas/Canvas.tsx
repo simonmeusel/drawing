@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { ShapeType } from '../../../shared/Shape';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { DispatchProps, RootState } from '../../store';
 import { moveScreen } from '../../store/actions/screen/moveScreen';
 import { zoomScreen } from '../../store/actions/screen/zoomScreen';
+import { setMousePosition } from '../../store/actions/setMousePosition';
+import { CanvasRenderer } from './CanvasRenderer';
 import { Graphics } from './Graphics';
-import { EllipseRenderer } from './renderers/EllipseRenderer';
-import { PencilRenderer } from './renderers/PencilRenderer';
-import { RectangleRenderer } from './renderers/RectangleRenderer';
-import { Renderer } from './renderers/Renderer';
 import { BasicShapeTool } from './tools/BasicShapeTool';
 import { MoveTool } from './tools/MoveTool';
 import { PencilShapeTool } from './tools/PencilShapeTool';
@@ -23,8 +20,8 @@ interface CanvasProps {
 interface CanvasState {
     currentToolIndex?: number;
     graphics?: Graphics;
+    canvasRenderer?: CanvasRenderer;
     keyDownHandler?: () => void;
-    renderTimeout?: any;
     resizeHandler?: () => void;
     tools?: Tool[];
 }
@@ -35,11 +32,6 @@ export class UnconnectedCanvas extends React.Component<
 > {
     state: CanvasState = {};
     private canvasRef = React.createRef<HTMLCanvasElement>();
-    private renderers: Record<ShapeType, Renderer<any>> = {
-        ellipse: new EllipseRenderer(),
-        pencil: new PencilRenderer(),
-        rectangle: new RectangleRenderer(),
-    };
 
     componentDidMount() {
         const canvas = this.canvasRef.current!;
@@ -61,6 +53,7 @@ export class UnconnectedCanvas extends React.Component<
         this.setState({
             currentToolIndex: 0,
             graphics,
+            canvasRenderer: new CanvasRenderer(this),
             keyDownHandler,
             resizeHandler,
             tools: [
@@ -81,7 +74,7 @@ export class UnconnectedCanvas extends React.Component<
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        this.renderDocument();
+        this.state.canvasRenderer?.render();
     }
 
     onMouseDown(event: React.MouseEvent) {
@@ -97,6 +90,13 @@ export class UnconnectedCanvas extends React.Component<
 
     onMouseMove(event: React.MouseEvent) {
         this.onToolEvent('onMouseMove', event);
+        const mousePosition = this.state.graphics!.getPoint(
+            event.clientX,
+            event.clientY
+        );
+        this.props.dispatch(
+            setMousePosition(this.props.mouseID, mousePosition)
+        );
     }
 
     onMouseUp(event: React.MouseEvent) {
@@ -159,25 +159,8 @@ export class UnconnectedCanvas extends React.Component<
         this.props.dispatch(moveScreen(x * factor, y * factor));
     }
 
-    renderDocument() {
-        this.state.renderTimeout = undefined;
-        if (!this.state.graphics) {
-            return;
-        }
-        this.state.graphics.setScreen(this.props.screen);
-        this.state.graphics.clear();
-        for (const shape of Object.values(this.props.shapes)) {
-            this.renderers[shape.type].draw(this.state.graphics, shape);
-        }
-    }
-
     render() {
-        if (!this.state.renderTimeout) {
-            this.state.renderTimeout = setTimeout(
-                this.renderDocument.bind(this),
-                0
-            );
-        }
+        this.state.canvasRenderer?.render();
 
         return (
             <canvas
@@ -188,7 +171,7 @@ export class UnconnectedCanvas extends React.Component<
                 onMouseUp={this.onMouseUp.bind(this)}
                 onMouseLeave={this.onMouseUp.bind(this)}
                 onWheel={this.onMouseWheel.bind(this)}
-                onContextMenu={event => event.preventDefault()}
+                onContextMenu={(event) => event.preventDefault()}
             ></canvas>
         );
     }
@@ -199,6 +182,8 @@ function mapStateToProps(state: RootState) {
         screen: state.screen,
         shapes: state.document.shapes,
         toolProperties: state.toolProperties,
+        mouseID: state.mouseID,
+        mousePositions: state.mousePositions,
         activeToolIndices: {
             0: state.selectedTool,
             1: 0,

@@ -1,7 +1,10 @@
 import { BoundingBox, isBoundingBoxContainer } from '../../shared/BoundingBox';
+import { Message } from '../../shared/Message';
+import { Point } from '../../shared/Point';
 import { Request } from '../../shared/Request';
 import { Shape } from '../../shared/Shape';
 import { RootDispatch } from '../store';
+import { setMousePosition } from '../store/actions/setMousePosition';
 import { updateShape } from '../store/actions/shapes/updateShape';
 import { addRoomIDToBrowserHistory } from '../store/roomID';
 
@@ -27,8 +30,8 @@ export class WebSocketManager {
     } = {};
 
     constructor(
-        private baseURI: string = WEB_SOCKET_BASE_URI,
-        private debounceDelay = 100
+        private debounceDelay,
+        private baseURI: string = WEB_SOCKET_BASE_URI
     ) {
         if (!baseURI.endsWith('/')) {
             throw new Error('Base URI must end with a /');
@@ -50,7 +53,7 @@ export class WebSocketManager {
                 this.sendRequest(request);
             }
         });
-        this.webSocket.addEventListener('message', event => {
+        this.webSocket.addEventListener('message', (event) => {
             this.onMessage(event);
         });
 
@@ -60,9 +63,20 @@ export class WebSocketManager {
     }
 
     public onMessage(event: MessageEvent) {
-        const shapes: Shape[] = JSON.parse(event.data);
-        for (const shape of shapes) {
-            this.dispatch!(updateShape(shape, false));
+        const data: Message = JSON.parse(event.data);
+        switch (data.command) {
+            case 'updateShapes':
+                for (const shape of data.shapes) {
+                    this.dispatch!(updateShape(shape, false));
+                }
+                break;
+            case 'setMousePosition':
+                this.dispatch!(
+                    setMousePosition(data.mouseID, data.mousePosition, false)
+                );
+                break;
+            default:
+                break;
         }
     }
 
@@ -96,6 +110,14 @@ export class WebSocketManager {
             clearTimeout(this.debouncedShapes[shapeID].timeout);
             delete this.debouncedShapes[shapeID];
         }
+    }
+
+    public setMousePosition(mouseID: string, mousePosition: Point) {
+        this.sendRequest({
+            command: 'setMousePosition',
+            mouseID,
+            mousePosition,
+        });
     }
 
     public setScreenBoundingBox(boundingBox: BoundingBox) {

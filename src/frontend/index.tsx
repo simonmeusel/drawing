@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'development') {
     if (navigator.serviceWorker) {
         navigator.serviceWorker
             .getRegistrations()
-            .then(function(registrations) {
+            .then(function (registrations) {
                 for (let registration of registrations) {
                     registration.unregister();
                 }
@@ -24,7 +24,8 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
-const webSocketManager = new WebSocketManager();
+export const defaultDebounceDelay = 100;
+const webSocketManager = new WebSocketManager(defaultDebounceDelay);
 const store = createPersistentStore(webSocketManager);
 webSocketManager.dispatch = store.dispatch;
 webSocketManager.setRoomID(store.getState().roomID);
