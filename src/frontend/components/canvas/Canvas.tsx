@@ -7,12 +7,12 @@ import { moveScreen } from '../../store/actions/screen/moveScreen';
 import { zoomScreen } from '../../store/actions/screen/zoomScreen';
 import { Graphics } from './Graphics';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
-import { LinesRenderer } from './renderers/LinesRenderer';
+import { PencilRenderer } from './renderers/PencilRenderer';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { Renderer } from './renderers/Renderer';
 import { BasicShapeTool } from './tools/BasicShapeTool';
-import { LinesShapeTool } from './tools/LinesShapeTool';
 import { MoveTool } from './tools/MoveTool';
+import { PencilShapeTool } from './tools/PencilShapeTool';
 import { Tool } from './tools/Tool';
 
 interface CanvasProps {
@@ -37,7 +37,7 @@ export class UnconnectedCanvas extends React.Component<
     private canvasRef = React.createRef<HTMLCanvasElement>();
     private renderers: Record<ShapeType, Renderer<any>> = {
         ellipse: new EllipseRenderer(),
-        lines: new LinesRenderer(),
+        pencil: new PencilRenderer(),
         rectangle: new RectangleRenderer(),
     };
 
@@ -67,7 +67,7 @@ export class UnconnectedCanvas extends React.Component<
                 new MoveTool(this.props.dispatch, graphics),
                 new BasicShapeTool(this.props.dispatch, graphics, 'rectangle'),
                 new BasicShapeTool(this.props.dispatch, graphics, 'ellipse'),
-                new LinesShapeTool(this.props.dispatch, graphics),
+                new PencilShapeTool(this.props.dispatch, graphics),
             ],
         });
     }

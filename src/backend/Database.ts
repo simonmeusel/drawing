@@ -9,6 +9,7 @@ import * as URI from 'urijs';
 import { BoundingBox } from '../shared/BoundingBox';
 import { Shape } from '../shared/Shape';
 import { BackendUUID } from './BackendUUID';
+import { migrate } from './migrate';
 import { RawShape } from './RawShape';
 
 export class Database {
@@ -31,6 +32,8 @@ export class Database {
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
         this.createIndexes();
+
+        await migrate(this.rawShapesCollection);
     }
 
     parseShape(shape: Shape | any, roomID: Binary): RawShape {

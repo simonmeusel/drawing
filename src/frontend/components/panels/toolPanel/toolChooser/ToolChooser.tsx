@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { DispatchProps, RootState } from '../../../../store';
 import { setSelectedTool } from '../../../../store/actions/setSelectedTool';
 
-export class UnconnextedToolChooser extends React.Component<
+export class UnconnectedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & DispatchProps,
     {}
 > {
     render() {
         const tools = [
-            { value: 3, name: 'Line' },
+            { value: 3, name: 'Pencil' },
             { value: 1, name: 'Rectangle' },
             { value: 2, name: 'Elipse' },
             { value: 0, name: 'Move' },
@@ -45,4 +45,4 @@ function mapStateToProps(state: RootState) {
     return { selectedTool: state.selectedTool };
 }
 
-export const ToolChooser = connect(mapStateToProps)(UnconnextedToolChooser);
+export const ToolChooser = connect(mapStateToProps)(UnconnectedToolChooser);

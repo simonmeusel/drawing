@@ -1,15 +1,15 @@
 import { addPointToBoundingBox } from '../../../../shared/BoundingBox';
 import { Point } from '../../../../shared/Point';
-import { LinesShape } from '../../../../shared/shapes/LinesShape';
+import { PencilShape } from '../../../../shared/shapes/PencilShape';
 import { UUID } from '../../../../shared/UUID';
 import { ShapeTool } from './ShapeTool';
 import { ToolProperties } from './Tool';
 
-export class LinesShapeTool extends ShapeTool<LinesShape> {
+export class PencilShapeTool extends ShapeTool<PencilShape> {
     protected createShape(point: Point, toolProperties: ToolProperties) {
-        const shape: LinesShape = {
+        const shape: PencilShape = {
             id: UUID.generateString(),
-            type: 'lines',
+            type: 'pencil',
             boundingBox: {
                 lowerLeftPoint: point,
                 upperRightPoint: point,
@@ -23,7 +23,7 @@ export class LinesShapeTool extends ShapeTool<LinesShape> {
     }
 
     protected updateShape(
-        activeShape: LinesShape,
+        activeShape: PencilShape,
         point: Point,
         toolProperties: ToolProperties
     ) {
