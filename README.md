@@ -7,4 +7,4 @@
     -   This can be changed by setting the `MONGODB_CONNECTION_URI` to different [connection string](https://docs.mongodb.com/manual/reference/connection-string/)
 -   `npm install` dependencies
 -   `npm start` the development server and the Frontend builder
--   Visit [the local website](http://localhost:8080)
+-   Visit the local website at [http://localhost:8080](http://localhost:8080)
