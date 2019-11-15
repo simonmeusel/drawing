@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "forceConsistentCasingInFileNames": true,
+        "module": "commonjs",
+        "declaration": false,
+        "sourceMap": true,
+        "types": ["node"],
+        "lib": ["es2019", "dom"],
+        "outDir": "dist/typescript",
+        "removeComments": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "incremental": true
+    },
+    "include": ["src/**/*.ts"]
+}
