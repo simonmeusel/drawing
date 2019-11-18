@@ -1,14 +1,11 @@
 import { Binary } from 'mongodb';
-import * as uuidv4 from 'uuid/v4';
+import uuidv4 from 'uuid/v4';
+import { UUID } from '../frontend/UUID';
 
-export class UUID {
+export class BackendUUID extends UUID {
     public static generateBinary(): Binary {
         const buffer = uuidv4(null, Buffer.alloc(16));
         return new Binary(buffer, Binary.SUBTYPE_UUID);
-    }
-
-    public static generateString(): string {
-        return uuidv4();
     }
 
     public static convertStringToBinary(string: string): Binary {
@@ -19,6 +16,11 @@ export class UUID {
             string.substring(19, 23) +
             string.substring(24, 36);
         return new Binary(Buffer.from(hex, 'hex'), Binary.SUBTYPE_UUID);
+    }
+
+    public static generateString(): string {
+        console.log(uuidv4);
+        return uuidv4();
     }
 
     public static convertBinaryToString(binary: Binary): string {

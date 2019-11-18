@@ -1,9 +1,9 @@
-import * as express from 'express';
+import express from 'express';
 import * as WebSocket from 'ws';
 import { createServer } from 'http';
 import { Stroke } from '../shared/Stroke';
 import { MongoClient, Binary, Collection, IndexSpecification } from 'mongodb';
-import { UUID } from './UUID';
+import { BackendUUID } from './BackendUUID';
 import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Request } from '../shared/Request';
 
@@ -20,7 +20,7 @@ function parseStrokes(strokes: Stroke[] | any): RawStroke[] {
     return strokes.map(s => {
         const rs = {
             ...s,
-            _id: UUID.convertStringToBinary(s.id),
+            _id: BackendUUID.convertStringToBinary(s.id),
         };
         delete rs.id;
         return rs;
@@ -31,7 +31,7 @@ function serializeStrokes(rawStrokes: RawStroke[]): string {
     const strokes: Stroke[] = rawStrokes.map(rs => {
         const s = {
             ...rs,
-            id: UUID.convertBinaryToString(rs._id),
+            id: BackendUUID.convertBinaryToString(rs._id),
         };
         delete s._id;
         return s;
@@ -68,6 +68,8 @@ async function createIndexes(rawStrokesCollection: Collection<RawStroke>) {
 }
 
 async function start() {
+    console.log('Connecting to database');
+
     const mongoClient = await MongoClient.connect(
         process.env.MONGODB_CONNECTION_URI || 'mongodb://localhost:27017/db',
         { useNewUrlParser: true, useUnifiedTopology: true }
@@ -142,4 +144,5 @@ async function start() {
     console.log('Webserver listening on port 8080 (http://localhost:8080)');
 }
 
+console.log(BackendUUID.generateString());
 start();
