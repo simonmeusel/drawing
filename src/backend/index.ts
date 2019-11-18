@@ -4,7 +4,7 @@ import { createServer } from 'http';
 import { Stroke } from '../shared/Stroke';
 import { MongoClient, Binary, Collection, IndexSpecification } from 'mongodb';
 import { UUID } from './UUID';
-import { BoundingBox } from '../shared/BoundingBox';
+import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Request } from '../shared/Request';
 
 type RawStroke = Pick<Stroke, 'boundingBox' | 'type'> & { _id: Binary };
@@ -37,11 +37,6 @@ function serializeStrokes(rawStrokes: RawStroke[]): string {
         return s;
     });
     return JSON.stringify(strokes);
-}
-
-function doBoundingBoxesOverlap(_b1: BoundingBox, _b2: BoundingBox): boolean {
-    // TODO: Implement
-    return true;
 }
 
 async function findRawStrokes(
