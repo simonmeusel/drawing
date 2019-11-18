@@ -39,11 +39,12 @@ window.onload = () => {
 
         if (event.deltaY < 0) {
             // Zoom in
-            scale *= event.deltaY * -2;
+            scale += event.deltaY;
         } else {
             // Zoom out
-            scale /= event.deltaY * 2;
+            scale /= event.deltaY;
         }
+        console.log(scale);
 
         // Moving the canvas bounding box
         leftUpperPointX =
