@@ -1,6 +1,5 @@
-import { Context } from '../Context';
 import { StrokeManager } from '../StrokeManager';
-import { Point } from '../../shared/BoundingBox';
+import { Point } from '../../shared/Point';
 
 export abstract class Tool {
     constructor(protected strokeManager: StrokeManager) {}

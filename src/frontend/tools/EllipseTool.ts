@@ -1,7 +1,8 @@
 import { Tool } from './Tool';
-import { Point, createBoundingBox } from '../../shared/BoundingBox';
+import { createBoundingBox } from '../../shared/BoundingBox';
 import { Stroke } from '../../shared/Stroke';
-import { UUID } from '../UUID';
+import { UUID } from '../../shared/UUID';
+import { Point } from '../../shared/Point';
 
 export class EllipseTool extends Tool {
     private activeStroke?: Stroke;

@@ -144,5 +144,4 @@ async function start() {
     console.log('Webserver listening on port 8080 (http://localhost:8080)');
 }
 
-console.log(BackendUUID.generateString());
 start();

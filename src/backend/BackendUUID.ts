@@ -1,6 +1,6 @@
 import { Binary } from 'mongodb';
 import uuidv4 from 'uuid/v4';
-import { UUID } from '../frontend/UUID';
+import { UUID } from '../shared/UUID';
 
 export class BackendUUID extends UUID {
     public static generateBinary(): Binary {
@@ -16,11 +16,6 @@ export class BackendUUID extends UUID {
             string.substring(19, 23) +
             string.substring(24, 36);
         return new Binary(Buffer.from(hex, 'hex'), Binary.SUBTYPE_UUID);
-    }
-
-    public static generateString(): string {
-        console.log(uuidv4);
-        return uuidv4();
     }
 
     public static convertBinaryToString(binary: Binary): string {
