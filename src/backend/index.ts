@@ -15,7 +15,7 @@ type ExtendedWebSocket = WebSocket & {
 
 function parseStrokes(strokes: Stroke[] | any): RawStroke[] {
     if (typeof strokes != 'object' || !Array.isArray(strokes)) {
-        throw new Error();
+        throw new Error('Strokes are not of type array');
     }
     return strokes.map(s => {
         const rs = {
@@ -81,6 +81,8 @@ async function start() {
         .db('drawing')
         .collection<RawStroke>('strokes');
 
+    rawStrokesCollection.deleteMany({});
+
     await createIndexes(rawStrokesCollection);
 
     const app = express();
@@ -107,7 +109,7 @@ async function start() {
                         )
                     );
                 } else if (request.command == 'addStrokes') {
-                    const rawStrokes = parseStrokes(data);
+                    const rawStrokes = parseStrokes(request.strokes);
 
                     await rawStrokesCollection.insertMany(rawStrokes);
 
@@ -124,8 +126,9 @@ async function start() {
                                     doBoundingBoxesOverlap(
                                         stroke.boundingBox,
                                         clientWebSocket.boundingBox!
-                                    )
+                                    ) || true
                             );
+                            console.log('sending to ', rawStrokes.length);
                             clientWebSocket.send(
                                 serializeStrokes(filteredRawStrokes)
                             );

@@ -22,13 +22,13 @@ export class StrokeManager {
     public addStrokes(strokes: Stroke[]) {
         this.addStrokesWithoutSending(strokes);
         this.webSocketManager.addStrokes(strokes);
-        this.redraw();
     }
 
     private addStrokesWithoutSending(strokes: Stroke[]) {
         for (const stroke of strokes) {
             this.strokes.push(stroke);
         }
+        this.redraw();
     }
 
     public removeStrokes(strokes: Stroke[]) {

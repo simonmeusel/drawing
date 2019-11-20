@@ -22,10 +22,18 @@ export function doBoundingBoxesOverlap(
     b1: BoundingBox,
     b2: BoundingBox
 ): boolean {
+    console.log(b1, b2);
+    console.log(
+        b1.upperRightPoint.x >= b2.lowerLeftPoint.x,
+        b2.upperRightPoint.x >= b1.lowerLeftPoint.x,
+        b1.upperRightPoint.y >= b2.lowerLeftPoint.y,
+        b2.upperRightPoint.y >= b1.lowerLeftPoint.y
+    );
+
     return (
-        b1.upperRightPoint.x > b2.lowerLeftPoint.x &&
-        b2.upperRightPoint.x > b1.lowerLeftPoint.x &&
-        b1.upperRightPoint.y > b2.lowerLeftPoint.y &&
-        b2.upperRightPoint.y > b1.lowerLeftPoint.y
+        b1.upperRightPoint.x >= b2.lowerLeftPoint.x &&
+        b2.upperRightPoint.x >= b1.lowerLeftPoint.x &&
+        b1.upperRightPoint.y >= b2.lowerLeftPoint.y &&
+        b2.upperRightPoint.y >= b1.lowerLeftPoint.y
     );
 }

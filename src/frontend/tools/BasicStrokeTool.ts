@@ -1,12 +1,22 @@
 import { Tool } from './Tool';
 import { createBoundingBox } from '../../shared/BoundingBox';
-import { Stroke } from '../../shared/Stroke';
+import { Stroke, StrokeType } from '../../shared/Stroke';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
+import { StrokeManager } from '../StrokeManager';
+import { Context } from '../Context';
 
-export class EllipseTool extends Tool {
+export class BasicStrokeTool extends Tool {
     private activeStroke?: Stroke;
     private startingPoint?: Point;
+
+    constructor(
+        strokeManager: StrokeManager,
+        context: Context,
+        private type: StrokeType
+    ) {
+        super(strokeManager, context);
+    }
 
     onMouseDown(point: Point) {
         if (this.activeStroke) {
@@ -15,7 +25,7 @@ export class EllipseTool extends Tool {
         this.startingPoint = point;
         this.activeStroke = {
             id: UUID.generateString(),
-            type: 'ellipse',
+            type: this.type,
             boundingBox: {
                 lowerLeftPoint: point,
                 upperRightPoint: point,

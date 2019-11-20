@@ -2,7 +2,7 @@ import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Point } from '../shared/Point';
 
 export class Context {
-    private screen: BoundingBox = {
+    public screen: BoundingBox = {
         lowerLeftPoint: { x: -1, y: -window.innerHeight / window.innerWidth },
         upperRightPoint: { x: 1, y: window.innerHeight / window.innerWidth },
     };
@@ -10,10 +10,17 @@ export class Context {
     private canvasWidthMultiplier: number = 1;
     private canvasHeightMultiplier: number = 1;
 
+    public screenChangeHandler?: () => void;
+
     constructor(private c: CanvasRenderingContext2D) {
         this.recalculateRealWidthAndHeight();
     }
 
+    private triggerScreenChangeHandler() {
+        if (this.screenChangeHandler) {
+            this.screenChangeHandler();
+        }
+    }
     /**
      * Translate screen in x direction
      */
@@ -24,6 +31,8 @@ export class Context {
 
         this.screen.lowerLeftPoint.x += transWidth;
         this.screen.upperRightPoint.x += transWidth;
+
+        this.triggerScreenChangeHandler();
     }
 
     /**
@@ -36,6 +45,18 @@ export class Context {
 
         this.screen.lowerLeftPoint.y += transHeight;
         this.screen.upperRightPoint.y += transHeight;
+
+        this.triggerScreenChangeHandler();
+    }
+
+    /**
+     * Translate in both directions
+     */
+    translateXY(canvasXTranslation, canvasYTranslation) {
+        this.translateX(canvasXTranslation);
+        this.translateY(canvasYTranslation);
+
+        this.triggerScreenChangeHandler();
     }
 
     zoom(factor: number, centerX: number, centerY: number) {
@@ -69,6 +90,8 @@ export class Context {
         };
 
         this.recalculateRealWidthAndHeight();
+
+        this.triggerScreenChangeHandler();
     }
 
     recalculateRealWidthAndHeight() {
@@ -113,8 +136,31 @@ export class Context {
         this.c.clearRect(0, 0, this.c.canvas.width, this.c.canvas.height);
     }
 
+    drawRectangle(boundingBox: BoundingBox) {
+        if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
+            console.warn('no overlap');
+            //return;
+        }
+        const lowerLeftCanvasPoint = this.getCanvasCoordinates(
+            boundingBox.lowerLeftPoint
+        );
+        const upperRightCanvasPoint = this.getCanvasCoordinates(
+            boundingBox.upperRightPoint
+        );
+
+        this.c.beginPath();
+        this.c.fillRect(
+            lowerLeftCanvasPoint.x,
+            lowerLeftCanvasPoint.y,
+            upperRightCanvasPoint.x - lowerLeftCanvasPoint.x,
+            upperRightCanvasPoint.y - lowerLeftCanvasPoint.y
+        );
+    }
+
     drawEllipse(boundingBox: BoundingBox) {
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
+            console.warn('no overlap');
+
             return;
         }
 

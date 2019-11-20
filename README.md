@@ -8,3 +8,11 @@
 -   `npm install` dependencies
 -   `npm start` the development server and the Frontend builder
 -   Visit the local website at [http://localhost:8080](http://localhost:8080)
+
+## Roadmap
+
+-   [ ] Add `pencil stroke` tool
+-   [ ] Fix `rectangle` tool
+-   [ ] Add `go back` tool (rightclick)
+-   [ ] Add `shifting` tool (middle mouse)
+-   [ ] Add `color` panel

@@ -1,8 +1,10 @@
 import { Context } from './Context';
-import { EllipseTool } from './tools/EllipseTool';
+import { BasicStrokeTool } from './tools/BasicStrokeTool';
 import { WebSocketManager } from './WebSocketManager';
 import { StrokeManager } from './StrokeManager';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
+import { MoveTool } from './tools/MoveTool';
+import { RectangleRenderer } from './renderers/RectangleRenderer';
 
 window.onload = () => {
     console.log('Starting');
@@ -18,27 +20,43 @@ window.onload = () => {
 
     const context = new Context(canvasContext);
 
-    const webSocketManager = new WebSocketManager('ws://' + location.host);
+    const webSocketManager = new WebSocketManager(
+        'ws://' + location.host,
+        context
+    );
 
     const strokeManager = new StrokeManager(webSocketManager, context, {
+        rectangle: new RectangleRenderer(),
         ellipse: new EllipseRenderer(),
     });
 
-    const tools = [new EllipseTool(strokeManager)];
-    const activeToolIndex = 0;
+    const tools = [
+        new MoveTool(strokeManager, context),
+        new BasicStrokeTool(strokeManager, context, 'rectangle'),
+        new BasicStrokeTool(strokeManager, context, 'ellipse'),
+    ];
+    const activeToolIndices = {
+        0: 1,
+        1: 0,
+        2: 0,
+    };
 
     canvas.addEventListener('mousedown', event => {
-        tools[activeToolIndex].onMouseDown(
+        event.preventDefault();
+        tools[activeToolIndices[event.button]].onMouseDown(
             context.getPoint(event.clientX, event.clientY)
         );
     });
+
     canvas.addEventListener('mousemove', event => {
-        tools[activeToolIndex].onMouseMove(
+        event.preventDefault();
+        tools[activeToolIndices[event.button]].onMouseMove(
             context.getPoint(event.clientX, event.clientY)
         );
     });
     canvas.addEventListener('mouseup', event => {
-        tools[activeToolIndex].onMouseUp(
+        event.preventDefault();
+        tools[activeToolIndices[event.button]].onMouseUp(
             context.getPoint(event.clientX, event.clientY)
         );
     });
