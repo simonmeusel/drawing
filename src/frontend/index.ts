@@ -47,4 +47,27 @@ window.onload = () => {
         context.zoom(event.deltaY, event.clientX, event.clientY);
         strokeManager.redraw();
     });
+
+    document.addEventListener('keydown', event => {
+        const translation = window.innerWidth / 25;
+        switch (event.keyCode) {
+            case 37:
+                // Left arrow pressed
+                context.translateX(-translation);
+                break;
+            case 38:
+                // Up arrow pressed
+                context.translateY(translation);
+                break;
+            case 39:
+                // Right arrow pressed
+                context.translateX(translation);
+                break;
+            case 40:
+                // Down arrow pressed
+                context.translateY(-translation);
+                break;
+        }
+        strokeManager.redraw();
+    });
 };

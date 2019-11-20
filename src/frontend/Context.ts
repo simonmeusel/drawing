@@ -7,56 +7,54 @@ export class Context {
         upperRightPoint: { x: 1, y: window.innerHeight / window.innerWidth },
     };
 
-    private realWidth: number = 1;
-    private realHeight: number = 1;
+    private canvasWidthMultiplier: number = 1;
+    private canvasHeightMultiplier: number = 1;
 
     constructor(private c: CanvasRenderingContext2D) {
         this.recalculateRealWidthAndHeight();
     }
 
     /**
-     * translateX > 0 move right
-     * translateX < 0 move left
+     * Translate screen in x direction
      */
-    /*translateX(translateX: number) {
+    translateX(canvasXTranslation: number) {
         const width =
             this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x;
-        const transWidth = (translateX / window.innerWidth) * width;
+        const transWidth = (canvasXTranslation / window.innerWidth) * width;
 
         this.screen.lowerLeftPoint.x += transWidth;
         this.screen.upperRightPoint.x += transWidth;
-    }*/
+    }
 
     /**
-     * translateY > 0 move up
-     * translateY < 0 move down
+     * Translate screen in y direction
      */
-    /*translateY(translateY: number) {
+    translateY(canvasYTranslation: number) {
         const height =
             this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y;
-        const transHeight = (translateY / window.innerHeight) * height;
+        const transHeight = (canvasYTranslation / window.innerHeight) * height;
 
         this.screen.lowerLeftPoint.y += transHeight;
         this.screen.upperRightPoint.y += transHeight;
-    }*/
+    }
 
     zoom(factor: number, centerX: number, centerY: number) {
-        centerX = (centerX + window.innerWidth / 2) / 2;
-        centerY = (centerY + window.innerHeight / 2) / 2;
+        let zoomFactor = Math.pow(1.01, factor);
 
-        let zoomFactor = 0;
-        if (factor < 0) {
-            // Zoom in
-            zoomFactor = 1.1;
-        } else {
-            // Zoom out
-            zoomFactor = 0.9;
-        }
+        const translationFactor = Math.abs(factor);
+
+        // Calculate weighted average of canvas center point and mouse postion
+        centerX =
+            (centerX * translationFactor + (window.innerWidth / 2) * 100) /
+            (100 + translationFactor);
+        centerY =
+            (centerY * translationFactor + (window.innerHeight / 2) * 100) /
+            (100 + translationFactor);
 
         const anchorPoint = this.getPoint(centerX, centerY);
 
         const newWidth =
-            (this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x) /
+            (this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x) *
             zoomFactor;
         const newHeight = newWidth * (window.innerHeight / window.innerWidth);
 
@@ -74,10 +72,10 @@ export class Context {
     }
 
     recalculateRealWidthAndHeight() {
-        this.realWidth =
+        this.canvasWidthMultiplier =
             window.innerWidth /
             (this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x);
-        this.realHeight =
+        this.canvasHeightMultiplier =
             window.innerHeight /
             (this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y);
     }
@@ -87,8 +85,12 @@ export class Context {
      */
     getPoint(canvasX: number, canvasY: number): Point {
         return {
-            x: this.screen.lowerLeftPoint.x + canvasX / this.realWidth,
-            y: this.screen.upperRightPoint.y - canvasY / this.realHeight,
+            x:
+                this.screen.lowerLeftPoint.x +
+                canvasX / this.canvasWidthMultiplier,
+            y:
+                this.screen.upperRightPoint.y -
+                canvasY / this.canvasHeightMultiplier,
         };
     }
 
@@ -96,8 +98,12 @@ export class Context {
      * Calculates the canvas coordinates of a point
      */
     getCanvasCoordinates(point: Point): { x: number; y: number } {
-        const x = (point.x - this.screen.lowerLeftPoint.x) * this.realWidth;
-        const y = (this.screen.upperRightPoint.y - point.y) * this.realHeight;
+        const x =
+            (point.x - this.screen.lowerLeftPoint.x) *
+            this.canvasWidthMultiplier;
+        const y =
+            (this.screen.upperRightPoint.y - point.y) *
+            this.canvasHeightMultiplier;
 
         return { x, y };
     }
@@ -109,7 +115,7 @@ export class Context {
 
     drawEllipse(boundingBox: BoundingBox) {
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
-            console.log('not in screen');
+            return;
         }
 
         const lowerLeftCanvasPoint = this.getCanvasCoordinates(
