@@ -52,7 +52,6 @@ export class WebSocketManager {
                 stroke,
                 oldBoundingBox,
                 timeout: setTimeout(() => {
-                    console.log('update sent');
                     this.sendRequest({
                         command: 'updateStroke',
                         oldBoundingBox,

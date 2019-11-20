@@ -111,7 +111,8 @@ async function start() {
 
                     await rawStrokesCollection.updateOne(
                         { _id: rawStroke._id },
-                        { $set: rawStroke }
+                        { $set: rawStroke },
+                        { upsert: true }
                     );
 
                     for (const clientWebSocket of webSocketServer.clients as Set<
