@@ -13,18 +13,16 @@ type ExtendedWebSocket = WebSocket & {
     boundingBox?: BoundingBox;
 };
 
-function parseStrokes(strokes: Stroke[] | any): RawStroke[] {
-    if (typeof strokes != 'object' || !Array.isArray(strokes)) {
-        throw new Error('Strokes are not of type array');
+function parseStroke(stroke: Stroke[] | any): RawStroke {
+    if (typeof stroke != 'object' || Array.isArray(stroke)) {
+        throw new Error('Strokes are not of type object');
     }
-    return strokes.map(s => {
-        const rs = {
-            ...s,
-            _id: BackendUUID.convertStringToBinary(s.id),
-        };
-        delete rs.id;
-        return rs;
-    });
+    const rs = {
+        ...stroke,
+        _id: BackendUUID.convertStringToBinary(stroke.id),
+    };
+    delete rs.id;
+    return rs;
 }
 
 function serializeStrokes(rawStrokes: RawStroke[]): string {
@@ -108,10 +106,13 @@ async function start() {
                             )
                         )
                     );
-                } else if (request.command == 'addStrokes') {
-                    const rawStrokes = parseStrokes(request.strokes);
+                } else if (request.command == 'updateStroke') {
+                    const rawStroke = parseStroke(request.stroke);
 
-                    await rawStrokesCollection.insertMany(rawStrokes);
+                    await rawStrokesCollection.updateOne(
+                        { _id: rawStroke._id },
+                        { $set: rawStroke }
+                    );
 
                     for (const clientWebSocket of webSocketServer.clients as Set<
                         ExtendedWebSocket
@@ -121,17 +122,21 @@ async function start() {
                             clientWebSocket.readyState === WebSocket.OPEN &&
                             clientWebSocket.boundingBox != undefined
                         ) {
-                            const filteredRawStrokes = rawStrokes.filter(
-                                stroke =>
+                            if (
+                                doBoundingBoxesOverlap(
+                                    rawStroke.boundingBox,
+                                    clientWebSocket.boundingBox!
+                                ) ||
+                                (request.oldBoundingBox &&
                                     doBoundingBoxesOverlap(
-                                        stroke.boundingBox,
+                                        request.oldBoundingBox,
                                         clientWebSocket.boundingBox!
-                                    ) || true
-                            );
-                            console.log('sending to ', rawStrokes.length);
-                            clientWebSocket.send(
-                                serializeStrokes(filteredRawStrokes)
-                            );
+                                    ))
+                            ) {
+                                clientWebSocket.send(
+                                    serializeStrokes([rawStroke])
+                                );
+                            }
                         }
                     }
                 }

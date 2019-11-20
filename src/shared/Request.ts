@@ -3,8 +3,13 @@ import { BoundingBox } from './BoundingBox';
 
 export type Request =
     | {
-          command: 'addStrokes';
-          strokes: Stroke[];
+          command: 'updateStroke';
+          oldBoundingBox: BoundingBox | undefined;
+          stroke: Stroke;
+      }
+    | {
+          command: 'deleteStroke';
+          strokeID: string;
       }
     | {
           command: 'setBoundingBox';

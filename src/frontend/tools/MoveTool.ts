@@ -9,10 +9,7 @@ export class MoveTool extends Tool {
     }
 
     onMouseMove(point: Point) {
-        console.log('move', this.lastPoint);
-
         if (!this.lastPoint) {
-            console.log('returned');
             return;
         }
         this.context.translateXY(

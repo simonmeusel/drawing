@@ -4,37 +4,40 @@ import { Renderer } from './renderers/Renderer';
 import { Context } from './Context';
 
 export class StrokeManager {
-    private strokes: Stroke[] = [];
+    private strokes: { [strokeID: string]: Stroke } = {};
     private timeout?: any;
 
     public constructor(
-        private webSocketManager: WebSocketManager,
+        public webSocketManager: WebSocketManager,
         private context: Context,
         private strokeRenderers: {
             [type: string]: Renderer;
         }
     ) {
         webSocketManager.onStrokes = (strokes: Stroke[]) => {
-            this.addStrokesWithoutSending(strokes);
+            for (const stroke of strokes) {
+                this.updateStrokeWithoutSending(stroke);
+            }
+            this.redraw();
         };
     }
 
-    public addStrokes(strokes: Stroke[]) {
-        this.addStrokesWithoutSending(strokes);
-        this.webSocketManager.addStrokes(strokes);
+    public updateStroke(stroke: Stroke) {
+        this.updateStrokeWithoutSending(stroke);
+        this.webSocketManager.updateStroke(stroke);
     }
 
-    private addStrokesWithoutSending(strokes: Stroke[]) {
-        for (const stroke of strokes) {
-            this.strokes.push(stroke);
-        }
-        this.redraw();
+    private updateStrokeWithoutSending(stroke: Stroke) {
+        this.strokes[stroke.id] = stroke;
     }
 
-    public removeStrokes(strokes: Stroke[]) {
-        for (const stroke of strokes) {
-            this.strokes.splice(this.strokes.indexOf(stroke), 1);
-        }
+    public deleteStroke(stroke: Stroke) {
+        this.deleteStrokeWithoutSending(stroke);
+        this.webSocketManager.deleteStroke(stroke.id);
+    }
+
+    public deleteStrokeWithoutSending(stroke: Stroke) {
+        delete stroke[stroke.id];
     }
 
     public getStrokes() {
@@ -53,7 +56,8 @@ export class StrokeManager {
 
     private redrawStrokes() {
         this.context.clear();
-        for (const stroke of this.strokes) {
+        for (const strokeID in this.strokes) {
+            const stroke = this.strokes[strokeID];
             this.strokeRenderers[stroke.type].draw(this.context, stroke);
         }
     }

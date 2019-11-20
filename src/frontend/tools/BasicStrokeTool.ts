@@ -31,7 +31,8 @@ export class BasicStrokeTool extends Tool {
                 upperRightPoint: point,
             },
         };
-        this.strokeManager.addStrokes([this.activeStroke]);
+        this.strokeManager.updateStroke(this.activeStroke);
+        this.strokeManager.redraw();
     }
 
     onMouseMove(point: Point) {
@@ -42,6 +43,7 @@ export class BasicStrokeTool extends Tool {
             this.startingPoint!,
             point
         );
+        this.strokeManager.updateStroke(this.activeStroke);
         this.strokeManager.redraw();
     }
 
@@ -50,6 +52,8 @@ export class BasicStrokeTool extends Tool {
             return;
         }
         this.onMouseMove(point);
+        this.strokeManager.updateStroke(this.activeStroke);
+        this.strokeManager.redraw();
         this.activeStroke = undefined;
         this.startingPoint = undefined;
     }

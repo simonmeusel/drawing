@@ -137,6 +137,7 @@ export class Context {
     }
 
     drawRectangle(boundingBox: BoundingBox) {
+        console.warn('rect', boundingBox);
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
             console.warn('no overlap');
             //return;

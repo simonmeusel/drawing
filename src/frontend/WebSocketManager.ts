@@ -4,10 +4,22 @@ import { BoundingBox } from '../shared/BoundingBox';
 import { Context } from './Context';
 
 export class WebSocketManager {
-    webSocket: WebSocket;
+    private webSocket: WebSocket;
     onStrokes?: (strokes: Stroke[]) => void;
 
-    constructor(uri: string, private context: Context) {
+    private debouncedStrokes: {
+        [strokeID: string]: {
+            stroke: Stroke;
+            oldBoundingBox?: BoundingBox;
+            timeout: any;
+        };
+    } = {};
+
+    constructor(
+        uri: string,
+        private context: Context,
+        private debounceDelay = 100
+    ) {
         this.webSocket = new WebSocket(uri);
         this.webSocket.addEventListener('open', () => {
             console.log('Web socket connected');
@@ -32,10 +44,34 @@ export class WebSocketManager {
         }
     }
 
-    addStrokes(strokes: Stroke[]) {
+    updateStroke(stroke: Stroke, oldBoundingBox?: BoundingBox) {
+        if (this.debouncedStrokes[stroke.id]) {
+            this.debouncedStrokes[stroke.id].stroke = stroke;
+        } else {
+            this.debouncedStrokes[stroke.id] = {
+                stroke,
+                oldBoundingBox,
+                timeout: setTimeout(() => {
+                    console.log('update sent');
+                    this.sendRequest({
+                        command: 'updateStroke',
+                        oldBoundingBox,
+                        stroke,
+                    });
+                    delete this.debouncedStrokes[stroke.id];
+                }, this.debounceDelay),
+            };
+        }
+    }
+
+    deleteStroke(strokeID: string) {
+        if (this.debouncedStrokes[strokeID]) {
+            clearTimeout(this.debouncedStrokes[strokeID].timeout);
+            delete this.debouncedStrokes[strokeID];
+        }
         this.sendRequest({
-            command: 'addStrokes',
-            strokes,
+            command: 'deleteStroke',
+            strokeID,
         });
     }
 
