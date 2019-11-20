@@ -41,22 +41,27 @@ window.onload = () => {
         2: 0,
     };
 
+    let currentToolIndice = 0;
+
     canvas.addEventListener('mousedown', event => {
         event.preventDefault();
+        console.log('button event down', event.button);
         tools[activeToolIndices[event.button]].onMouseDown(
             context.getPoint(event.clientX, event.clientY)
         );
+        currentToolIndice = event.button;
     });
 
     canvas.addEventListener('mousemove', event => {
         event.preventDefault();
-        tools[activeToolIndices[event.button]].onMouseMove(
+        tools[activeToolIndices[currentToolIndice]].onMouseMove(
             context.getPoint(event.clientX, event.clientY)
         );
     });
+
     canvas.addEventListener('mouseup', event => {
         event.preventDefault();
-        tools[activeToolIndices[event.button]].onMouseUp(
+        tools[activeToolIndices[currentToolIndice]].onMouseUp(
             context.getPoint(event.clientX, event.clientY)
         );
     });
