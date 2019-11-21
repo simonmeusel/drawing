@@ -36,7 +36,7 @@ window.onload = () => {
         new BasicStrokeTool(strokeManager, context, 'ellipse'),
     ];
     const activeToolIndices = {
-        0: 2,
+        0: 1,
         1: 0,
         2: 0,
     };
@@ -71,7 +71,7 @@ window.onload = () => {
     });
 
     document.addEventListener('keydown', event => {
-        const translation = window.innerWidth / 25;
+        const translation = context.getWidth() / 25;
         switch (event.keyCode) {
             case 37:
                 // Left arrow pressed
