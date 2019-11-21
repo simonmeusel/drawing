@@ -2,31 +2,24 @@ import { Tool } from './Tool';
 import { Point } from '../../shared/Point';
 
 export class MoveTool extends Tool {
-    private lastPoint: Point | undefined;
-    private counter: number = 0;
+    private startingPoint?: Point;
 
     onMouseDown(point: Point) {
-        this.lastPoint = point;
+        // Clone point
+        this.startingPoint = point;
     }
 
     onMouseMove(point: Point) {
-        this.counter++;
-        if (!this.lastPoint) {
+        if (!this.startingPoint) {
             return;
         }
-        if (this.counter == 10) {
-            this.context.translateXY(
-                -(point.x - this.lastPoint.x) * 1000,
-                -(point.y - this.lastPoint.y) * 1000
-            );
-            this.counter = 0;
-            this.lastPoint = point;
-        }
+        this.context.translateX(this.startingPoint.x - point.x);
+        this.context.translateY(this.startingPoint.y - point.y);
 
         this.strokeManager.redraw();
     }
 
     onMouseUp() {
-        this.lastPoint = undefined;
+        this.startingPoint = undefined;
     }
 }

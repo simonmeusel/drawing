@@ -16,6 +16,14 @@ export class Context {
         this.recalculateRealWidthAndHeight();
     }
 
+    public getWidth() {
+        return this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x;
+    }
+
+    public getHeight() {
+        return this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y;
+    }
+
     private triggerScreenChangeHandler() {
         if (this.screenChangeHandler) {
             this.screenChangeHandler();
@@ -25,12 +33,8 @@ export class Context {
      * Translate screen in x direction
      */
     translateX(canvasXTranslation: number) {
-        const width =
-            this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x;
-        const transWidth = (canvasXTranslation / window.innerWidth) * width;
-
-        this.screen.lowerLeftPoint.x += transWidth;
-        this.screen.upperRightPoint.x += transWidth;
+        this.screen.lowerLeftPoint.x += canvasXTranslation;
+        this.screen.upperRightPoint.x += canvasXTranslation;
 
         this.triggerScreenChangeHandler();
     }
@@ -39,12 +43,8 @@ export class Context {
      * Translate screen in y direction
      */
     translateY(canvasYTranslation: number) {
-        const height =
-            this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y;
-        const transHeight = (canvasYTranslation / window.innerHeight) * height;
-
-        this.screen.lowerLeftPoint.y += transHeight;
-        this.screen.upperRightPoint.y += transHeight;
+        this.screen.lowerLeftPoint.y += canvasYTranslation;
+        this.screen.upperRightPoint.y += canvasYTranslation;
 
         this.triggerScreenChangeHandler();
     }
@@ -74,9 +74,7 @@ export class Context {
 
         const anchorPoint = this.getPoint(centerX, centerY);
 
-        const newWidth =
-            (this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x) *
-            zoomFactor;
+        const newWidth = this.getWidth() * zoomFactor;
         const newHeight = newWidth * (window.innerHeight / window.innerWidth);
 
         this.screen.lowerLeftPoint = {
@@ -95,12 +93,8 @@ export class Context {
     }
 
     recalculateRealWidthAndHeight() {
-        this.canvasWidthMultiplier =
-            window.innerWidth /
-            (this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x);
-        this.canvasHeightMultiplier =
-            window.innerHeight /
-            (this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y);
+        this.canvasWidthMultiplier = window.innerWidth / this.getWidth();
+        this.canvasHeightMultiplier = window.innerHeight / this.getHeight();
     }
 
     /**
@@ -137,10 +131,8 @@ export class Context {
     }
 
     drawRectangle(boundingBox: BoundingBox) {
-        console.warn('rect', boundingBox);
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
-            console.warn('no overlap');
-            //return;
+            return;
         }
         const lowerLeftCanvasPoint = this.getCanvasCoordinates(
             boundingBox.lowerLeftPoint
@@ -160,8 +152,6 @@ export class Context {
 
     drawEllipse(boundingBox: BoundingBox) {
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
-            console.warn('no overlap');
-
             return;
         }
 

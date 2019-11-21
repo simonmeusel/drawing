@@ -45,7 +45,6 @@ window.onload = () => {
 
     canvas.addEventListener('mousedown', event => {
         event.preventDefault();
-        console.log('button event down', event.button);
         tools[activeToolIndices[event.button]].onMouseDown(
             context.getPoint(event.clientX, event.clientY)
         );
