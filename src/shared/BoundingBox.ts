@@ -18,6 +18,19 @@ export function createBoundingBox(p1: Point, p2: Point): BoundingBox {
     };
 }
 
+export function addPointToBoundingBox(boundingBox: BoundingBox, point: Point) {
+    return {
+        lowerLeftPoint: {
+            x: Math.min(boundingBox.lowerLeftPoint.x, point.x),
+            y: Math.min(boundingBox.lowerLeftPoint.y, point.y),
+        },
+        upperRightPoint: {
+            x: Math.max(boundingBox.upperRightPoint.x, point.x),
+            y: Math.max(boundingBox.upperRightPoint.y, point.y),
+        },
+    };
+}
+
 export function doBoundingBoxesOverlap(
     b1: BoundingBox,
     b2: BoundingBox

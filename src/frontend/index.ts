@@ -5,6 +5,8 @@ import { StrokeManager } from './StrokeManager';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { MoveTool } from './tools/MoveTool';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
+import { LinesTool } from './tools/LinesTool';
+import { LinesRenderer } from './renderers/LinesRenderer';
 
 window.onload = () => {
     console.log('Starting');
@@ -28,15 +30,17 @@ window.onload = () => {
     const strokeManager = new StrokeManager(webSocketManager, context, {
         rectangle: new RectangleRenderer(),
         ellipse: new EllipseRenderer(),
+        lines: new LinesRenderer(),
     });
 
     const tools = [
         new MoveTool(strokeManager, context),
         new BasicStrokeTool(strokeManager, context, 'rectangle'),
         new BasicStrokeTool(strokeManager, context, 'ellipse'),
+        new LinesTool(strokeManager, context),
     ];
     const activeToolIndices = {
-        0: 1,
+        0: 3,
         1: 0,
         2: 0,
     };

@@ -1,4 +1,4 @@
-import { Stroke } from '../shared/Stroke';
+import { Stroke, StrokeType } from '../shared/Stroke';
 import { WebSocketManager } from './WebSocketManager';
 import { Renderer } from './renderers/Renderer';
 import { Context } from './Context';
@@ -10,9 +10,7 @@ export class StrokeManager {
     public constructor(
         public webSocketManager: WebSocketManager,
         private context: Context,
-        private strokeRenderers: {
-            [type: string]: Renderer;
-        }
+        private strokeRenderers: Record<StrokeType, Renderer>
     ) {
         webSocketManager.onStrokes = (strokes: Stroke[]) => {
             for (const stroke of strokes) {

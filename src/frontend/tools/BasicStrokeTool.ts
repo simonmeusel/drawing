@@ -1,13 +1,12 @@
-import { Tool } from './Tool';
 import { createBoundingBox } from '../../shared/BoundingBox';
 import { Stroke, StrokeType } from '../../shared/Stroke';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
 import { StrokeManager } from '../StrokeManager';
 import { Context } from '../Context';
+import { StrokeTool } from './StrokeTool';
 
-export class BasicStrokeTool extends Tool {
-    private activeStroke?: Stroke;
+export class BasicStrokeTool extends StrokeTool<Stroke> {
     private startingPoint?: Point;
 
     constructor(
@@ -18,12 +17,8 @@ export class BasicStrokeTool extends Tool {
         super(strokeManager, context);
     }
 
-    onMouseDown(point: Point) {
-        if (this.activeStroke) {
-            return;
-        }
-        this.startingPoint = point;
-        this.activeStroke = {
+    protected createStroke(point: Point) {
+        return {
             id: UUID.generateString(),
             type: this.type,
             boundingBox: {
@@ -31,30 +26,12 @@ export class BasicStrokeTool extends Tool {
                 upperRightPoint: point,
             },
         };
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
     }
 
-    onMouseMove(point: Point) {
-        if (!this.activeStroke) {
-            return;
-        }
-        this.activeStroke.boundingBox = createBoundingBox(
-            this.startingPoint!,
-            point
-        );
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
-    }
-
-    onMouseUp(point: Point) {
-        if (!this.activeStroke) {
-            return;
-        }
-        this.onMouseMove(point);
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
-        this.activeStroke = undefined;
-        this.startingPoint = undefined;
+    protected updateStroke(activeStroke: Stroke, point: Point) {
+        return {
+            ...activeStroke,
+            boundingBox: createBoundingBox(this.startingPoint!, point),
+        };
     }
 }

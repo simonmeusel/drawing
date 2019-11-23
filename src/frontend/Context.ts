@@ -1,4 +1,8 @@
-import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
+import {
+    BoundingBox,
+    doBoundingBoxesOverlap,
+    createBoundingBox,
+} from '../shared/BoundingBox';
 import { Point } from '../shared/Point';
 
 export class Context {
@@ -183,5 +187,19 @@ export class Context {
             2 * Math.PI
         );
         this.c.fill();
+    }
+
+    drawLine(p1: Point, p2: Point) {
+        if (!doBoundingBoxesOverlap(createBoundingBox(p1, p2), this.screen)) {
+            return;
+        }
+
+        const canvasPoint1 = this.getCanvasCoordinates(p1);
+        const canvasPoint2 = this.getCanvasCoordinates(p2);
+
+        this.c.beginPath();
+        this.c.moveTo(canvasPoint1.x, canvasPoint1.y);
+        this.c.lineTo(canvasPoint2.x, canvasPoint2.y);
+        this.c.stroke();
     }
 }
