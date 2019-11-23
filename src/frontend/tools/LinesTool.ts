@@ -31,7 +31,7 @@ export class LinesTool extends StrokeTool<LinesStroke> {
             ...activeStroke,
             boundingBox: addPointToBoundingBox(activeStroke.boundingBox, point),
             data: {
-                points: activeStroke.data.points.concat([point]),
+                points: [...activeStroke.data.points, point],
             },
         };
     }

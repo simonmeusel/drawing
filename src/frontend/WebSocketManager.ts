@@ -54,8 +54,9 @@ export class WebSocketManager {
                 timeout: setTimeout(() => {
                     this.sendRequest({
                         command: 'updateStroke',
-                        oldBoundingBox,
-                        stroke,
+                        oldBoundingBox: this.debouncedStrokes[stroke.id]
+                            .oldBoundingBox,
+                        stroke: this.debouncedStrokes[stroke.id].stroke,
                     });
                     delete this.debouncedStrokes[stroke.id];
                 }, this.debounceDelay),
