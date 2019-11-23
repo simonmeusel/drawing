@@ -21,7 +21,7 @@ export class LinesTool extends StrokeTool<LinesStroke> {
             },
             data: {
                 points: [point],
-                strokeColor: '#00ff00ff',
+                strokeColor: '#4400ccff',
             },
         };
         return stroke;

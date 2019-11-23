@@ -1,4 +1,3 @@
-import { Stroke } from '../Stroke';
 import { Point } from '../Point';
 import { StrokedShape } from './StrokedShape';
 

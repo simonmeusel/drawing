@@ -152,12 +152,14 @@ export class Context {
         this.c.strokeStyle = strokeColor;
         this.c.fillStyle = fillColor;
         this.c.beginPath();
-        this.c.fillRect(
+        const args: [number, number, number, number] = [
             lowerLeftCanvasPoint.x,
             lowerLeftCanvasPoint.y,
             upperRightCanvasPoint.x - lowerLeftCanvasPoint.x,
-            upperRightCanvasPoint.y - lowerLeftCanvasPoint.y
-        );
+            upperRightCanvasPoint.y - lowerLeftCanvasPoint.y,
+        ];
+        this.c.strokeRect(...args);
+        this.c.fillRect(...args);
     }
 
     drawEllipse(
@@ -196,11 +198,11 @@ export class Context {
             0,
             2 * Math.PI
         );
+        this.c.stroke();
         this.c.fill();
     }
 
     drawLine(p1: Point, p2: Point, strokeColor: string) {
-        console.log('drawing', strokeColor);
         if (!doBoundingBoxesOverlap(createBoundingBox(p1, p2), this.screen)) {
             return;
         }
@@ -209,7 +211,7 @@ export class Context {
         const canvasPoint2 = this.getCanvasCoordinates(p2);
 
         this.c.beginPath();
-        this.c.strokeStyle = '#000000ff';
+        this.c.strokeStyle = strokeColor;
         this.c.moveTo(canvasPoint1.x, canvasPoint1.y);
         this.c.lineTo(canvasPoint2.x, canvasPoint2.y);
         this.c.stroke();

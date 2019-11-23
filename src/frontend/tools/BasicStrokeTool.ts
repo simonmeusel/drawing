@@ -1,5 +1,5 @@
 import { createBoundingBox } from '../../shared/BoundingBox';
-import { Stroke, StrokeType } from '../../shared/Stroke';
+import { StrokeType } from '../../shared/Stroke';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
 import { StrokeManager } from '../StrokeManager';
@@ -19,6 +19,7 @@ export class BasicStrokeTool extends StrokeTool<BasicShape> {
     }
 
     protected createStroke(point: Point) {
+        this.startingPoint = point;
         return {
             id: UUID.generateString(),
             type: this.type,
@@ -27,8 +28,8 @@ export class BasicStrokeTool extends StrokeTool<BasicShape> {
                 upperRightPoint: point,
             },
             data: {
-                strokeColor: '#0000ffff',
-                fillColor: '#00ff00ff',
+                strokeColor: '#000000ff',
+                fillColor: '#cc0044ff',
             },
         };
     }
