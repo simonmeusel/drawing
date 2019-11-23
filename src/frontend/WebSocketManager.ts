@@ -18,7 +18,7 @@ export class WebSocketManager {
     constructor(
         uri: string,
         private context: Context,
-        private debounceDelay = 1000
+        private debounceDelay = 100
     ) {
         this.webSocket = new WebSocket(uri);
         this.webSocket.addEventListener('open', () => {
