@@ -1,9 +1,13 @@
 import { Renderer } from './Renderer';
 import { Context } from '../Context';
-import { Stroke } from '../../shared/Stroke';
+import { BasicShape } from '../../shared/strokes/BasicShape';
 
 export class RectangleRenderer extends Renderer {
-    public draw(context: Context, stroke: Stroke) {
-        context.drawRectangle(stroke.boundingBox);
+    public draw(context: Context, stroke: BasicShape) {
+        context.drawRectangle(
+            stroke.boundingBox,
+            stroke.data.strokeColor,
+            stroke.data.fillColor
+        );
     }
 }

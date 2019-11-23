@@ -21,6 +21,7 @@ export class LinesTool extends StrokeTool<LinesStroke> {
             },
             data: {
                 points: [point],
+                strokeColor: '#00ff00ff',
             },
         };
         return stroke;
@@ -32,6 +33,7 @@ export class LinesTool extends StrokeTool<LinesStroke> {
             boundingBox: addPointToBoundingBox(activeStroke.boundingBox, point),
             data: {
                 points: activeStroke.data.points.concat([point]),
+                strokeColor: activeStroke.data.strokeColor,
             },
         };
     }

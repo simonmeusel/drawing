@@ -40,7 +40,7 @@ window.onload = () => {
         new LinesTool(strokeManager, context),
     ];
     const activeToolIndices = {
-        0: 3,
+        0: 2,
         1: 0,
         2: 0,
     };

@@ -8,7 +8,7 @@ export class LinesRenderer extends Renderer {
         let lastPoint: Point | undefined;
         for (const point of stroke.data.points) {
             if (lastPoint) {
-                context.drawLine(lastPoint, point);
+                context.drawLine(lastPoint, point, stroke.data.strokeColor);
             }
             lastPoint = point;
         }

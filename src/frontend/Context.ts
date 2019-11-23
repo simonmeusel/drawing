@@ -134,7 +134,11 @@ export class Context {
         this.c.clearRect(0, 0, this.c.canvas.width, this.c.canvas.height);
     }
 
-    drawRectangle(boundingBox: BoundingBox) {
+    drawRectangle(
+        boundingBox: BoundingBox,
+        strokeColor: string,
+        fillColor: string
+    ) {
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
             return;
         }
@@ -145,6 +149,8 @@ export class Context {
             boundingBox.upperRightPoint
         );
 
+        this.c.strokeStyle = strokeColor;
+        this.c.fillStyle = fillColor;
         this.c.beginPath();
         this.c.fillRect(
             lowerLeftCanvasPoint.x,
@@ -154,7 +160,11 @@ export class Context {
         );
     }
 
-    drawEllipse(boundingBox: BoundingBox) {
+    drawEllipse(
+        boundingBox: BoundingBox,
+        strokeColor: string,
+        fillColor: string
+    ) {
         if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
             return;
         }
@@ -174,8 +184,8 @@ export class Context {
         const radiusX = Math.abs(centerCanvasPoint.x - lowerLeftCanvasPoint.x);
         const radiusY = Math.abs(lowerLeftCanvasPoint.y - centerCanvasPoint.y);
 
-        this.c.fillStyle = 'black';
-
+        this.c.strokeStyle = strokeColor;
+        this.c.fillStyle = fillColor;
         this.c.beginPath();
         this.c.ellipse(
             centerCanvasPoint.x,
@@ -189,7 +199,8 @@ export class Context {
         this.c.fill();
     }
 
-    drawLine(p1: Point, p2: Point) {
+    drawLine(p1: Point, p2: Point, strokeColor: string) {
+        console.log('drawing', strokeColor);
         if (!doBoundingBoxesOverlap(createBoundingBox(p1, p2), this.screen)) {
             return;
         }
@@ -198,6 +209,7 @@ export class Context {
         const canvasPoint2 = this.getCanvasCoordinates(p2);
 
         this.c.beginPath();
+        this.c.strokeStyle = '#000000ff';
         this.c.moveTo(canvasPoint1.x, canvasPoint1.y);
         this.c.lineTo(canvasPoint2.x, canvasPoint2.y);
         this.c.stroke();
