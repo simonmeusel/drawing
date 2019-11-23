@@ -5,7 +5,6 @@ export class MoveTool extends Tool {
     private startingPoint?: Point;
 
     onMouseDown(point: Point) {
-        // Clone point
         this.startingPoint = point;
     }
 
@@ -16,7 +15,7 @@ export class MoveTool extends Tool {
         this.context.translateX(this.startingPoint.x - point.x);
         this.context.translateY(this.startingPoint.y - point.y);
 
-        this.strokeManager.redraw();
+        this.shapeManager.redraw();
     }
 
     onMouseUp() {

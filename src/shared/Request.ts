@@ -1,15 +1,15 @@
-import { Stroke } from './Stroke';
+import { Shape } from './Shape';
 import { BoundingBox } from './BoundingBox';
 
 export type Request =
     | {
-          command: 'updateStroke';
+          command: 'updateShape';
           oldBoundingBox: BoundingBox | undefined;
-          stroke: Stroke;
+          shape: Shape;
       }
     | {
-          command: 'deleteStroke';
-          strokeID: string;
+          command: 'deleteShape';
+          shapeID: string;
       }
     | {
           command: 'setBoundingBox';

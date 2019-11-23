@@ -1,21 +1,21 @@
 import { createBoundingBox } from '../../shared/BoundingBox';
-import { StrokeType } from '../../shared/Stroke';
+import { ShapeType } from '../../shared/Shape';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
-import { StrokeManager } from '../StrokeManager';
+import { StrokeManager } from '../ShapeManager';
 import { Context } from '../Context';
-import { StrokeTool } from './StrokeTool';
+import { ShapeTool } from './ShapeTool';
 import { BasicShape } from '../../shared/strokes/BasicShape';
 
-export class BasicStrokeTool extends StrokeTool<BasicShape> {
+export class BasicShapeTool extends ShapeTool<BasicShape> {
     private startingPoint?: Point;
 
     constructor(
-        strokeManager: StrokeManager,
+        shapeManager: StrokeManager,
         context: Context,
-        private type: StrokeType
+        private type: ShapeType
     ) {
-        super(strokeManager, context);
+        super(shapeManager, context);
     }
 
     protected createStroke(point: Point) {

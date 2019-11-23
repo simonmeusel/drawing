@@ -1,10 +1,10 @@
 import { BoundingBox } from './BoundingBox';
 
-export type StrokeType = 'ellipse' | 'rectangle' | 'lines';
+export type ShapeType = 'ellipse' | 'rectangle' | 'lines';
 
-export interface Stroke {
+export interface Shape {
     id: string;
     boundingBox: BoundingBox;
-    type: StrokeType;
+    type: ShapeType;
     data?: any;
 }

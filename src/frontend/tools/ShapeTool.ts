@@ -1,8 +1,8 @@
 import { Tool } from './Tool';
-import { Stroke } from '../../shared/Stroke';
+import { Shape } from '../../shared/Shape';
 import { Point } from '../../shared/Point';
 
-export abstract class StrokeTool<T extends Stroke> extends Tool {
+export abstract class ShapeTool<T extends Shape> extends Tool {
     private activeStroke?: T;
 
     public onMouseDown(point: Point) {

@@ -1,18 +1,18 @@
 import { addPointToBoundingBox } from '../../shared/BoundingBox';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
-import { StrokeManager } from '../StrokeManager';
+import { StrokeManager } from '../ShapeManager';
 import { Context } from '../Context';
-import { StrokeTool } from './StrokeTool';
-import { LinesStroke } from '../../shared/strokes/LinesStroke';
+import { ShapeTool } from './ShapeTool';
+import { LinesShape } from '../../shared/strokes/LinesShape';
 
-export class LinesTool extends StrokeTool<LinesStroke> {
+export class LinesShapeTool extends ShapeTool<LinesShape> {
     constructor(strokeManager: StrokeManager, context: Context) {
         super(strokeManager, context);
     }
 
     protected createStroke(point: Point) {
-        const stroke: LinesStroke = {
+        const stroke: LinesShape = {
             id: UUID.generateString(),
             type: 'lines',
             boundingBox: {
@@ -27,7 +27,7 @@ export class LinesTool extends StrokeTool<LinesStroke> {
         return stroke;
     }
 
-    protected updateStroke(activeStroke: LinesStroke, point: Point) {
+    protected updateStroke(activeStroke: LinesShape, point: Point) {
         return {
             ...activeStroke,
             boundingBox: addPointToBoundingBox(activeStroke.boundingBox, point),

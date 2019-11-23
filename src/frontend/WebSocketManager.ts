@@ -1,15 +1,15 @@
-import { Stroke } from '../shared/Stroke';
+import { Shape } from '../shared/Shape';
 import { Request } from '../shared/Request';
 import { BoundingBox } from '../shared/BoundingBox';
 import { Context } from './Context';
 
 export class WebSocketManager {
     private webSocket: WebSocket;
-    onStrokes?: (strokes: Stroke[]) => void;
+    onShapes?: (shapes: Shape[]) => void;
 
-    private debouncedStrokes: {
-        [strokeID: string]: {
-            stroke: Stroke;
+    private debouncedShapes: {
+        [shapeID: string]: {
+            shape: Shape;
             oldBoundingBox?: BoundingBox;
             timeout: any;
         };
@@ -38,40 +38,40 @@ export class WebSocketManager {
     }
 
     onMessage(event: MessageEvent) {
-        if (this.onStrokes) {
-            const strokes: Stroke[] = JSON.parse(event.data);
-            this.onStrokes(strokes);
+        if (this.onShapes) {
+            const shapes: Shape[] = JSON.parse(event.data);
+            this.onShapes(shapes);
         }
     }
 
-    updateStroke(stroke: Stroke, oldBoundingBox?: BoundingBox) {
-        if (this.debouncedStrokes[stroke.id]) {
-            this.debouncedStrokes[stroke.id].stroke = stroke;
+    updateShape(shape: Shape, oldBoundingBox?: BoundingBox) {
+        if (this.debouncedShapes[shape.id]) {
+            this.debouncedShapes[shape.id].shape = shape;
         } else {
-            this.debouncedStrokes[stroke.id] = {
-                stroke,
+            this.debouncedShapes[shape.id] = {
+                shape: shape,
                 oldBoundingBox,
                 timeout: setTimeout(() => {
                     this.sendRequest({
-                        command: 'updateStroke',
-                        oldBoundingBox: this.debouncedStrokes[stroke.id]
+                        command: 'updateShape',
+                        oldBoundingBox: this.debouncedShapes[shape.id]
                             .oldBoundingBox,
-                        stroke: this.debouncedStrokes[stroke.id].stroke,
+                        shape: this.debouncedShapes[shape.id].shape,
                     });
-                    delete this.debouncedStrokes[stroke.id];
+                    delete this.debouncedShapes[shape.id];
                 }, this.debounceDelay),
             };
         }
     }
 
-    deleteStroke(strokeID: string) {
-        if (this.debouncedStrokes[strokeID]) {
-            clearTimeout(this.debouncedStrokes[strokeID].timeout);
-            delete this.debouncedStrokes[strokeID];
+    deleteShape(shapeID: string) {
+        if (this.debouncedShapes[shapeID]) {
+            clearTimeout(this.debouncedShapes[shapeID].timeout);
+            delete this.debouncedShapes[shapeID];
         }
         this.sendRequest({
-            command: 'deleteStroke',
-            strokeID,
+            command: 'deleteShape',
+            shapeID: shapeID,
         });
     }
 

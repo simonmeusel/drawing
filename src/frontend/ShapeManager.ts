@@ -1,18 +1,18 @@
-import { Stroke, StrokeType } from '../shared/Stroke';
+import { Shape, ShapeType } from '../shared/Shape';
 import { WebSocketManager } from './WebSocketManager';
 import { Renderer } from './renderers/Renderer';
 import { Context } from './Context';
 
-export class StrokeManager {
-    private strokes: { [strokeID: string]: Stroke } = {};
+export class ShapeManager {
+    private shapes: { [shapeID: string]: Shape } = {};
     private timeout?: any;
 
     public constructor(
         public webSocketManager: WebSocketManager,
         private context: Context,
-        private strokeRenderers: Record<StrokeType, Renderer>
+        private shapeRenderers: Record<ShapeType, Renderer<any>>
     ) {
-        webSocketManager.onStrokes = (strokes: Stroke[]) => {
+        webSocketManager.onShapes = (strokes: Shape[]) => {
             for (const stroke of strokes) {
                 this.updateStrokeWithoutSending(stroke);
             }
@@ -20,26 +20,26 @@ export class StrokeManager {
         };
     }
 
-    public updateStroke(stroke: Stroke) {
+    public updateStroke(stroke: Shape) {
         this.updateStrokeWithoutSending(stroke);
-        this.webSocketManager.updateStroke(stroke);
+        this.webSocketManager.updateShape(stroke);
     }
 
-    private updateStrokeWithoutSending(stroke: Stroke) {
-        this.strokes[stroke.id] = stroke;
+    private updateStrokeWithoutSending(stroke: Shape) {
+        this.shapes[stroke.id] = stroke;
     }
 
-    public deleteStroke(stroke: Stroke) {
+    public deleteStroke(stroke: Shape) {
         this.deleteStrokeWithoutSending(stroke);
-        this.webSocketManager.deleteStroke(stroke.id);
+        this.webSocketManager.deleteShape(stroke.id);
     }
 
-    public deleteStrokeWithoutSending(stroke: Stroke) {
+    public deleteStrokeWithoutSending(stroke: Shape) {
         delete stroke[stroke.id];
     }
 
     public getStrokes() {
-        return this.strokes;
+        return this.shapes;
     }
 
     public redraw() {
@@ -54,9 +54,9 @@ export class StrokeManager {
 
     private redrawStrokes() {
         this.context.clear();
-        for (const strokeID in this.strokes) {
-            const stroke = this.strokes[strokeID];
-            this.strokeRenderers[stroke.type].draw(this.context, stroke);
+        for (const shapeID in this.shapes) {
+            const shape = this.shapes[shapeID];
+            this.shapeRenderers[shape.type].draw(this.context, shape);
         }
     }
 }

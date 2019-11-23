@@ -1,6 +1,6 @@
 import { Context } from '../Context';
-import { Stroke } from '../../shared/Stroke';
+import { Shape } from '../../shared/Shape';
 
-export abstract class Renderer {
-    public abstract draw(context: Context, stroke: Stroke);
+export abstract class Renderer<T extends Shape> {
+    public abstract draw(context: Context, shape: T);
 }

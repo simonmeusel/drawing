@@ -1,32 +1,32 @@
 import express from 'express';
 import * as WebSocket from 'ws';
 import { createServer } from 'http';
-import { Stroke } from '../shared/Stroke';
+import { Shape } from '../shared/Shape';
 import { MongoClient, Binary, Collection, IndexSpecification } from 'mongodb';
 import { BackendUUID } from './BackendUUID';
 import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Request } from '../shared/Request';
 
-type RawStroke = Pick<Stroke, 'boundingBox' | 'type'> & { _id: Binary };
+type RawShape = Pick<Shape, 'boundingBox' | 'type'> & { _id: Binary };
 
 type ExtendedWebSocket = WebSocket & {
     boundingBox?: BoundingBox;
 };
 
-function parseStroke(stroke: Stroke[] | any): RawStroke {
-    if (typeof stroke != 'object' || Array.isArray(stroke)) {
-        throw new Error('Strokes are not of type object');
+function parseShape(shape: Shape[] | any): RawShape {
+    if (typeof shape != 'object' || Array.isArray(shape)) {
+        throw new Error('Shapes are not of type object');
     }
     const rs = {
-        ...stroke,
-        _id: BackendUUID.convertStringToBinary(stroke.id),
+        ...shape,
+        _id: BackendUUID.convertStringToBinary(shape.id),
     };
     delete rs.id;
     return rs;
 }
 
-function serializeStrokes(rawStrokes: RawStroke[]): string {
-    const strokes: Stroke[] = rawStrokes.map(rs => {
+function serializeShape(rawShape: RawShape[]): string {
+    const shapes: Shape[] = rawShape.map(rs => {
         const s = {
             ...rs,
             id: BackendUUID.convertBinaryToString(rs._id),
@@ -34,18 +34,18 @@ function serializeStrokes(rawStrokes: RawStroke[]): string {
         delete s._id;
         return s;
     });
-    return JSON.stringify(strokes);
+    return JSON.stringify(shapes);
 }
 
-async function findRawStrokes(
-    rawStrokesCollection: Collection<RawStroke>,
+async function findRawShapes(
+    rawShapesCollection: Collection<RawShape>,
     _boundingBox: BoundingBox
 ) {
-    // TODO: Only return strokes inside of bounding box
-    return await rawStrokesCollection.find({}).toArray();
+    // TODO: Only return shapes inside of bounding box
+    return await rawShapesCollection.find({}).toArray();
 }
 
-async function createIndexes(rawStrokesCollection: Collection<RawStroke>) {
+async function createIndexes(rawShapesCollection: Collection<RawShape>) {
     const indexes: IndexSpecification[] = [];
     for (const field of [
         'boundingBox.maxX',
@@ -62,7 +62,7 @@ async function createIndexes(rawStrokesCollection: Collection<RawStroke>) {
         });
     }
 
-    rawStrokesCollection.createIndexes(indexes);
+    rawShapesCollection.createIndexes(indexes);
 }
 
 async function start() {
@@ -75,13 +75,13 @@ async function start() {
 
     console.log('Connected to database');
 
-    const rawStrokesCollection = mongoClient
+    const rawShapesCollection = mongoClient
         .db('drawing')
-        .collection<RawStroke>('strokes');
+        .collection<RawShape>('shapes');
 
-    rawStrokesCollection.deleteMany({});
+    rawShapesCollection.deleteMany({});
 
-    await createIndexes(rawStrokesCollection);
+    await createIndexes(rawShapesCollection);
 
     const app = express();
     const server = createServer(app);
@@ -99,19 +99,19 @@ async function start() {
                 if (request.command == 'setBoundingBox') {
                     webSocket.boundingBox = request.boundingBox;
                     webSocket.send(
-                        serializeStrokes(
-                            await findRawStrokes(
-                                rawStrokesCollection,
+                        serializeShape(
+                            await findRawShapes(
+                                rawShapesCollection,
                                 webSocket.boundingBox
                             )
                         )
                     );
-                } else if (request.command == 'updateStroke') {
-                    const rawStroke = parseStroke(request.stroke);
+                } else if (request.command == 'updateShape') {
+                    const rawShape = parseShape(request.shape);
 
-                    await rawStrokesCollection.updateOne(
-                        { _id: rawStroke._id },
-                        { $set: rawStroke },
+                    await rawShapesCollection.updateOne(
+                        { _id: rawShape._id },
+                        { $set: rawShape },
                         { upsert: true }
                     );
 
@@ -125,7 +125,7 @@ async function start() {
                         ) {
                             if (
                                 doBoundingBoxesOverlap(
-                                    rawStroke.boundingBox,
+                                    rawShape.boundingBox,
                                     clientWebSocket.boundingBox!
                                 ) ||
                                 (request.oldBoundingBox &&
@@ -135,7 +135,7 @@ async function start() {
                                     ))
                             ) {
                                 clientWebSocket.send(
-                                    serializeStrokes([rawStroke])
+                                    serializeShape([rawShape])
                                 );
                             }
                         }

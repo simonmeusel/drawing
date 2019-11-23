@@ -1,11 +1,11 @@
 import { Context } from './Context';
-import { BasicStrokeTool } from './tools/BasicStrokeTool';
+import { BasicShapeTool } from './tools/BasicShapeTool';
 import { WebSocketManager } from './WebSocketManager';
-import { StrokeManager } from './StrokeManager';
+import { ShapeManager } from './ShapeManager';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { MoveTool } from './tools/MoveTool';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
-import { LinesTool } from './tools/LinesTool';
+import { LinesShapeTool } from './tools/LinesShapeTool';
 import { LinesRenderer } from './renderers/LinesRenderer';
 
 window.onload = () => {
@@ -27,17 +27,17 @@ window.onload = () => {
         context
     );
 
-    const strokeManager = new StrokeManager(webSocketManager, context, {
+    const shapeManager = new ShapeManager(webSocketManager, context, {
         rectangle: new RectangleRenderer(),
         ellipse: new EllipseRenderer(),
         lines: new LinesRenderer(),
     });
 
     const tools = [
-        new MoveTool(strokeManager, context),
-        new BasicStrokeTool(strokeManager, context, 'rectangle'),
-        new BasicStrokeTool(strokeManager, context, 'ellipse'),
-        new LinesTool(strokeManager, context),
+        new MoveTool(shapeManager, context),
+        new BasicShapeTool(shapeManager, context, 'rectangle'),
+        new BasicShapeTool(shapeManager, context, 'ellipse'),
+        new LinesShapeTool(shapeManager, context),
     ];
     const activeToolIndices = {
         0: 3,
@@ -71,7 +71,7 @@ window.onload = () => {
 
     canvas.addEventListener('wheel', event => {
         context.zoom(event.deltaY, event.clientX, event.clientY);
-        strokeManager.redraw();
+        shapeManager.redraw();
     });
 
     document.addEventListener('keydown', event => {
@@ -94,6 +94,6 @@ window.onload = () => {
                 context.translateY(-translation);
                 break;
         }
-        strokeManager.redraw();
+        shapeManager.redraw();
     });
 };

@@ -1,4 +1,4 @@
-import { StrokeManager } from '../StrokeManager';
+import { StrokeManager } from '../ShapeManager';
 import { Point } from '../../shared/Point';
 import { Context } from '../Context';
 
