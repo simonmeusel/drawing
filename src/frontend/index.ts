@@ -96,4 +96,8 @@ window.onload = () => {
         }
         shapeManager.redraw();
     });
+
+    canvas.addEventListener('contextmenu', event => {
+        event.preventDefault();
+    });
 };
