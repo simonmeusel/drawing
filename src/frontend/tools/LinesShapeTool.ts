@@ -1,13 +1,13 @@
 import { addPointToBoundingBox } from '../../shared/BoundingBox';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
-import { StrokeManager } from '../ShapeManager';
+import { ShapeManager } from '../ShapeManager';
 import { Context } from '../Context';
 import { ShapeTool } from './ShapeTool';
-import { LinesShape } from '../../shared/strokes/LinesShape';
+import { LinesShape } from '../../shared/shapes/LinesShape';
 
 export class LinesShapeTool extends ShapeTool<LinesShape> {
-    constructor(strokeManager: StrokeManager, context: Context) {
+    constructor(strokeManager: ShapeManager, context: Context) {
         super(strokeManager, context);
     }
 

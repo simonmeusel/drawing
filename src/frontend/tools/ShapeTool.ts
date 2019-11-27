@@ -10,8 +10,8 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.activeStroke = this.createStroke(point);
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
+        this.shapeManager.updateStroke(this.activeStroke);
+        this.shapeManager.redraw();
     }
 
     public onMouseMove(point: Point) {
@@ -19,8 +19,8 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.activeStroke = this.updateStroke(this.activeStroke, point);
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
+        this.shapeManager.updateStroke(this.activeStroke);
+        this.shapeManager.redraw();
     }
 
     public onMouseUp(point: Point) {
@@ -28,8 +28,8 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.onMouseMove(point);
-        this.strokeManager.updateStroke(this.activeStroke);
-        this.strokeManager.redraw();
+        this.shapeManager.updateStroke(this.activeStroke);
+        this.shapeManager.redraw();
         this.activeStroke = undefined;
     }
 

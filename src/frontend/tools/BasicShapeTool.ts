@@ -2,16 +2,16 @@ import { createBoundingBox } from '../../shared/BoundingBox';
 import { ShapeType } from '../../shared/Shape';
 import { UUID } from '../../shared/UUID';
 import { Point } from '../../shared/Point';
-import { StrokeManager } from '../ShapeManager';
+import { ShapeManager } from '../ShapeManager';
 import { Context } from '../Context';
 import { ShapeTool } from './ShapeTool';
-import { BasicShape } from '../../shared/strokes/BasicShape';
+import { BasicShape } from '../../shared/shapes/BasicShape';
 
 export class BasicShapeTool extends ShapeTool<BasicShape> {
     private startingPoint?: Point;
 
     constructor(
-        shapeManager: StrokeManager,
+        shapeManager: ShapeManager,
         context: Context,
         private type: ShapeType
     ) {
