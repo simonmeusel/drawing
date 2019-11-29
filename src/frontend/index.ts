@@ -8,6 +8,8 @@ import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { LinesRenderer } from './renderers/LinesRenderer';
 
+export let sm: ShapeManager | undefined;
+
 window.onload = () => {
     console.log('Starting');
 
@@ -32,6 +34,8 @@ window.onload = () => {
         ellipse: new EllipseRenderer(),
         lines: new LinesRenderer(),
     });
+
+    sm = shapeManager;
 
     const tools = [
         new MoveTool(shapeManager, context),
