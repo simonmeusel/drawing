@@ -11,10 +11,10 @@ export class LinesRenderer extends Renderer<LinesShape> {
         super();
         setInterval(
             (() => {
-                this.m += 1;
+                this.m += 2;
                 sm!.redraw();
             }).bind(this),
-            100
+            250
         );
     }
     public draw(context: Context, shape: LinesShape) {
