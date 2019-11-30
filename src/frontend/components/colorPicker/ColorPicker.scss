@@ -1,0 +1,16 @@
+.app-color-picker {
+    position: fixed;
+    max-width: calc(200px + 3rem);
+    z-index: 9999;
+
+    .sketch-picker {
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        :nth-child(4n) {
+            max-height: 42px !important;
+            padding-bottom: 0 !important;
+        }
+    }
+}
