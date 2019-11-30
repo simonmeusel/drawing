@@ -1,6 +1,6 @@
-import { Shape } from '../shared/Shape';
-import { Request } from '../shared/Request';
-import { BoundingBox } from '../shared/BoundingBox';
+import { Shape } from '../../../shared/Shape';
+import { Request } from '../../../shared/Request';
+import { BoundingBox } from '../../../shared/BoundingBox';
 import { Context } from './Context';
 
 export class WebSocketManager {

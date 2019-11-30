@@ -18,7 +18,8 @@
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
         "incremental": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "jsx": "react"
     },
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

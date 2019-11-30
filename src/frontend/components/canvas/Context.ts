@@ -2,8 +2,8 @@ import {
     BoundingBox,
     doBoundingBoxesOverlap,
     createBoundingBox,
-} from '../shared/BoundingBox';
-import { Point } from '../shared/Point';
+} from '../../../shared/BoundingBox';
+import { Point } from '../../../shared/Point';
 
 export class Context {
     public screen: BoundingBox = {

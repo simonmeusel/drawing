@@ -1,5 +1,5 @@
 import { ShapeManager } from '../ShapeManager';
-import { Point } from '../../shared/Point';
+import { Point } from '../../../../shared/Point';
 import { Context } from '../Context';
 
 export abstract class Tool {
