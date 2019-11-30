@@ -1,5 +1,6 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { Canvas } from './components/canvas/Canvas';
+import { ColorPicker } from './components/colorPicker/ColorPicker';
+import '../../node_modules/rc-color-picker/assets/index.css';
 
-ReactDOM.render(<Canvas />, document.getElementById('root'));
+ReactDOM.render(<ColorPicker />, document.getElementById('root'));
