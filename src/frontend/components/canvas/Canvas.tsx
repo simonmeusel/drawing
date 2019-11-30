@@ -23,8 +23,6 @@ export class Canvas extends React.Component<{}, CanvasState> {
     private canvasRef = React.createRef<HTMLCanvasElement>();
 
     componentDidMount() {
-        const webSocketManager = new WebSocketManager('ws://' + location.host);
-
         const width = window.innerWidth;
         const height = window.innerHeight;
 
@@ -34,6 +32,11 @@ export class Canvas extends React.Component<{}, CanvasState> {
         const canvasContext = canvas.getContext('2d')!;
 
         const context = new Context(canvasContext);
+
+        const webSocketManager = new WebSocketManager(
+            'ws://' + location.host,
+            context
+        );
 
         const shapeManager = new ShapeManager(webSocketManager, context, {
             rectangle: new RectangleRenderer(),
