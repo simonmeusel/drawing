@@ -2,20 +2,12 @@ import { Renderer } from './Renderer';
 import { Context } from '../Context';
 import { LinesShape } from '../../../../shared/shapes/LinesShape';
 import { Point } from '../../../../shared/Point';
-import { sm } from '../canvasIndex';
 
 export class LinesRenderer extends Renderer<LinesShape> {
     public m = 1;
 
     constructor() {
         super();
-        setInterval(
-            (() => {
-                this.m += 2;
-                sm!.redraw();
-            }).bind(this),
-            250
-        );
     }
     public draw(context: Context, shape: LinesShape) {
         let lastPoint: Point | undefined;

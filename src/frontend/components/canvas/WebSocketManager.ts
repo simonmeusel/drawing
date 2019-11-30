@@ -1,7 +1,6 @@
 import { Shape } from '../../../shared/Shape';
 import { Request } from '../../../shared/Request';
 import { BoundingBox } from '../../../shared/BoundingBox';
-import { Context } from './Context';
 
 export class WebSocketManager {
     private webSocket: WebSocket;
@@ -15,26 +14,14 @@ export class WebSocketManager {
         };
     } = {};
 
-    constructor(
-        uri: string,
-        private context: Context,
-        private debounceDelay = 100
-    ) {
+    constructor(uri: string, private debounceDelay = 100) {
         this.webSocket = new WebSocket(uri);
         this.webSocket.addEventListener('open', () => {
             console.log('Web socket connected');
-            this.onScreenChange();
         });
         this.webSocket.addEventListener('message', event => {
             this.onMessage(event);
         });
-        context.screenChangeHandler = () => {
-            this.onScreenChange();
-        };
-    }
-
-    onScreenChange() {
-        this.setBoundingBox(this.context.screen);
     }
 
     onMessage(event: MessageEvent) {

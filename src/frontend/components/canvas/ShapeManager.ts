@@ -1,5 +1,5 @@
 import { Shape, ShapeType } from '../../../shared/Shape';
-import { WebSocketManager } from '../../WebSocketManager';
+import { WebSocketManager } from './WebSocketManager';
 import { Renderer } from './renderers/Renderer';
 import { Context } from './Context';
 
