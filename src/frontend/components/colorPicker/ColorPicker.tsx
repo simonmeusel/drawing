@@ -8,7 +8,9 @@ export class ColorPicker extends React.Component {
         return (
             <div className="app-color-picker">
                 <Draggable
-                    defaultPosition={{ x: 24, y: 24 }}
+                    defaultPosition={{ x: 0, y: 0 }}
+                    grid={[10, 10]}
+                    bounds="parent"
                     position={undefined}
                     scale={1}
                     handle=".app-color-picker-handle"

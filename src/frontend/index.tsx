@@ -2,14 +2,19 @@ import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { ColorPicker } from './components/colorPicker/ColorPicker';
 import { Canvas } from './components/canvas/Canvas';
-import 'bulma/css/bulma.min.css';
+import './index.scss';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { reducer } from './redux/reducers';
+
+const store = createStore(reducer);
 
 ReactDOM.render(
-    <div style={{ position: 'relative' }}>
+    <Provider store={store}>
         <ColorPicker />
         <div style={{ position: 'relative' }}>
             <Canvas />
         </div>
-    </div>,
+    </Provider>,
     document.getElementById('root')
 );

@@ -1,7 +1,15 @@
 .app-color-picker {
-    position: fixed;
-    max-width: calc(200px + 3rem);
-    z-index: 9999;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    padding-bottom: 20px;
+
+    .card {
+        position: fixed;
+        max-width: 220px;
+        z-index: 1;
+    }
 
     .sketch-picker {
         padding: 0 !important;
