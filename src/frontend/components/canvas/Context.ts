@@ -6,17 +6,26 @@ import {
 import { Point } from '../../../shared/Point';
 
 export class Context {
-    public screen: BoundingBox = {
-        lowerLeftPoint: { x: -1, y: -window.innerHeight / window.innerWidth },
-        upperRightPoint: { x: 1, y: window.innerHeight / window.innerWidth },
-    };
+    public screen: BoundingBox;
 
+    private canvas: HTMLCanvasElement;
     private canvasWidthMultiplier: number = 1;
     private canvasHeightMultiplier: number = 1;
 
     public screenChangeHandler?: () => void;
 
     constructor(private c: CanvasRenderingContext2D) {
+        this.canvas = c.canvas;
+        this.screen = {
+            lowerLeftPoint: {
+                x: -1,
+                y: -this.canvas.clientHeight / this.canvas.clientWidth,
+            },
+            upperRightPoint: {
+                x: 1,
+                y: this.canvas.clientHeight / this.canvas.clientWidth,
+            },
+        };
         this.recalculateRealWidthAndHeight();
     }
 
@@ -63,23 +72,30 @@ export class Context {
         this.triggerScreenChangeHandler();
     }
 
-    zoom(factor: number, centerX: number, centerY: number) {
+    zoom(
+        factor: number,
+        centerX: number = this.canvas.clientWidth / 2,
+        centerY: number = this.canvas.clientHeight / 2
+    ) {
         let zoomFactor = Math.pow(1.01, factor);
 
         const translationFactor = Math.abs(factor);
 
         // Calculate weighted average of canvas center point and mouse postion
         centerX =
-            (centerX * translationFactor + (window.innerWidth / 2) * 100) /
+            (centerX * translationFactor +
+                (this.canvas.clientWidth / 2) * 100) /
             (100 + translationFactor);
         centerY =
-            (centerY * translationFactor + (window.innerHeight / 2) * 100) /
+            (centerY * translationFactor +
+                (this.canvas.clientHeight / 2) * 100) /
             (100 + translationFactor);
 
         const anchorPoint = this.getPoint(centerX, centerY);
 
         const newWidth = this.getWidth() * zoomFactor;
-        const newHeight = newWidth * (window.innerHeight / window.innerWidth);
+        const newHeight =
+            newWidth * (this.canvas.clientHeight / this.canvas.clientWidth);
 
         this.screen.lowerLeftPoint = {
             x: anchorPoint.x - newWidth / 2,
@@ -97,8 +113,9 @@ export class Context {
     }
 
     recalculateRealWidthAndHeight() {
-        this.canvasWidthMultiplier = window.innerWidth / this.getWidth();
-        this.canvasHeightMultiplier = window.innerHeight / this.getHeight();
+        this.canvasWidthMultiplier = this.canvas.clientWidth / this.getWidth();
+        this.canvasHeightMultiplier =
+            this.canvas.clientHeight / this.getHeight();
     }
 
     /**

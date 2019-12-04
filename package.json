@@ -1,10 +1,9 @@
 {
     "name": "drawing",
     "scripts": {
-        "start": "concurrently \"parcel watch src/frontend/index.html\" \"ts-node-dev src/backend/index.ts\"",
-        "start:prod": "ts-node src/backend/index.ts",
-        "build": "webpack --mode development",
-        "build:prod": "webpack --mode production"
+        "start": "concurrently \"npm run build\" \"npm run start:backend\"",
+        "start:backend": "ts-node src/backend/index.ts",
+        "build": "parcel watch src/frontend/index.html"
     },
     "prettier": {
         "singleQuote": true,
@@ -17,6 +16,7 @@
         "@types/mongodb": "^3.3.10",
         "@types/react": "^16.9.13",
         "@types/react-dom": "^16.9.4",
+        "@types/react-redux": "^7.1.5",
         "@types/uuid": "^3.4.6",
         "@types/ws": "^6.0.3",
         "ajv": "^6.10.2",
@@ -28,8 +28,11 @@
         "react-color": "^2.17.3",
         "react-dom": "^16.12.0",
         "react-draggable": "^4.1.0",
+        "react-redux": "^7.1.3",
+        "redux": "^4.0.4",
         "sass": "^1.23.7",
         "ts-node": "^8.5.2",
+        "typesafe-actions": "^5.1.0",
         "typescript": "^3.7.2",
         "uuid": "^3.3.3",
         "ws": "^7.2.0"

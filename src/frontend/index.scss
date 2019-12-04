@@ -1,0 +1,11 @@
+$card-content-padding: 10px;
+$card-header-padding: 10px;
+
+@import '~bulma/sass/utilities/_all.sass';
+@import '~bulma/sass/base/_all.sass';
+@import '~bulma/sass/components/card.sass';
+
+html,
+body {
+    overflow: hidden !important;
+}

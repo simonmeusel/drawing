@@ -9,26 +9,30 @@ import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { LinesRenderer } from './renderers/LinesRenderer';
 import { Tool } from './tools/Tool';
+import { RootState } from '../../redux/reducers';
+import { connect } from 'react-redux';
 
 type CanvasState = {
     activeToolIndices?: { [button: number]: number };
     context?: Context;
     currentToolIndex?: number;
+    resizeHandler?: () => void;
     shapeManager?: ShapeManager;
     tools?: Tool[];
     webSocketManager?: WebSocketManager;
 };
 
-export class Canvas extends React.Component<{}, CanvasState> {
+export class UnconnectedCanvas extends React.Component<
+    ReturnType<typeof mapStateToProps>,
+    CanvasState
+> {
     private canvasRef = React.createRef<HTMLCanvasElement>();
 
     componentDidMount() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-
-        const canvas = document.querySelector('canvas')!;
-        canvas.width = width;
-        canvas.height = height;
+        console.log(this.canvasRef);
+        const canvas = this.canvasRef.current!;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         const canvasContext = canvas.getContext('2d')!;
 
         const context = new Context(canvasContext);
@@ -44,6 +48,8 @@ export class Canvas extends React.Component<{}, CanvasState> {
             lines: new LinesRenderer(),
         });
 
+        const resizeHandler = this.resizeCanvas.bind(this);
+
         this.setState({
             activeToolIndices: {
                 0: 3,
@@ -52,6 +58,7 @@ export class Canvas extends React.Component<{}, CanvasState> {
             },
             context,
             currentToolIndex: 0,
+            resizeHandler,
             shapeManager,
             tools: [
                 new MoveTool(shapeManager, context),
@@ -66,15 +73,20 @@ export class Canvas extends React.Component<{}, CanvasState> {
             this.state.webSocketManager!.setBoundingBox(this.context.screen);
         };
 
-        window.addEventListener('resize', this.resizeCanvas);
+        window.addEventListener('resize', resizeHandler);
     }
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.resizeCanvas);
+        window.removeEventListener('resize', this.state.resizeHandler!);
     }
 
     resizeCanvas() {
-        console.warn('Resize not implemented yet');
+        const canvas = this.canvasRef.current!;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        this.state.context!.zoom(1);
+        this.state.shapeManager!.redraw();
     }
 
     onMouseDown(event: React.MouseEvent) {
@@ -143,3 +155,11 @@ export class Canvas extends React.Component<{}, CanvasState> {
         );
     }
 }
+
+function mapStateToProps(state: RootState) {
+    return {
+        strokeColor: state.strokeColor,
+    };
+}
+
+export const Canvas = connect(mapStateToProps)(UnconnectedCanvas);
