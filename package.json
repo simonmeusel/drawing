@@ -1,10 +1,10 @@
 {
     "name": "drawing",
     "scripts": {
-        "start": "concurrently \"parcel watch src/frontend/index.html\" \"ts-node-dev src/backend/index.ts\"",
-        "start:prod": "ts-node src/backend/index.ts",
-        "build": "webpack --mode development",
-        "build:prod": "webpack --mode production"
+        "start": "concurrently \"npm run build\" \"npm run start:backend\"",
+        "start:backend": "ts-node src/backend/index.ts",
+        "build": "parcel watch src/frontend/index.html",
+        "build:prod": "parcel build src/frontend/index.html"
     },
     "prettier": {
         "singleQuote": true,
