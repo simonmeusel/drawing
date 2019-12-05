@@ -5,13 +5,14 @@ import { ShapeManager } from '../ShapeManager';
 import { Context } from '../Context';
 import { ShapeTool } from './ShapeTool';
 import { LinesShape } from '../../../../shared/shapes/LinesShape';
+import { ToolProperties } from './Tool';
 
 export class LinesShapeTool extends ShapeTool<LinesShape> {
     constructor(strokeManager: ShapeManager, context: Context) {
         super(strokeManager, context);
     }
 
-    protected createStroke(point: Point) {
+    protected createStroke(point: Point, toolProperties: ToolProperties) {
         const stroke: LinesShape = {
             id: UUID.generateString(),
             type: 'lines',
@@ -21,19 +22,23 @@ export class LinesShapeTool extends ShapeTool<LinesShape> {
             },
             data: {
                 points: [point],
-                strokeColor: '#4400ccff',
+                strokeColor: toolProperties.strokeColor,
             },
         };
         return stroke;
     }
 
-    protected updateStroke(activeStroke: LinesShape, point: Point) {
+    protected updateStroke(
+        activeStroke: LinesShape,
+        point: Point,
+        toolProperties: ToolProperties
+    ) {
         return {
             ...activeStroke,
             boundingBox: addPointToBoundingBox(activeStroke.boundingBox, point),
             data: {
                 points: [...activeStroke.data.points, point],
-                strokeColor: activeStroke.data.strokeColor,
+                strokeColor: toolProperties.strokeColor,
             },
         };
     }

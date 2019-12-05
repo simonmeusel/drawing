@@ -4,13 +4,15 @@ import { strokeColor } from './strokeColor';
 import { Color } from '../../../shared/Color';
 
 export const initialState = {
-    strokeColor: '#00000011',
+    strokeColor: '#000000ff',
 };
+
+export type RootAction = SetStrokeColorAction;
 
 export interface RootState {
     strokeColor: Color;
 }
 
-export const reducer = createReducer<RootState, SetStrokeColorAction>(
+export const reducer = createReducer<RootState, RootAction>(
     initialState
 ).handleType(SET_STROKE_COLOR, strokeColor);

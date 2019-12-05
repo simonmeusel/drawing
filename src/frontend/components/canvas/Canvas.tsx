@@ -8,11 +8,11 @@ import { MoveTool } from './tools/MoveTool';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { LinesRenderer } from './renderers/LinesRenderer';
-import { Tool } from './tools/Tool';
+import { Tool, ToolProperties } from './tools/Tool';
 import { RootState } from '../../redux/reducers';
 import { connect } from 'react-redux';
 
-type CanvasState = {
+interface CanvasState {
     activeToolIndices?: { [button: number]: number };
     context?: Context;
     currentToolIndex?: number;
@@ -20,7 +20,7 @@ type CanvasState = {
     shapeManager?: ShapeManager;
     tools?: Tool[];
     webSocketManager?: WebSocketManager;
-};
+}
 
 export class UnconnectedCanvas extends React.Component<
     ReturnType<typeof mapStateToProps>,
@@ -29,7 +29,6 @@ export class UnconnectedCanvas extends React.Component<
     private canvasRef = React.createRef<HTMLCanvasElement>();
 
     componentDidMount() {
-        console.log(this.canvasRef);
         const canvas = this.canvasRef.current!;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -111,7 +110,10 @@ export class UnconnectedCanvas extends React.Component<
         event.preventDefault();
         this.state.tools![
             this.state.activeToolIndices![this.state.currentToolIndex!]
-        ][type](this.state.context!.getPoint(event.clientX, event.clientY));
+        ][type](
+            this.state.context!.getPoint(event.clientX, event.clientY),
+            this.props.toolProperties
+        );
     }
 
     onMouseWheel(event: React.WheelEvent) {
@@ -157,8 +159,11 @@ export class UnconnectedCanvas extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-    return {
+    const toolProperties: ToolProperties = {
         strokeColor: state.strokeColor,
+    };
+    return {
+        toolProperties,
     };
 }
 

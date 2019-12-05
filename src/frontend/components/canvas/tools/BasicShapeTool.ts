@@ -6,6 +6,7 @@ import { ShapeManager } from '../ShapeManager';
 import { Context } from '../Context';
 import { ShapeTool } from './ShapeTool';
 import { BasicShape } from '../../../../shared/shapes/BasicShape';
+import { ToolProperties } from './Tool';
 
 export class BasicShapeTool extends ShapeTool<BasicShape> {
     private startingPoint?: Point;
@@ -18,7 +19,7 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
         super(shapeManager, context);
     }
 
-    protected createStroke(point: Point) {
+    protected createStroke(point: Point, toolProperties: ToolProperties) {
         this.startingPoint = point;
         return {
             id: UUID.generateString(),
@@ -28,7 +29,7 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
                 upperRightPoint: point,
             },
             data: {
-                strokeColor: '#000000ff',
+                strokeColor: toolProperties.strokeColor,
                 fillColor: '#cc0044ff',
             },
         };
