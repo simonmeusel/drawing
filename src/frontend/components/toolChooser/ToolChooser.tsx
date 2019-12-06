@@ -1,10 +1,9 @@
+import 'bulma/css/bulma.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../redux/reducers';
 import { setSelectedTool } from '../../redux/actions/selectedTool';
-import 'bulma/css/bulma.css';
-import { LinesRenderer } from '../canvas/renderers/LinesRenderer';
+import { RootAction, RootState } from '../../redux/reducers';
 
 export class UnconnextedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & {
@@ -24,9 +23,14 @@ export class UnconnextedToolChooser extends React.Component<
             { value: 0, name: 'Move' },
         ];
 
-        const buttonItems = tools.map(tool => (
+        const buttonElements = tools.map(tool => (
             <button
-                className="button is-link is-outlined"
+                className={
+                    'button is-link' +
+                    (this.props.selectedTool == tool.value
+                        ? ''
+                        : ' is-outlined')
+                }
                 key={tool.value.toString()}
                 onClick={() => this.onClick(tool.value)}
             >
@@ -35,7 +39,7 @@ export class UnconnextedToolChooser extends React.Component<
         ));
         return (
             <div>
-                <div className="buttons">{buttonItems}</div>
+                <div className="buttons">{buttonElements}</div>
             </div>
         );
     }
@@ -46,7 +50,7 @@ export class UnconnextedToolChooser extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-    return {};
+    return { selectedTool: state.selectedTool };
 }
 
 export const ToolChooser = connect(mapStateToProps)(UnconnextedToolChooser);
