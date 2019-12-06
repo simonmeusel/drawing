@@ -3,9 +3,9 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { Canvas } from './components/canvas/Canvas';
+import { ToolPanel } from './components/toolPanel/ToolPanel';
 import './index.scss';
 import { reducer } from './redux/reducers';
-import { ToolPanel } from './components/toolPanel/ToolPanel';
 
 const store = createStore(reducer);
 

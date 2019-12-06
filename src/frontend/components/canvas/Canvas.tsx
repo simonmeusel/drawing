@@ -102,7 +102,6 @@ export class UnconnectedCanvas extends React.Component<
         event: React.MouseEvent
     ) {
         event.preventDefault();
-        console.log(this.state.currentToolIndex!);
         this.state.tools![
             this.props.activeToolIndices[this.state.currentToolIndex!]
         ][type](

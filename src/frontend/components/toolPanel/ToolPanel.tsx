@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import './ToolPanel.scss';
 import { ColorPicker } from './colorPicker/ColorPicker';
 import { ToolChooser } from './toolChooser/ToolChooser';
+import './ToolPanel.scss';
 
 export class ToolPanel extends React.Component {
     render() {
