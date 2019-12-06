@@ -1,5 +1,5 @@
-import { Tool } from './Tool';
 import { Point } from '../../../../shared/Point';
+import { Tool } from './Tool';
 
 export class MoveTool extends Tool {
     private startingPoint?: Point;

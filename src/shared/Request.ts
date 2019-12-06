@@ -1,5 +1,5 @@
-import { Shape } from './Shape';
 import { BoundingBox } from './BoundingBox';
+import { Shape } from './Shape';
 
 export type Request =
     | {

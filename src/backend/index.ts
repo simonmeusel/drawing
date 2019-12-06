@@ -1,11 +1,11 @@
 import express from 'express';
-import * as WebSocket from 'ws';
 import { createServer } from 'http';
-import { Shape } from '../shared/Shape';
-import { MongoClient, Binary, Collection, IndexSpecification } from 'mongodb';
-import { BackendUUID } from './BackendUUID';
+import { Binary, Collection, IndexSpecification, MongoClient } from 'mongodb';
+import * as WebSocket from 'ws';
 import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Request } from '../shared/Request';
+import { Shape } from '../shared/Shape';
+import { BackendUUID } from './BackendUUID';
 
 type RawShape = Pick<Shape, 'boundingBox' | 'type'> & { _id: Binary };
 

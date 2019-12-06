@@ -1,12 +1,12 @@
 import { createReducer } from 'typesafe-actions';
-import { SET_STROKE_COLOR, SetStrokeColorAction } from '../actions/strokeColor';
-import { strokeColor } from './strokeColor';
 import { Color } from '../../../shared/Color';
 import {
     SET_SELECTED_TOOL,
     SetSelectedToolAction,
 } from '../actions/selectedTool';
+import { SET_STROKE_COLOR, SetStrokeColorAction } from '../actions/strokeColor';
 import { selectedTool } from './selectedTool';
+import { strokeColor } from './strokeColor';
 
 export const initialState = {
     strokeColor: '#000000ff',

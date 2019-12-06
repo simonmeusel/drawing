@@ -1,6 +1,6 @@
-import { ShapeManager } from '../ShapeManager';
 import { Point } from '../../../../shared/Point';
 import { Context } from '../Context';
+import { ShapeManager } from '../ShapeManager';
 
 export interface ToolProperties {
     strokeColor: string;

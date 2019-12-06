@@ -1,7 +1,7 @@
 import { Shape, ShapeType } from '../../../shared/Shape';
-import { WebSocketManager } from './WebSocketManager';
-import { Renderer } from './renderers/Renderer';
 import { Context } from './Context';
+import { Renderer } from './renderers/Renderer';
+import { WebSocketManager } from './WebSocketManager';
 
 export class ShapeManager {
     private shapes: { [shapeID: string]: Shape } = {};

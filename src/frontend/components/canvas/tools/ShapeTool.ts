@@ -1,6 +1,6 @@
-import { Tool, ToolProperties } from './Tool';
-import { Shape } from '../../../../shared/Shape';
 import { Point } from '../../../../shared/Point';
+import { Shape } from '../../../../shared/Shape';
+import { Tool, ToolProperties } from './Tool';
 
 export abstract class ShapeTool<T extends Shape> extends Tool {
     private activeStroke?: T;

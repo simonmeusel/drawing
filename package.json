@@ -6,7 +6,7 @@
         "build": "parcel watch src/frontend/index.html",
         "build:prod": "parcel build --no-source-maps src/frontend/index.html",
         "lint": "concurrently \"npm run lint:prettier\" \"npm run lint:tslint\"",
-        "lint:prettier": "prettier --loglevel warn --write \"**/*.{json,md,ts,yml}\"",
+        "lint:prettier": "prettier --ignore-path .gitignore --loglevel warn --write \"**/*.{json,md,ts,yml}\"",
         "lint:tslint": "tslint --project . --fix"
     },
     "prettier": {

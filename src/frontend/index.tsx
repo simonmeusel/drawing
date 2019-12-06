@@ -1,10 +1,10 @@
-import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { ColorPicker } from './components/colorPicker/ColorPicker';
-import { Canvas } from './components/canvas/Canvas';
-import './index.scss';
+import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { Canvas } from './components/canvas/Canvas';
+import { ColorPicker } from './components/colorPicker/ColorPicker';
+import './index.scss';
 import { reducer } from './redux/reducers';
 
 const store = createStore(reducer);

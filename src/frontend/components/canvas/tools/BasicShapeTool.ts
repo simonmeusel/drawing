@@ -1,11 +1,11 @@
 import { createBoundingBox } from '../../../../shared/BoundingBox';
-import { ShapeType } from '../../../../shared/Shape';
-import { UUID } from '../../../../shared/UUID';
 import { Point } from '../../../../shared/Point';
-import { ShapeManager } from '../ShapeManager';
-import { Context } from '../Context';
-import { ShapeTool } from './ShapeTool';
+import { ShapeType } from '../../../../shared/Shape';
 import { BasicShape } from '../../../../shared/shapes/BasicShape';
+import { UUID } from '../../../../shared/UUID';
+import { Context } from '../Context';
+import { ShapeManager } from '../ShapeManager';
+import { ShapeTool } from './ShapeTool';
 import { ToolProperties } from './Tool';
 
 export class BasicShapeTool extends ShapeTool<BasicShape> {

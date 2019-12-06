@@ -2,5 +2,8 @@
     "rules": {
         "no-unused-variable": [true, { "ignore-pattern": "^_" }],
         "ordered-imports": true
+    },
+    "linterOptions": {
+        "exclude": ["dist", ".cache", "node_modules"]
     }
 }

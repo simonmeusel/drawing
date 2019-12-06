@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { WebSocketManager } from './WebSocketManager';
+import { connect } from 'react-redux';
+import { RootState } from '../../redux/reducers';
 import { Context } from './Context';
+import { EllipseRenderer } from './renderers/EllipseRenderer';
+import { LinesRenderer } from './renderers/LinesRenderer';
+import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { ShapeManager } from './ShapeManager';
 import { BasicShapeTool } from './tools/BasicShapeTool';
-import { EllipseRenderer } from './renderers/EllipseRenderer';
-import { MoveTool } from './tools/MoveTool';
-import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { LinesShapeTool } from './tools/LinesShapeTool';
-import { LinesRenderer } from './renderers/LinesRenderer';
+import { MoveTool } from './tools/MoveTool';
 import { Tool, ToolProperties } from './tools/Tool';
-import { RootState } from '../../redux/reducers';
-import { connect } from 'react-redux';
+import { WebSocketManager } from './WebSocketManager';
 
 interface CanvasState {
     context?: Context;
