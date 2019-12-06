@@ -4,7 +4,10 @@
         "start": "concurrently \"npm run build\" \"npm run start:backend\"",
         "start:backend": "ts-node src/backend/index.ts",
         "build": "parcel watch src/frontend/index.html",
-        "build:prod": "parcel build src/frontend/index.html"
+        "build:prod": "parcel build --no-source-maps src/frontend/index.html",
+        "lint": "concurrently \"npm run lint:prettier\" \"npm run lint:tslint\"",
+        "lint:prettier": "prettier --loglevel warn --write \"**/*.{json,md,ts,yml}\"",
+        "lint:tslint": "tslint --project . --fix"
     },
     "prettier": {
         "singleQuote": true,
@@ -25,6 +28,7 @@
         "bulma": "^0.8.0",
         "express": "^4.17.1",
         "mongodb": "^3.3.5",
+        "prettier": "^1.19.1",
         "rc-color-picker": "^1.2.6",
         "react": "^16.12.0",
         "react-color": "^2.17.3",
@@ -34,6 +38,7 @@
         "redux": "^4.0.4",
         "sass": "^1.23.7",
         "ts-node": "^8.5.4",
+        "tslint": "^5.20.1",
         "typesafe-actions": "^5.1.0",
         "typescript": "^3.7.3",
         "uuid": "^3.3.3",
