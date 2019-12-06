@@ -11,10 +11,10 @@
 -   Visit the local website at [http://localhost:8080](http://localhost:8080)
 
 ### Second possibility
--   Doing everything with [Docker]
+-   Doing everything with [Docker](https://hub.docker.com/_/mongo)
 -   Go into the root folder and make sure that the following folders and files are avaible (they should be there, if they are not then something went wrong with cloning this project)
     -   src [folder]
-    -   package.json, package-lock.json, tsconfig.json, docker-compose.yml, Dockerfile
+    -   package.json, package-lock.json, tsconfig.json, docker-compose.yml, Dockerfile [files]
 -   Then go to the root folder with the Terminal or GitBash
 -   `docker build .` builds the docker image
 -   `docker-compose up --build` starts the application
