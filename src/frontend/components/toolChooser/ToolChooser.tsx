@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { setSelectedTool } from '../../redux/actions/selectedTool';
 import { RootAction, RootState } from '../../redux/reducers';
+import { setSelectedTool } from '../../redux/actions/selectedTool';
+import 'bulma/css/bulma.css';
+import { LinesRenderer } from '../canvas/renderers/LinesRenderer';
 
 export class UnconnextedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & {
@@ -11,37 +13,39 @@ export class UnconnextedToolChooser extends React.Component<
     {}
 > {
     render() {
+        /*
+         * See more possible button options:
+         * https://bulma.io/documentation/elements/button/
+         */
+        const tools = [
+            { value: 3, name: 'Line' },
+            { value: 1, name: 'Rectangle' },
+            { value: 2, name: 'Elipse' },
+            { value: 0, name: 'Move' },
+        ];
+
+        const buttonItems = tools.map(tool => (
+            <button
+                className="button is-link is-outlined"
+                key={tool.value.toString()}
+                onClick={() => this.onClick(tool.value)}
+            >
+                {tool.name}
+            </button>
+        ));
         return (
             <div>
-                <div className="buttons">
-                    <button className="button is-primary is-light">
-                        Primary
-                    </button>
-                    <button className="button is-link is-light">Link</button>
-                </div>
-
-                <div className="buttons">
-                    <button className="button is-info is-light">Info</button>
-                    <button className="button is-success is-light">
-                        Success
-                    </button>
-                    <button className="button is-warning is-light">
-                        Warning
-                    </button>
-                    <button className="button is-danger is-light">
-                        Danger
-                    </button>
-                </div>
+                <div className="buttons">{buttonItems}</div>
             </div>
         );
     }
 
-    componentDidMount() {
-        this.props.dispatch(setSelectedTool(1));
+    onClick(toolNumber: number) {
+        this.props.dispatch(setSelectedTool(toolNumber));
     }
 }
 
-function mapStateToProps(_state: RootState) {
+function mapStateToProps(state: RootState) {
     return {};
 }
 
