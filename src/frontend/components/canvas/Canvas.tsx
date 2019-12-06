@@ -13,7 +13,6 @@ import { RootState } from '../../redux/reducers';
 import { connect } from 'react-redux';
 
 interface CanvasState {
-    activeToolIndices?: { [button: number]: number };
     context?: Context;
     currentToolIndex?: number;
     resizeHandler?: () => void;
@@ -50,11 +49,6 @@ export class UnconnectedCanvas extends React.Component<
         const resizeHandler = this.resizeCanvas.bind(this);
 
         this.setState({
-            activeToolIndices: {
-                0: 3,
-                1: 0,
-                2: 0,
-            },
             context,
             currentToolIndex: 0,
             resizeHandler,
@@ -109,7 +103,7 @@ export class UnconnectedCanvas extends React.Component<
     ) {
         event.preventDefault();
         this.state.tools![
-            this.state.activeToolIndices![this.state.currentToolIndex!]
+            this.props.activeToolIndices[this.state.currentToolIndex!]
         ][type](
             this.state.context!.getPoint(event.clientX, event.clientY),
             this.props.toolProperties
@@ -164,6 +158,11 @@ function mapStateToProps(state: RootState) {
     };
     return {
         toolProperties,
+        activeToolIndices: {
+            0: state.selectedTool,
+            1: 0,
+            2: 0,
+        },
     };
 }
 

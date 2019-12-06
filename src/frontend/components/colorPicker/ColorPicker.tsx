@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootAction, RootState } from '../../redux/reducers';
 import { setStrokeColor } from '../../redux/actions/strokeColor';
+import { ToolChooser } from '../toolChooser/ToolChooser';
 
 export class UnconnectedColorPicker extends React.Component<
     ReturnType<typeof mapStateToProps> & {
@@ -57,6 +58,8 @@ export class UnconnectedColorPicker extends React.Component<
                         </header>
                         <div className="card-content">
                             <div className="content">
+                                <ToolChooser />
+                                <hr />
                                 <SketchPicker
                                     color={rgba}
                                     onChangeComplete={this.onColorChange.bind(
