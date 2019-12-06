@@ -30,14 +30,22 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
             },
             data: {
                 strokeColor: toolProperties.strokeColor,
-                fillColor: '#cc0044ff',
+                fillColor: toolProperties.fillColor,
             },
         };
     }
 
-    protected updateStroke(activeStroke: BasicShape, point: Point) {
+    protected updateStroke(
+        activeStroke: BasicShape,
+        point: Point,
+        toolProperties: ToolProperties
+    ) {
         return {
             ...activeStroke,
+            data: {
+                strokeColor: toolProperties.strokeColor,
+                fillColor: toolProperties.fillColor,
+            },
             boundingBox: createBoundingBox(this.startingPoint!, point),
         };
     }

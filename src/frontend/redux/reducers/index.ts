@@ -1,25 +1,31 @@
 import { createReducer } from 'typesafe-actions';
-import { Color } from '../../../shared/Color';
+import { ToolProperties } from '../../components/canvas/tools/Tool';
 import {
     SET_SELECTED_TOOL,
     SetSelectedToolAction,
 } from '../actions/selectedTool';
-import { SET_STROKE_COLOR, SetStrokeColorAction } from '../actions/strokeColor';
+import {
+    SET_TOOL_PROPERTIES,
+    SetToolPropertiesAction,
+} from '../actions/toolProperties';
 import { selectedTool } from './selectedTool';
-import { strokeColor } from './strokeColor';
+import { toolProperties } from './toolProperties';
 
 export const initialState = {
-    strokeColor: '#000000ff',
+    toolProperties: {
+        strokeColor: '#000000ff',
+        fillColor: '#cc0044ff',
+    },
     selectedTool: 2,
 };
 
-export type RootAction = SetStrokeColorAction | SetSelectedToolAction;
+export type RootAction = SetToolPropertiesAction | SetSelectedToolAction;
 
 export interface RootState {
-    strokeColor: Color;
+    toolProperties: ToolProperties;
     selectedTool: number;
 }
 
 export const reducer = createReducer<RootState, RootAction>(initialState)
-    .handleType(SET_STROKE_COLOR, strokeColor)
-    .handleType(SET_SELECTED_TOOL, selectedTool);
+    .handleType(SET_SELECTED_TOOL, selectedTool)
+    .handleType(SET_TOOL_PROPERTIES, toolProperties);

@@ -9,7 +9,7 @@ import { ShapeManager } from './ShapeManager';
 import { BasicShapeTool } from './tools/BasicShapeTool';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { MoveTool } from './tools/MoveTool';
-import { Tool, ToolProperties } from './tools/Tool';
+import { Tool } from './tools/Tool';
 import { WebSocketManager } from './WebSocketManager';
 
 interface CanvasState {
@@ -154,11 +154,8 @@ export class UnconnectedCanvas extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-    const toolProperties: ToolProperties = {
-        strokeColor: state.strokeColor,
-    };
     return {
-        toolProperties,
+        toolProperties: state.toolProperties,
         activeToolIndices: {
             0: state.selectedTool,
             1: 0,

@@ -3,7 +3,7 @@ import { ColorResult, SketchPicker } from 'react-color';
 import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { setStrokeColor } from '../../redux/actions/strokeColor';
+import { setToolProperties } from '../../redux/actions/toolProperties';
 import { RootAction, RootState } from '../../redux/reducers';
 import { ToolChooser } from '../toolChooser/ToolChooser';
 import './ColorPicker.scss';
@@ -18,7 +18,12 @@ export class UnconnectedColorPicker extends React.Component<
         const alpha =
             '00' + Math.round((colorResult.rgb.a || 1) * 255).toString(16);
         const color = colorResult.hex + alpha.substring(alpha.length - 2);
-        this.props.dispatch(setStrokeColor(color));
+        this.props.dispatch(
+            setToolProperties({
+                strokeColor: color,
+                fillColor: color,
+            })
+        );
     }
 
     render() {
@@ -76,9 +81,7 @@ export class UnconnectedColorPicker extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-    return {
-        strokeColor: state.strokeColor,
-    };
+    return state.toolProperties;
 }
 
 export const ColorPicker = connect(mapStateToProps)(UnconnectedColorPicker);
