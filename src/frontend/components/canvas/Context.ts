@@ -1,7 +1,7 @@
 import {
     BoundingBox,
-    doBoundingBoxesOverlap,
     createBoundingBox,
+    doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
 

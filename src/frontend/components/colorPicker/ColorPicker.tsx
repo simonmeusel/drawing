@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { SketchPicker, ColorResult } from 'react-color';
+import { ColorResult, SketchPicker } from 'react-color';
 import Draggable from 'react-draggable';
-import './ColorPicker.scss';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../redux/reducers';
 import { setStrokeColor } from '../../redux/actions/strokeColor';
+import { RootAction, RootState } from '../../redux/reducers';
 import { ToolChooser } from '../toolChooser/ToolChooser';
+import './ColorPicker.scss';
 
 export class UnconnectedColorPicker extends React.Component<
     ReturnType<typeof mapStateToProps> & {

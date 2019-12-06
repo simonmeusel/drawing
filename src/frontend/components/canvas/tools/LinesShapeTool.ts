@@ -1,10 +1,10 @@
 import { addPointToBoundingBox } from '../../../../shared/BoundingBox';
-import { UUID } from '../../../../shared/UUID';
 import { Point } from '../../../../shared/Point';
-import { ShapeManager } from '../ShapeManager';
-import { Context } from '../Context';
-import { ShapeTool } from './ShapeTool';
 import { LinesShape } from '../../../../shared/shapes/LinesShape';
+import { UUID } from '../../../../shared/UUID';
+import { Context } from '../Context';
+import { ShapeManager } from '../ShapeManager';
+import { ShapeTool } from './ShapeTool';
 import { ToolProperties } from './Tool';
 
 export class LinesShapeTool extends ShapeTool<LinesShape> {

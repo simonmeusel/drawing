@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../redux/reducers';
 import { setSelectedTool } from '../../redux/actions/selectedTool';
-import 'bulma/css/bulma.css';
-
-let toolNumber = 1;
+import { RootAction, RootState } from '../../redux/reducers';
 
 export class UnconnextedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & {
@@ -14,37 +11,25 @@ export class UnconnextedToolChooser extends React.Component<
     {}
 > {
     render() {
-        /**
-         * See more possible button options:
-         * https://bulma.io/documentation/elements/button/
-         */
-
         return (
             <div>
                 <div className="buttons">
-                    <button
-                        className="button is-primary is-outlined"
-                        onClick={() => (toolNumber = 3)}
-                    >
-                        Line
+                    <button className="button is-primary is-light">
+                        Primary
                     </button>
-                    <button
-                        className="button is-primary is-outlined"
-                        onClick={() => (toolNumber = 1)}
-                    >
-                        Rectangle
+                    <button className="button is-link is-light">Link</button>
+                </div>
+
+                <div className="buttons">
+                    <button className="button is-info is-light">Info</button>
+                    <button className="button is-success is-light">
+                        Success
                     </button>
-                    <button
-                        className="button is-link is-outlined"
-                        onClick={() => (toolNumber = 2)}
-                    >
-                        Elipse
+                    <button className="button is-warning is-light">
+                        Warning
                     </button>
-                    <button
-                        className="button is-link is-outlined"
-                        onClick={this.componentDidMount}
-                    >
-                        Apply Changes
+                    <button className="button is-danger is-light">
+                        Danger
                     </button>
                 </div>
             </div>
@@ -52,18 +37,11 @@ export class UnconnextedToolChooser extends React.Component<
     }
 
     componentDidMount() {
-        console.log('mounted');
-        this.props.dispatch(setSelectedTool(toolNumber));
+        this.props.dispatch(setSelectedTool(1));
     }
 }
 
-/*
-function toolChangeHandler(this: any, toolNumber: number) {
-    toolNumber = toolNumber;
-}
-*/
-
-function mapStateToProps(state: RootState) {
+function mapStateToProps(_state: RootState) {
     return {};
 }
 

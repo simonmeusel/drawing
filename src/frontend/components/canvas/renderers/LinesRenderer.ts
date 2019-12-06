@@ -1,7 +1,7 @@
-import { Renderer } from './Renderer';
-import { Context } from '../Context';
-import { LinesShape } from '../../../../shared/shapes/LinesShape';
 import { Point } from '../../../../shared/Point';
+import { LinesShape } from '../../../../shared/shapes/LinesShape';
+import { Context } from '../Context';
+import { Renderer } from './Renderer';
 
 export class LinesRenderer extends Renderer<LinesShape> {
     public m = 1;
