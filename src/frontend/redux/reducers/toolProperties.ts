@@ -7,6 +7,9 @@ export function toolProperties(
 ): RootState {
     return {
         ...state,
-        toolProperties: action.toolProperties,
+        toolProperties: {
+            ...state.toolProperties,
+            ...action.toolProperties,
+        },
     };
 }

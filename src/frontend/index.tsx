@@ -3,15 +3,15 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { Canvas } from './components/canvas/Canvas';
-import { ColorPicker } from './components/colorPicker/ColorPicker';
 import './index.scss';
 import { reducer } from './redux/reducers';
+import { ToolPanel } from './components/toolPanel/ToolPanel';
 
 const store = createStore(reducer);
 
 ReactDOM.render(
     <Provider store={store}>
-        <ColorPicker />
+        <ToolPanel />
         <div style={{ position: 'relative' }}>
             <Canvas />
         </div>

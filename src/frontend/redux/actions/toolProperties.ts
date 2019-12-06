@@ -4,11 +4,11 @@ export const SET_TOOL_PROPERTIES = 'SET_TOOL_PROPERTIES';
 
 export interface SetToolPropertiesAction {
     type: typeof SET_TOOL_PROPERTIES;
-    toolProperties: ToolProperties;
+    toolProperties: Partial<ToolProperties>;
 }
 
 export function setToolProperties(
-    toolProperties: ToolProperties
+    toolProperties: Partial<ToolProperties>
 ): SetToolPropertiesAction {
     return {
         type: SET_TOOL_PROPERTIES,

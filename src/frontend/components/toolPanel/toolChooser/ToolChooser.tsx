@@ -1,9 +1,8 @@
-import 'bulma/css/bulma.css';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { setSelectedTool } from '../../redux/actions/selectedTool';
-import { RootAction, RootState } from '../../redux/reducers';
+import { setSelectedTool } from '../../../redux/actions/selectedTool';
+import { RootAction, RootState } from '../../../redux/reducers';
 
 export class UnconnextedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & {
@@ -12,10 +11,9 @@ export class UnconnextedToolChooser extends React.Component<
     {}
 > {
     render() {
-        /*
-         * See more possible button options:
-         * https://bulma.io/documentation/elements/button/
-         */
+        // See possible button options:
+        // https://bulma.io/documentation/elements/button/
+
         const tools = [
             { value: 3, name: 'Line' },
             { value: 1, name: 'Rectangle' },
