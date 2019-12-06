@@ -1,0 +1,14 @@
+image: alpine:latest
+
+stages:
+    - test
+
+test:
+    script:
+        - apk add nodejs npm
+        # Install npm dependencies
+        - node --version
+        - npm --version
+        - npm install
+        # Build Frontend
+        - npm run build:prod
