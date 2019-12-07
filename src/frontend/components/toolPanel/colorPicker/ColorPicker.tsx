@@ -53,8 +53,12 @@ export class UnconnectedColorPicker extends React.Component<
         });
     }
 
+    getColor(tab: Tab) {
+        return this.props[tab + 'Color'];
+    }
+
     render() {
-        const color = this.props[this.state.selectedTab + 'Color'].substring(1);
+        const color = this.getColor(this.state.selectedTab).substring(1);
         const rgba = {
             r: parseInt(color.substring(0, 2), 16),
             g: parseInt(color.substring(2, 4), 16),
@@ -71,7 +75,15 @@ export class UnconnectedColorPicker extends React.Component<
                 }
                 onClick={() => this.setSelectedTab(t.tab)}
             >
-                <a>{t.name}</a>
+                <a>
+                    <span
+                        className="icon app-color-picker-icon"
+                        style={{
+                            backgroundColor: this.getColor(t.tab),
+                        }}
+                    ></span>
+                    {t.name}
+                </a>
             </li>
         ));
 
