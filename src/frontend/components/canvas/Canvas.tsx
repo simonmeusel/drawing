@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../redux/reducers';
+import { RootState } from '../../redux';
 import { Context } from './Context';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { LinesRenderer } from './renderers/LinesRenderer';

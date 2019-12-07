@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { setSelectedTool } from '../../../redux/actions/selectedTool';
-import { RootAction, RootState } from '../../../redux/reducers';
+import { RootAction, RootState } from '../../../redux';
 
 export class UnconnextedToolChooser extends React.Component<
     ReturnType<typeof mapStateToProps> & {

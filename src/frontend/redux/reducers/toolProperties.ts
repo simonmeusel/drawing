@@ -1,4 +1,4 @@
-import { RootState } from '.';
+import { RootState } from '..';
 import { SetToolPropertiesAction } from '../actions/toolProperties';
 
 export function toolProperties(

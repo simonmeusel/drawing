@@ -3,7 +3,7 @@ import { ColorResult, SketchPicker } from 'react-color';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { setToolProperties } from '../../../redux/actions/toolProperties';
-import { RootAction, RootState } from '../../../redux/reducers';
+import { RootAction, RootState } from '../../../redux';
 import './ColorPicker.scss';
 
 export type ColorPickerProps = ReturnType<typeof mapStateToProps> & {

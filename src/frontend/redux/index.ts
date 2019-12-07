@@ -1,15 +1,15 @@
 import { createReducer } from 'typesafe-actions';
-import { ToolProperties } from '../../components/canvas/tools/Tool';
+import { ToolProperties } from '../components/canvas/tools/Tool';
 import {
     SET_SELECTED_TOOL,
     SetSelectedToolAction,
-} from '../actions/selectedTool';
+} from './actions/selectedTool';
 import {
     SET_TOOL_PROPERTIES,
     SetToolPropertiesAction,
-} from '../actions/toolProperties';
-import { selectedTool } from './selectedTool';
-import { toolProperties } from './toolProperties';
+} from './actions/toolProperties';
+import { selectedTool } from './reducers/selectedTool';
+import { toolProperties } from './reducers/toolProperties';
 
 export const initialState = {
     toolProperties: {

@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import { Canvas } from './components/canvas/Canvas';
 import { ToolPanel } from './components/toolPanel/ToolPanel';
 import './index.scss';
-import { reducer } from './redux/reducers';
+import { reducer } from './redux';
 
 const store = createStore(reducer);
 
