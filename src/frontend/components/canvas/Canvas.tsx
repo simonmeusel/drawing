@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../redux/reducers';
+import { RootState } from '../../redux';
 import { Context } from './Context';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { LinesRenderer } from './renderers/LinesRenderer';
@@ -9,7 +9,7 @@ import { ShapeManager } from './ShapeManager';
 import { BasicShapeTool } from './tools/BasicShapeTool';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { MoveTool } from './tools/MoveTool';
-import { Tool, ToolProperties } from './tools/Tool';
+import { Tool } from './tools/Tool';
 import { WebSocketManager } from './WebSocketManager';
 
 interface CanvasState {
@@ -102,7 +102,6 @@ export class UnconnectedCanvas extends React.Component<
         event: React.MouseEvent
     ) {
         event.preventDefault();
-        console.log(this.state.currentToolIndex!);
         this.state.tools![
             this.props.activeToolIndices[this.state.currentToolIndex!]
         ][type](
@@ -154,11 +153,8 @@ export class UnconnectedCanvas extends React.Component<
 }
 
 function mapStateToProps(state: RootState) {
-    const toolProperties: ToolProperties = {
-        strokeColor: state.strokeColor,
-    };
     return {
-        toolProperties,
+        toolProperties: state.toolProperties,
         activeToolIndices: {
             0: state.selectedTool,
             1: 0,

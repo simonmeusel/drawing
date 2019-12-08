@@ -4,6 +4,7 @@ import { ShapeManager } from '../ShapeManager';
 
 export interface ToolProperties {
     strokeColor: string;
+    fillColor: string;
 }
 
 export abstract class Tool {

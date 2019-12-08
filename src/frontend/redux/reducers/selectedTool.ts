@@ -1,4 +1,4 @@
-import { RootState } from '.';
+import { RootState } from '..';
 import { SetSelectedToolAction } from '../actions/selectedTool';
 
 export function selectedTool(
