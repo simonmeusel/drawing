@@ -6,8 +6,13 @@ import { Canvas } from './components/canvas/Canvas';
 import { ToolPanel } from './components/toolPanel/ToolPanel';
 import './index.scss';
 import { reducer } from './redux';
+import { saveState } from './redux/localStorage';
 
 const store = createStore(reducer);
+
+window.addEventListener('beforeunload', () => {
+    saveState(store, false);
+});
 
 ReactDOM.render(
     <Provider store={store}>
