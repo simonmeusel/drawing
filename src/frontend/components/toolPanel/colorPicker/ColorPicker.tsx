@@ -74,6 +74,7 @@ export class UnconnectedColorPicker extends React.Component<
                     this.state.selectedTab == t.tab ? activeClassName : ''
                 }
                 onClick={() => this.setSelectedTab(t.tab)}
+                key={t.tab}
             >
                 <a>
                     <span
