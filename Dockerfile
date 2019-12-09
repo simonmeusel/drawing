@@ -1,19 +1,32 @@
-FROM alpine
+FROM alpine as builder
 
-RUN apk add nodejs npm
-# Create app dir
 WORKDIR /app
-# Install app dependencies
-COPY package*.json ./
 
+# Install build dependencies
+RUN apk add nodejs npm
+COPY package*.json ./
 RUN npm install
 
-# Bundle app source
-COPY . .
-
+# Build application
+COPY . ./
 RUN npm run build:prod
-#binds to port 8080
-EXPOSE 8080
-# start the application
-CMD [ "npm", "run", "start:backend" ]
+
+FROM alpine
+
+WORKDIR /app
+
+# Install production dependencies
+RUN apk add nodejs npm
+COPY package*.json ./
+RUN npm install --only=production
+
+# Copy Backend source
+COPY src/backend src/backend
+COPY src/shared src/shared
+COPY tsconfig.json ./
+
+# Copy built Frontend
+COPY --from=builder /app/dist /app/dist
+
+CMD npm run start:backend
 

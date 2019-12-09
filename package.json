@@ -3,7 +3,7 @@
     "scripts": {
         "start": "concurrently \"npm run build\" \"npm run start:backend\"",
         "start:backend": "ts-node src/backend/index.ts",
-        "build:clean": "shx rm -r dist",
+        "build:clean": "shx rm -rf dist",
         "build": "npm run build:clean && parcel watch src/frontend/index.html",
         "build:prod": "npm run build:clean && parcel build --no-source-maps src/frontend/index.html && npx workbox generateSW",
         "lint": "concurrently \"npm run lint:prettier\" \"npm run lint:tslint\"",
