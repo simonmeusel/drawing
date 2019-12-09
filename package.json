@@ -3,8 +3,9 @@
     "scripts": {
         "start": "concurrently \"npm run build\" \"npm run start:backend\"",
         "start:backend": "ts-node src/backend/index.ts",
-        "build": "parcel watch src/frontend/index.html",
-        "build:prod": "parcel build --no-source-maps src/frontend/index.html",
+        "build:clean": "shx rm -rf dist",
+        "build": "npm run build:clean && parcel watch src/frontend/index.html",
+        "build:prod": "npm run build:clean && parcel build --no-source-maps src/frontend/index.html && npx workbox generateSW",
         "lint": "concurrently \"npm run lint:prettier\" \"npm run lint:tslint\"",
         "lint:prettier": "prettier --ignore-path .gitignore --loglevel warn --write \"**/*.{json,md,ts,yml}\"",
         "lint:tslint": "tslint --project . --fix"
@@ -18,18 +19,25 @@
         "@types/ajv": "^1.0.0",
         "@types/express": "^4.17.2",
         "@types/mongodb": "^3.3.11",
+        "@types/uuid": "^3.4.6",
+        "@types/ws": "^6.0.4",
+        "ajv": "^6.10.2",
+        "express": "^4.17.1",
+        "mongodb": "^3.3.5",
+        "ts-node": "^8.5.4",
+        "typescript": "^3.7.3",
+        "uuid": "^3.3.3",
+        "ws": "^7.2.0"
+    },
+    "devDependencies": {
         "@types/react": "^16.9.15",
         "@types/react-color": "^3.0.1",
         "@types/react-dom": "^16.9.4",
         "@types/react-redux": "^7.1.5",
-        "@types/uuid": "^3.4.6",
-        "@types/ws": "^6.0.4",
-        "ajv": "^6.10.2",
         "bulma": "^0.8.0",
-        "express": "^4.17.1",
-        "mongodb": "^3.3.5",
+        "concurrently": "^5.0.0",
+        "parcel-bundler": "^1.12.4",
         "prettier": "^1.19.1",
-        "rc-color-picker": "^1.2.6",
         "react": "^16.12.0",
         "react-color": "^2.17.3",
         "react-dom": "^16.12.0",
@@ -37,16 +45,10 @@
         "react-redux": "^7.1.3",
         "redux": "^4.0.4",
         "sass": "^1.23.7",
-        "ts-node": "^8.5.4",
+        "shx": "^0.3.2",
+        "ts-node-dev": "^1.0.0-pre.44",
         "tslint": "^5.20.1",
         "typesafe-actions": "^5.1.0",
-        "typescript": "^3.7.3",
-        "uuid": "^3.3.3",
-        "ws": "^7.2.0"
-    },
-    "devDependencies": {
-        "concurrently": "^5.0.0",
-        "parcel-bundler": "^1.12.4",
-        "ts-node-dev": "^1.0.0-pre.44"
+        "workbox-cli": "^4.3.1"
     }
 }

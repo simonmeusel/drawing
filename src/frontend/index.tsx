@@ -8,6 +8,15 @@ import './index.scss';
 import { reducer } from './redux';
 import { saveState } from './redux/localStorage';
 
+navigator.serviceWorker.register('' + '/sw.js');
+if (process.env.NODE_ENV === 'development') {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+            registration.unregister();
+        }
+    });
+}
+
 const store = createStore(reducer);
 
 window.addEventListener('beforeunload', () => {
