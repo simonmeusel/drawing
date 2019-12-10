@@ -13,6 +13,8 @@ RUN npm run build:prod
 
 FROM alpine
 
+RUN useradd --create-home --home /app drawing
+
 WORKDIR /app
 
 # Install production dependencies
@@ -27,6 +29,8 @@ COPY tsconfig.json ./
 
 # Copy built Frontend
 COPY --from=builder /app/dist /app/dist
+
+USER drawing
 
 CMD npm run start:backend
 
