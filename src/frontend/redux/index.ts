@@ -1,5 +1,6 @@
 import { createStore, Store } from 'redux';
 import { createReducer } from 'typesafe-actions';
+import { UUID } from '../../shared/UUID';
 import { ToolProperties } from '../components/canvas/tools/Tool';
 import {
     SET_SELECTED_TOOL,
@@ -19,13 +20,23 @@ export const initialState: RootState = getPersistentState({
         fillColor: '#cc0044ff',
     },
     selectedTool: 2,
+    roomID: getRoomID(),
 });
+
+function getRoomID() {
+    let hash = new URL(location.href).hash.substring(1);
+    if (hash == '') {
+        hash = UUID.generateString();
+    }
+    return hash;
+}
 
 export type RootAction = SetToolPropertiesAction | SetSelectedToolAction;
 
 export interface RootState {
     toolProperties: ToolProperties;
     selectedTool: number;
+    roomID: string;
 }
 
 export type RootStore = Store<RootState, RootAction>;
