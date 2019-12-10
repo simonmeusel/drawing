@@ -7,7 +7,10 @@ const timeouts = new Map<RootStore, any>();
 export function getPersistentState(state: RootState): RootState {
     if (localStorage.getItem('drawing-state-v1')) {
         try {
-            state = JSON.parse(localStorage.getItem('drawing-state-v1')!);
+            state = {
+                ...state,
+                ...JSON.parse(localStorage.getItem('drawing-state-v1')!),
+            };
         } catch (error) {
             console.error(error);
         }
