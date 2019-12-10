@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { Panel } from '../Panel';
 import { ColorPicker } from './colorPicker/ColorPicker';
 import { ToolChooser } from './toolChooser/ToolChooser';
-import { Panel } from '../Panel';
 
 export class ToolPanel extends React.Component {
     render() {
