@@ -1,4 +1,4 @@
-import { Server } from 'http';
+import { Server, IncomingMessage } from 'http';
 import { Binary } from 'mongodb';
 import * as WebSocket from 'ws';
 import { database } from '.';
@@ -18,27 +18,37 @@ export class WebSocketServer {
 
     initialize(httpServer: Server) {
         this.server = new WebSocket.Server({ server: httpServer });
-        this.server.on('connection', (webSocket: ExtendedWebSocket) => {
-            this.handleConnection(webSocket);
-        });
+        this.server.on(
+            'connection',
+            (webSocket: ExtendedWebSocket, request: IncomingMessage) => {
+                this.handleConnection(webSocket, request);
+            }
+        );
     }
 
-    private parseRoomID(webSocket: ExtendedWebSocket) {
-        if (!webSocket.url) {
+    private parseRoomID(
+        webSocket: ExtendedWebSocket,
+        request: IncomingMessage
+    ) {
+        const url = request.url;
+        if (!url || url.length != 37 || !url.startsWith('/')) {
             this.disconnectWebSocket(webSocket);
             return;
         }
-        const hash = new URL(webSocket.url).hash;
-        if (!hash || hash.length != 36 || !uuidRegexp.test(hash)) {
+        const roomID = url.substring(1);
+        if (!uuidRegexp.test(roomID)) {
             this.disconnectWebSocket(webSocket);
             return;
         }
-        webSocket.roomID = BackendUUID.convertStringToBinary(hash);
+        webSocket.roomID = BackendUUID.convertStringToBinary(roomID);
     }
 
-    private handleConnection(webSocket: ExtendedWebSocket) {
+    private handleConnection(
+        webSocket: ExtendedWebSocket,
+        request: IncomingMessage
+    ) {
         try {
-            this.parseRoomID(webSocket);
+            this.parseRoomID(webSocket, request);
 
             webSocket.on('message', async data => {
                 this.handleMessage(webSocket, data);

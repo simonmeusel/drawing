@@ -1,7 +1,7 @@
 {
     "name": "drawing",
     "scripts": {
-        "start": "concurrently \"npm run build\" \"npm run start:backend\"",
+        "start": "concurrently \"npm run build\" \"ts-node-dev src/backend/index.ts\"",
         "start:backend": "ts-node src/backend/index.ts",
         "build:clean": "shx rm -rf dist",
         "build": "npm run build:clean && parcel watch src/frontend/index.html",

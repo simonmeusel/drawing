@@ -36,7 +36,7 @@ export class UnconnectedCanvas extends React.Component<
         const context = new Context(canvasContext);
 
         const webSocketManager = new WebSocketManager(
-            'ws://' + location.host,
+            'ws://' + location.host + '/' + this.props.roomID,
             context
         );
 
@@ -160,6 +160,7 @@ function mapStateToProps(state: RootState) {
             1: 0,
             2: 0,
         },
+        roomID: state.roomID,
     };
 }
 
