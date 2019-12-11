@@ -6,7 +6,21 @@ export interface PanelProps {
     title: string;
 }
 
-export class Panel extends React.Component<PanelProps> {
+export interface PanelState {
+    collabsed: boolean;
+}
+
+export class Panel extends React.Component<PanelProps, PanelState> {
+    state = {
+        collabsed: false,
+    };
+
+    toggle() {
+        this.setState({
+            collabsed: !this.state.collabsed,
+        });
+    }
+
     render() {
         return (
             <div className="app-panel">
@@ -23,8 +37,22 @@ export class Panel extends React.Component<PanelProps> {
                             <p className="card-header-title">
                                 {this.props.title}
                             </p>
+                            <a
+                                className="card-header-icon"
+                                aria-label="more options"
+                                onClick={this.toggle.bind(this)}
+                            >
+                                <span className="icon">-</span>
+                            </a>
                         </header>
-                        <div className="card-content">
+                        <div
+                            className={
+                                'card-content' +
+                                (this.state.collabsed
+                                    ? ' app-panel-collapsed-card-content'
+                                    : '')
+                            }
+                        >
                             {this.props.children}
                         </div>
                     </div>

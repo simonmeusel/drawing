@@ -10,4 +10,10 @@
         max-width: 220px;
         z-index: 1;
     }
+
+    .app-panel-collapsed-card-content {
+        height: 0px;
+        padding: 0;
+        overflow: hidden;
+    }
 }
