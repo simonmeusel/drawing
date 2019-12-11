@@ -11,9 +11,28 @@ export class UnconnectedRoomIDPanel extends React.Component<
     {}
 > {
     render() {
+        function copyToClipBoard(currentHash: string) {
+            // DAS BLEIBT SO WIE ES IST, OB DU WILLST UND NICHT!
+            let URLtoBeCopied = new URL(location.href);
+            console.log(currentHash);
+            URLtoBeCopied.hash = '#' + currentHash;
+            let toBeCopied = URLtoBeCopied.toString();
+            console.log(toBeCopied);
+            var dummy = document.createElement('textarea');
+            document.body.appendChild(dummy);
+            dummy.value = toBeCopied;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+        }
+
         return (
             <Panel title="Room ID">
-                <h1> {this.props.roomID} </h1>
+                <h1 id="roomID"> {this.props.roomID.substring(0, 8)} </h1>
+                <button onClick={() => copyToClipBoard(this.props.roomID)}>
+                    {' '}
+                    Copy{' '}
+                </button>
             </Panel>
         );
     }
