@@ -1,4 +1,5 @@
 import { RootState, RootStore } from '.';
+import { getRoomID } from './roomID';
 
 const saveDelay = 1000;
 
@@ -15,6 +16,10 @@ export function getPersistentState(state: RootState): RootState {
             console.error(error);
         }
     }
+
+    // Overrides
+    state.roomID = getRoomID() || state.roomID;
+
     return state;
 }
 

@@ -6,8 +6,9 @@ import { Canvas } from './components/canvas/Canvas';
 import { RoomIDPanel } from './components/panels/RoomIDPanel/RoomIDPanel';
 import { ToolPanel } from './components/panels/toolPanel/ToolPanel';
 import './index.scss';
-import { reducer } from './redux';
-import { saveState } from './redux/localStorage';
+import { reducer } from './store';
+import { saveState } from './store/localStorage';
+import { updateRoomID } from './store/roomID';
 
 if (process.env.NODE_ENV === 'development') {
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -23,6 +24,10 @@ const store = createStore(reducer);
 
 window.addEventListener('beforeunload', () => {
     saveState(store, false);
+});
+
+window.addEventListener('hashchange', () => {
+    updateRoomID(store);
 });
 
 ReactDOM.render(

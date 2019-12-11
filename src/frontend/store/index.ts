@@ -1,7 +1,7 @@
 import { createStore, Store } from 'redux';
 import { createReducer } from 'typesafe-actions';
-import { UUID } from '../../shared/UUID';
 import { ToolProperties } from '../components/canvas/tools/Tool';
+import { SET_ROOM_ID, SetRoomIDAction } from './actions/roomID';
 import {
     SET_SELECTED_TOOL,
     SetSelectedToolAction,
@@ -11,8 +11,10 @@ import {
     SetToolPropertiesAction,
 } from './actions/toolProperties';
 import { getPersistentState, saveState } from './localStorage';
+import { roomID } from './reducers/roomID';
 import { selectedTool } from './reducers/selectedTool';
 import { toolProperties } from './reducers/toolProperties';
+import { getOrGenerateRoomID } from './roomID';
 
 export const initialState: RootState = getPersistentState({
     toolProperties: {
@@ -20,28 +22,26 @@ export const initialState: RootState = getPersistentState({
         fillColor: '#cc0044ff',
     },
     selectedTool: 2,
-    roomID: getRoomID(),
+    roomID: getOrGenerateRoomID(),
+    roomIDHistory: [],
 });
 
-function getRoomID() {
-    let hash = new URL(location.href).hash.substring(1);
-    if (hash == '') {
-        hash = UUID.generateString();
-    }
-    return hash;
-}
-
-export type RootAction = SetToolPropertiesAction | SetSelectedToolAction;
+export type RootAction =
+    | SetRoomIDAction
+    | SetToolPropertiesAction
+    | SetSelectedToolAction;
 
 export interface RootState {
     toolProperties: ToolProperties;
     selectedTool: number;
     roomID: string;
+    roomIDHistory: string[];
 }
 
 export type RootStore = Store<RootState, RootAction>;
 
 export const reducer = createReducer<RootState, RootAction>(initialState)
+    .handleType(SET_ROOM_ID, roomID)
     .handleType(SET_SELECTED_TOOL, selectedTool)
     .handleType(SET_TOOL_PROPERTIES, toolProperties);
 

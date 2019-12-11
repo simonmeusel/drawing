@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../../redux';
+import { RootAction, RootState } from '../../../store';
 import { Panel } from '../Panel';
 
 export class UnconnectedRoomIDPanel extends React.Component<

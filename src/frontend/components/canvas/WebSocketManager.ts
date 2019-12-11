@@ -4,8 +4,10 @@ import { Shape } from '../../../shared/Shape';
 import { Context } from './Context';
 
 export class WebSocketManager {
-    private webSocket: WebSocket;
-    onShapes?: (shapes: Shape[]) => void;
+    private webSocket?: WebSocket;
+    public onShapes?: (shapes: Shape[]) => void;
+    private roomID?: string;
+    private pendingRequests: Request[] = [];
 
     private debouncedShapes: {
         [shapeID: string]: {
@@ -16,11 +18,20 @@ export class WebSocketManager {
     } = {};
 
     constructor(
-        uri: string,
+        private baseURI: string,
         private context: Context,
         private debounceDelay = 100
     ) {
-        this.webSocket = new WebSocket(uri);
+        if (!baseURI.endsWith('/')) {
+            throw new Error('Base URI must end with a /');
+        }
+    }
+
+    public setRoomID(roomID: string) {
+        if (this.roomID == roomID) {
+            return;
+        }
+        this.webSocket = new WebSocket(this.baseURI + roomID);
         this.webSocket.addEventListener('open', () => {
             console.log('Web socket connected');
             this.onScreenChange();
@@ -28,23 +39,26 @@ export class WebSocketManager {
         this.webSocket.addEventListener('message', event => {
             this.onMessage(event);
         });
-        context.screenChangeHandler = () => {
+        this.context.screenChangeHandler = () => {
             this.onScreenChange();
         };
+        for (const shapeID in this.debouncedShapes) {
+            this.discardShape(shapeID);
+        }
     }
 
-    onScreenChange() {
+    public onScreenChange() {
         this.setBoundingBox(this.context.screen);
     }
 
-    onMessage(event: MessageEvent) {
+    public onMessage(event: MessageEvent) {
         if (this.onShapes) {
             const shapes: Shape[] = JSON.parse(event.data);
             this.onShapes(shapes);
         }
     }
 
-    updateShape(shape: Shape, oldBoundingBox?: BoundingBox) {
+    public updateShape(shape: Shape, oldBoundingBox?: BoundingBox) {
         if (this.debouncedShapes[shape.id]) {
             this.debouncedShapes[shape.id].shape = shape;
         } else {
@@ -64,25 +78,37 @@ export class WebSocketManager {
         }
     }
 
-    deleteShape(shapeID: string) {
-        if (this.debouncedShapes[shapeID]) {
-            clearTimeout(this.debouncedShapes[shapeID].timeout);
-            delete this.debouncedShapes[shapeID];
-        }
+    public deleteShape(shapeID: string) {
+        this.discardShape(shapeID);
         this.sendRequest({
             command: 'deleteShape',
             shapeID: shapeID,
         });
     }
 
-    setBoundingBox(boundingBox: BoundingBox) {
+    private discardShape(shapeID: string) {
+        if (this.debouncedShapes.hasOwnProperty(shapeID)) {
+            clearTimeout(this.debouncedShapes[shapeID].timeout);
+            delete this.debouncedShapes[shapeID];
+        }
+    }
+
+    public setBoundingBox(boundingBox: BoundingBox) {
         this.sendRequest({
             command: 'setBoundingBox',
             boundingBox: boundingBox,
         });
     }
 
-    sendRequest(request: Request) {
-        this.webSocket.send(JSON.stringify(request));
+    private sendRequest(request: Request) {
+        if (!this.webSocket) {
+            return;
+        }
+
+        if (this.webSocket.readyState == WebSocket.CONNECTING) {
+            this.pendingRequests.push(request);
+        } else {
+            this.webSocket.send(JSON.stringify(request));
+        }
     }
 }

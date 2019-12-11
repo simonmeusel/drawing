@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../redux';
+import { RootState } from '../../store';
 import { Context } from './Context';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { LinesRenderer } from './renderers/LinesRenderer';
@@ -36,9 +36,10 @@ export class UnconnectedCanvas extends React.Component<
         const context = new Context(canvasContext);
 
         const webSocketManager = new WebSocketManager(
-            'ws://' + location.host + '/' + this.props.roomID,
+            'ws://' + location.host + '/',
             context
         );
+        webSocketManager.setRoomID(this.props.roomID);
 
         const shapeManager = new ShapeManager(webSocketManager, context, {
             rectangle: new RectangleRenderer(),
@@ -139,6 +140,10 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     render() {
+        if (this.state && this.state.webSocketManager) {
+            this.state.webSocketManager!.setRoomID(this.props.roomID);
+        }
+
         return (
             <canvas
                 ref={this.canvasRef}
