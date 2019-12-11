@@ -10,28 +10,28 @@ export class UnconnectedRoomIDPanel extends React.Component<
     },
     {}
 > {
-    render() {
-        function copyToClipBoard(currentHash: string) {
-            // DAS BLEIBT SO WIE ES IST, OB DU WILLST UND NICHT!
-            let URLtoBeCopied = new URL(location.href);
-            console.log(currentHash);
-            URLtoBeCopied.hash = '#' + currentHash;
-            let toBeCopied = URLtoBeCopied.toString();
-            console.log(toBeCopied);
-            var dummy = document.createElement('textarea');
-            document.body.appendChild(dummy);
-            dummy.value = toBeCopied;
-            dummy.select();
-            document.execCommand('copy');
-            document.body.removeChild(dummy);
-        }
+    private textAreaRef = React.createRef<HTMLTextAreaElement>();
 
+    copy(currentHash: string) {
+        const url = new URL(location.href);
+        url.hash = '#' + currentHash;
+        this.textAreaRef.current!.value = url.toString();
+        this.textAreaRef.current!.select();
+        document.execCommand('copy');
+    }
+
+    render() {
         return (
             <Panel title="Room ID">
-                <h1 id="roomID"> {this.props.roomID.substring(0, 8)} </h1>
-                <button onClick={() => copyToClipBoard(this.props.roomID)}>
-                    {' '}
-                    Copy{' '}
+                <div style={{ opacity: 0, height: 0, overflow: 'hidden' }}>
+                    <textarea ref={this.textAreaRef}></textarea>
+                </div>
+                <h1> {this.props.roomID.substring(0, 8)} </h1>
+                <button
+                    className="button"
+                    onClick={() => this.copy(this.props.roomID)}
+                >
+                    Copy
                 </button>
             </Panel>
         );
