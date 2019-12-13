@@ -23,3 +23,19 @@ jobs:
         npm run build:prod
       env:
         CI: true
+    - name: deploy
+      run: |
+        git branch --delete --force gh-pages || true
+        git checkout -b gh-pages
+        git rm --cached -r .
+        mv .git dist/.git
+        cd dist
+        git add .
+        git commit -m"Automatic build"
+        git remote set-url origin git@github.com:simonmeusel/drawing.git
+        echo $GITHUB_ID_RSA_PRIVATE_KEY | base64 --decode > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        git push origin gh-pages --force > /dev/null
+        shred -u ~/.ssh/id_rsa
+      env:
+        GITHUB_ID_RSA_PRIVATE_KEY: ${{ secrets.GITHUB_ID_RSA_PRIVATE_KEY }}
