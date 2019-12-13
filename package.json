@@ -4,8 +4,8 @@
         "start": "concurrently \"npm run build\" \"ts-node-dev src/backend/index.ts\"",
         "start:backend": "ts-node src/backend/index.ts",
         "build:clean": "shx rm -rf dist",
-        "build": "npm run build:clean && parcel watch src/frontend/index.html",
-        "build:prod": "npm run build:clean && parcel build --no-source-maps src/frontend/index.html && npx workbox generateSW",
+        "build": "npm run build:clean && parcel watch --public-url '.' src/frontend/index.html",
+        "build:prod": "npm run build:clean && parcel build --public-url '.' --no-source-maps src/frontend/index.html && npx workbox generateSW",
         "lint": "concurrently \"npm run lint:prettier\" \"npm run lint:tslint\"",
         "lint:prettier": "prettier --ignore-path .gitignore --loglevel warn --write \"**/*.{json,md,ts,yml}\"",
         "lint:tslint": "tslint --project . --fix"
