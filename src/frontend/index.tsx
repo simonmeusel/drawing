@@ -11,13 +11,19 @@ import { saveState } from './store/localStorage';
 import { updateRoomID } from './store/roomID';
 
 if (process.env.NODE_ENV === 'development') {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for (let registration of registrations) {
-            registration.unregister();
-        }
-    });
+    if (navigator.serviceWorker) {
+        navigator.serviceWorker
+            .getRegistrations()
+            .then(function(registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+    }
 } else {
-    navigator.serviceWorker.register('' + '/sw.js');
+    if (navigator.serviceWorker) {
+        navigator.serviceWorker.register('' + '/sw.js');
+    }
 }
 
 const store = createStore(reducer);
