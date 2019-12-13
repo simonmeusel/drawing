@@ -36,7 +36,10 @@ export class UnconnectedCanvas extends React.Component<
         const context = new Context(canvasContext);
 
         const webSocketManager = new WebSocketManager(
-            'ws://' + location.host + '/',
+            (location.protocol == 'http:' ? 'ws' : 'wss') +
+                '://' +
+                location.host +
+                '/',
             context
         );
         webSocketManager.setRoomID(this.props.roomID);
