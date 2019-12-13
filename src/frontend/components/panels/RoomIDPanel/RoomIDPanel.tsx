@@ -22,7 +22,7 @@ export class UnconnectedRoomIDPanel extends React.Component<
 
     render() {
         return (
-            <Panel title="Room ID">
+            <Panel title="Room ID" position="right">
                 <div style={{ opacity: 0, height: 0, overflow: 'hidden' }}>
                     <textarea ref={this.textAreaRef}></textarea>
                 </div>
