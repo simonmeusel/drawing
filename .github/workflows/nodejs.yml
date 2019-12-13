@@ -7,16 +7,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 12.x
     - name: npm install, build, and test
       run: |
         npm ci
@@ -31,6 +27,8 @@ jobs:
         mv .git dist/.git
         cd dist
         git add .
+        git config --global user.email "ci@simonmeusel.de"
+        git config --global user.name "CI"
         git commit -m"Automatic build"
         git remote set-url origin git@github.com:simonmeusel/drawing.git
         echo $GITHUB_ID_RSA_PRIVATE_KEY | base64 --decode > ~/.ssh/id_rsa
