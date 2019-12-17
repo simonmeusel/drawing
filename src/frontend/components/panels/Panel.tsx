@@ -33,7 +33,14 @@ export class Panel extends React.Component<PanelProps, PanelState> {
                     scale={1}
                     handle=".app-tool-panel-handle"
                 >
-                    <div className="card" style={(this.props.position == 'right') ? { right: '10px' } : {left: '10px'}}>
+                    <div
+                        className="card"
+                        style={
+                            this.props.position == 'right'
+                                ? { right: '10px' }
+                                : { left: '10px' }
+                        }
+                    >
                         <header className="app-tool-panel-handle card-header">
                             <p className="card-header-title">
                                 {this.props.title}
