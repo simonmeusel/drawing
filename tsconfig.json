@@ -17,6 +17,7 @@
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
         "downlevelIteration": true,
+        "resolveJsonModule": true,
         "incremental": true,
         "esModuleInterop": true,
         "jsx": "react"

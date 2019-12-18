@@ -30,9 +30,6 @@ export class Database {
         this.db = this.mongoClient.db(this.dbName);
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
-        // TODO: Remove
-        this.rawShapesCollection.deleteMany({});
-
         this.createIndexes();
     }
 

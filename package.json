@@ -3,7 +3,7 @@
     "scripts": {
         "start": "npm run b:build:schemas && concurrently \"npm run f:build\" \"ts-node-dev src/backend/index.ts\"",
         "b:start:prod": "NODE_ENV=production ts-node src/backend/index.ts",
-        "b:build:schemas": "typescript-json-schema src/shared/Request.ts Request --out src/backend/schemas/Request.json",
+        "b:build:schemas": "typescript-json-schema src/shared/Request.ts Request --id Request.json --out src/backend/schemas/Request.json",
         "b:build:prod": "webpack --mode production",
         "build:clean": "shx rm -rf dist",
         "build:prod": "npm run build:clean && npm run f:build:prod && npm run b:build:prod",
