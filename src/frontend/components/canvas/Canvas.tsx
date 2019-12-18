@@ -97,7 +97,7 @@ export class UnconnectedCanvas extends React.Component<
         this.setState({
             currentToolIndex: event.button,
         });
-        this.onToolEvent('onMouseDown', event);
+        this.onToolEvent('onMouseDown', event, event.button);
     }
 
     onMouseMove(event: React.MouseEvent) {
@@ -113,12 +113,11 @@ export class UnconnectedCanvas extends React.Component<
 
     onToolEvent(
         type: 'onMouseDown' | 'onMouseMove' | 'onMouseUp',
-        event: React.MouseEvent
+        event: React.MouseEvent,
+        button: number = this.state.currentToolIndex!
     ) {
         event.preventDefault();
-        this.state.tools![
-            this.props.activeToolIndices[this.state.currentToolIndex!]
-        ][type](
+        this.state.tools![this.props.activeToolIndices[button]][type](
             this.state.context!.getPoint(event.clientX, event.clientY),
             this.props.toolProperties
         );
