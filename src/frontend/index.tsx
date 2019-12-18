@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { Canvas } from './components/canvas/Canvas';
-import { RoomIDPanel } from './components/panels/roomIDPanel/RoomIDPanel';
+import { RoomPanel } from './components/panels/roomPanel/RoomPanel';
 import { ToolPanel } from './components/panels/toolPanel/ToolPanel';
 import './index.scss';
 import { reducer } from './store';
@@ -39,7 +39,7 @@ window.addEventListener('hashchange', () => {
 ReactDOM.render(
     <Provider store={store}>
         <ToolPanel />
-        <RoomIDPanel />
+        <RoomPanel />
         <div style={{ position: 'relative' }}>
             <Canvas />
         </div>

@@ -1,7 +1,11 @@
 import { createStore, Store } from 'redux';
 import { createReducer } from 'typesafe-actions';
 import { ToolProperties } from '../components/canvas/tools/Tool';
-import { SET_ROOM_ID, SetRoomIDAction } from './actions/roomID';
+import {
+    CLEAR_ROOM_HISTORY,
+    ClearRoomHistoryAction,
+} from './actions/rooms/clearRoomHistory';
+import { SET_ROOM_ID, SetRoomIDAction } from './actions/rooms/setRoomID';
 import {
     SET_SELECTED_TOOL,
     SetSelectedToolAction,
@@ -11,9 +15,10 @@ import {
     SetToolPropertiesAction,
 } from './actions/toolProperties';
 import { getPersistentState, saveState } from './localStorage';
-import { roomID } from './reducers/roomID';
-import { selectedTool } from './reducers/selectedTool';
-import { toolProperties } from './reducers/toolProperties';
+import { reduceClearRoomHistory } from './reducers/rooms/clearRoomHistory';
+import { reduceSetRoomID } from './reducers/rooms/setRoomID';
+import { reduceSetSelectedTool } from './reducers/setSelectedTool';
+import { reduceSetToolProperties } from './reducers/setToolProperties';
 import { getOrGenerateRoomID } from './roomID';
 
 export const initialState: RootState = getPersistentState({
@@ -28,6 +33,7 @@ export const initialState: RootState = getPersistentState({
 
 export type RootAction =
     | SetRoomIDAction
+    | ClearRoomHistoryAction
     | SetToolPropertiesAction
     | SetSelectedToolAction;
 
@@ -41,9 +47,10 @@ export interface RootState {
 export type RootStore = Store<RootState, RootAction>;
 
 export const reducer = createReducer<RootState, RootAction>(initialState)
-    .handleType(SET_ROOM_ID, roomID)
-    .handleType(SET_SELECTED_TOOL, selectedTool)
-    .handleType(SET_TOOL_PROPERTIES, toolProperties);
+    .handleType(SET_ROOM_ID, reduceSetRoomID)
+    .handleType(CLEAR_ROOM_HISTORY, reduceClearRoomHistory)
+    .handleType(SET_SELECTED_TOOL, reduceSetSelectedTool)
+    .handleType(SET_TOOL_PROPERTIES, reduceSetToolProperties);
 
 export function createPersistentStore() {
     const store = createStore(reducer);
