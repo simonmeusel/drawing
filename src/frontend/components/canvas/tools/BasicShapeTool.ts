@@ -21,7 +21,7 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
         super(shapeManager, context);
     }
 
-    protected createStroke(point: Point, toolProperties: ToolProperties) {
+    protected createShape(point: Point, toolProperties: ToolProperties) {
         this.startingPoint = point;
         return {
             id: UUID.generateString(),
@@ -37,13 +37,13 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
         };
     }
 
-    protected updateStroke(
-        activeStroke: BasicShape,
+    protected updateShape(
+        activeShape: BasicShape,
         point: Point,
         toolProperties: ToolProperties
     ) {
         return {
-            ...activeStroke,
+            ...activeShape,
             data: {
                 strokeColor: toolProperties.strokeColor,
                 fillColor: toolProperties.fillColor,
