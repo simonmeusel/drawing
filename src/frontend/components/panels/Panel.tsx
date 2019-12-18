@@ -2,12 +2,14 @@ import * as React from 'react';
 import Draggable from 'react-draggable';
 import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown';
 import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup';
+import MdHelpCircle from 'react-ionicons/lib/MdHelpCircle';
 import './Panel.scss';
 
 export interface PanelProps {
     title: string;
     position: 'left' | 'right';
     width?: string;
+    help?: JSX.Element;
 }
 
 export interface PanelState {
@@ -23,6 +25,27 @@ export class Panel extends React.Component<PanelProps, PanelState> {
         this.setState({
             collabsed: !this.state.collabsed,
         });
+    }
+
+    getHelp() {
+        return (
+            <div className="dropdown is-hoverable">
+                <div className="dropdown-trigger">
+                    <span
+                        className="app-panel-icon icon"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu7"
+                    >
+                        <MdHelpCircle />
+                    </span>
+                </div>
+                <div className="dropdown-menu" id="dropdown-menu7" role="menu">
+                    <div className="dropdown-content">
+                        <div className="dropdown-item">{this.props.help}</div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     render() {
@@ -46,9 +69,10 @@ export class Panel extends React.Component<PanelProps, PanelState> {
                 >
                     <div className="card" style={cardStyle}>
                         <header className="app-tool-panel-handle card-header">
-                            <p className="card-header-title">
+                            <div className="card-header-title">
                                 {this.props.title}
-                            </p>
+                                {this.props.help && this.getHelp()}
+                            </div>
                             <a
                                 className="card-header-icon"
                                 aria-label="more options"

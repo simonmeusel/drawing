@@ -45,7 +45,20 @@ export class UnconnectedRoomPanel extends React.Component<
 
     render() {
         return (
-            <Panel title="Room" position="right" width="320px">
+            <Panel
+                title="Room"
+                position="right"
+                width="320px"
+                help={
+                    <p>
+                        Each room has it's own canvas. To live-collaborate with
+                        others, you can send them the room invitation link. Only
+                        users with access to that link can visit and use the
+                        room. The room ID is also saved inside the browser
+                        history.
+                    </p>
+                }
+            >
                 <div style={{ opacity: 0, height: 0, overflow: 'hidden' }}>
                     <textarea ref={this.textAreaRef}></textarea>
                 </div>
