@@ -65,7 +65,7 @@ export class Database {
             };
             delete s._id;
             delete s.roomID;
-            return s;
+            return s as Shape;
         });
         return JSON.stringify(shapes);
     }
