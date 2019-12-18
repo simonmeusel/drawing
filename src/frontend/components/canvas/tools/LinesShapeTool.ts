@@ -8,12 +8,12 @@ import { ShapeTool } from './ShapeTool';
 import { ToolProperties } from './Tool';
 
 export class LinesShapeTool extends ShapeTool<LinesShape> {
-    constructor(strokeManager: ShapeManager, context: Context) {
-        super(strokeManager, context);
+    constructor(shapeManager: ShapeManager, context: Context) {
+        super(shapeManager, context);
     }
 
-    protected createStroke(point: Point, toolProperties: ToolProperties) {
-        const stroke: LinesShape = {
+    protected createShape(point: Point, toolProperties: ToolProperties) {
+        const shape: LinesShape = {
             id: UUID.generateString(),
             type: 'lines',
             boundingBox: {
@@ -25,19 +25,19 @@ export class LinesShapeTool extends ShapeTool<LinesShape> {
                 strokeColor: toolProperties.strokeColor,
             },
         };
-        return stroke;
+        return shape;
     }
 
-    protected updateStroke(
-        activeStroke: LinesShape,
+    protected updateShape(
+        activeShape: LinesShape,
         point: Point,
         toolProperties: ToolProperties
     ) {
         return {
-            ...activeStroke,
-            boundingBox: addPointToBoundingBox(activeStroke.boundingBox, point),
+            ...activeShape,
+            boundingBox: addPointToBoundingBox(activeShape.boundingBox, point),
             data: {
-                points: [...activeStroke.data.points, point],
+                points: [...activeShape.data.points, point],
                 strokeColor: toolProperties.strokeColor,
             },
         };

@@ -27,7 +27,10 @@ export class App extends React.Component<{}, AppState> {
                                   transition: 'opacity 0.3s',
                                   opacity: 0.5,
                               }
-                            : {}
+                            : {
+                                  transition: 'opacity 0.3s',
+                                  opacity: 1,
+                              }
                     }
                 >
                     <ToolPanel />
