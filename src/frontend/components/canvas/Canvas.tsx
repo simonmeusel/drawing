@@ -91,6 +91,7 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onMouseDown(event: React.MouseEvent) {
+        this.canvasRef.current?.focus();
         if (this.props.onDrawingChange) {
             this.props.onDrawingChange(true);
         }
@@ -159,6 +160,8 @@ export class UnconnectedCanvas extends React.Component<
         return (
             <canvas
                 ref={this.canvasRef}
+                tabIndex={-1}
+                onKeyDown={this.onKeyDown.bind(this)}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
