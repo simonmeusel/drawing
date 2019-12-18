@@ -1,5 +1,6 @@
 import express from 'express';
 import { createServer } from 'http';
+import { join } from 'path';
 import { Database } from './Database';
 import { WebSocketServer } from './WebSocketServer';
 
@@ -17,7 +18,7 @@ async function start() {
     await database.connect();
 
     const app = express();
-    app.use(express.static('dist'));
+    app.use(express.static(join('dist', 'frontend')));
     const server = createServer(app);
 
     webSocketServer.initialize(server);

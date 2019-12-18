@@ -13,24 +13,21 @@ RUN npm run build:prod
 
 FROM alpine
 
+RUN apk add nodejs npm shadow
+
 RUN useradd --create-home --home /app drawing
 
 WORKDIR /app
 
 # Install production dependencies
-RUN apk add nodejs npm
 COPY package*.json ./
 RUN npm install --only=production
-
-# Copy Backend source
-COPY src/backend src/backend
-COPY src/shared src/shared
-COPY tsconfig.json ./
+RUN rm package*.json
 
 # Copy built Frontend
-COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/dist dist
 
 USER drawing
 
-CMD npm run start:backend
+CMD node dist/backend/index.js
 

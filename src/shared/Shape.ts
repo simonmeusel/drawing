@@ -11,4 +11,8 @@ export interface GenericShape {
 
 export type Shape = BasicShape | LinesShape;
 
-export type ShapeType = Extract<Shape, 'type'>;
+export type ShapeType = ReturnType<typeof getShapeType>;
+
+export function getShapeType(shape: Shape) {
+    return shape.type;
+}

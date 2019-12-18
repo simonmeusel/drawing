@@ -1,4 +1,6 @@
 /node_modules
 /Dockerfile
-/dist
 /docker-compose.yml
+/dist
+/.cache
+/src/backend/schemas

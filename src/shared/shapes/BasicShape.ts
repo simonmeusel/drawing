@@ -1,8 +1,10 @@
 import { FilledShape } from './FilledShape';
 import { StrokedShape } from './StrokedShape';
 
+export type BasicShapeType = 'ellipse' | 'rectangle';
+
 export interface BasicShape extends StrokedShape, FilledShape {
-    type: 'ellipse' | 'rectangle';
+    type: BasicShapeType;
     data: {
         strokeColor: string;
         fillColor: string;
