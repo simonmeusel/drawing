@@ -7,7 +7,9 @@ export function reduceSetRoomID(
     state: RootState,
     action: SetRoomIDAction
 ): RootState {
-    let roomIDHistory = state.roomIDHistory.concat([state.roomID]);
+    let roomIDHistory = state.roomIDHistory
+        .filter(roomID => state.roomID != roomID)
+        .concat([state.roomID]);
     // Remove elements if list gets too long
     roomIDHistory = roomIDHistory.slice(
         Math.max(0, roomIDHistory.length - MAX_ROOM_ID_HISTORY_SIZE)

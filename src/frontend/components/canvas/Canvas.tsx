@@ -133,7 +133,6 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onKeyDown(event: KeyboardEvent) {
-        console.log(event.target);
         if (
             event.target != document.body &&
             event.target != this.canvasRef.current

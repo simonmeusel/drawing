@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { RootAction, RootState } from '../../../store';
 import { clearRoomHistory } from '../../../store/actions/rooms/clearRoomHistory';
 import { setRoomID } from '../../../store/actions/rooms/setRoomID';
-import { generateRoomID } from '../../../store/roomID';
+import { generateRoomID, getURLWithRoomID } from '../../../store/roomID';
 import { Panel } from '../Panel';
 
 export class UnconnectedRoomPanel extends React.Component<
@@ -15,10 +15,8 @@ export class UnconnectedRoomPanel extends React.Component<
 > {
     private textAreaRef = React.createRef<HTMLTextAreaElement>();
 
-    copy(currentHash: string) {
-        const url = new URL(location.href);
-        url.hash = '#' + currentHash;
-        this.textAreaRef.current!.value = url.toString();
+    copy(roomID: string) {
+        this.textAreaRef.current!.value = getURLWithRoomID(roomID);
         this.textAreaRef.current!.select();
         document.execCommand('copy');
     }

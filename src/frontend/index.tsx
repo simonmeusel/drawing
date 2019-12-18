@@ -6,7 +6,7 @@ import { App } from './components/app/App';
 import './index.scss';
 import { reducer } from './store';
 import { saveState } from './store/localStorage';
-import { updateRoomID } from './store/roomID';
+import { onRoomIDUpdate } from './store/roomID';
 
 if (process.env.NODE_ENV === 'development') {
     if (navigator.serviceWorker) {
@@ -31,7 +31,7 @@ window.addEventListener('beforeunload', () => {
 });
 
 window.addEventListener('hashchange', () => {
-    updateRoomID(store);
+    onRoomIDUpdate(store);
 });
 
 ReactDOM.render(
