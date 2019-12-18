@@ -12,6 +12,10 @@ import { MoveTool } from './tools/MoveTool';
 import { Tool } from './tools/Tool';
 import { WebSocketManager } from './WebSocketManager';
 
+interface CanvasProps {
+    onDrawingChange?: (drawing: boolean) => void;
+}
+
 interface CanvasState {
     context?: Context;
     currentToolIndex?: number;
@@ -22,7 +26,7 @@ interface CanvasState {
 }
 
 export class UnconnectedCanvas extends React.Component<
-    ReturnType<typeof mapStateToProps>,
+    ReturnType<typeof mapStateToProps> & CanvasProps,
     CanvasState
 > {
     private canvasRef = React.createRef<HTMLCanvasElement>();
@@ -87,6 +91,9 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onMouseDown(event: React.MouseEvent) {
+        if (this.props.onDrawingChange) {
+            this.props.onDrawingChange(true);
+        }
         this.setState({
             currentToolIndex: event.button,
         });
@@ -98,6 +105,9 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onMouseUp(event: React.MouseEvent) {
+        if (this.props.onDrawingChange) {
+            this.props.onDrawingChange(false);
+        }
         this.onToolEvent('onMouseUp', event);
     }
 
@@ -153,6 +163,7 @@ export class UnconnectedCanvas extends React.Component<
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
+                onMouseLeave={this.onMouseUp.bind(this)}
                 onWheel={this.onMouseWheel.bind(this)}
                 onContextMenu={event => event.preventDefault()}
             ></canvas>
