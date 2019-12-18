@@ -19,6 +19,7 @@ interface CanvasProps {
 interface CanvasState {
     context?: Context;
     currentToolIndex?: number;
+    keyDownHandler?: () => void;
     resizeHandler?: () => void;
     shapeManager?: ShapeManager;
     tools?: Tool[];
@@ -54,11 +55,15 @@ export class UnconnectedCanvas extends React.Component<
             lines: new LinesRenderer(),
         });
 
+        const keyDownHandler = this.onKeyDown.bind(this);
+        window.addEventListener('keydown', keyDownHandler);
         const resizeHandler = this.resizeCanvas.bind(this);
+        window.addEventListener('resize', resizeHandler);
 
         this.setState({
             context,
             currentToolIndex: 0,
+            keyDownHandler,
             resizeHandler,
             shapeManager,
             tools: [
@@ -73,8 +78,6 @@ export class UnconnectedCanvas extends React.Component<
         context.screenChangeHandler = () => {
             this.state.webSocketManager!.setBoundingBox(this.context.screen);
         };
-
-        window.addEventListener('resize', resizeHandler);
     }
 
     componentWillUnmount() {
@@ -129,7 +132,15 @@ export class UnconnectedCanvas extends React.Component<
         this.state.shapeManager!.redraw();
     }
 
-    onKeyDown(event: React.KeyboardEvent) {
+    onKeyDown(event: KeyboardEvent) {
+        console.log(event.target);
+        if (
+            event.target != document.body &&
+            event.target != this.canvasRef.current
+        ) {
+            return;
+        }
+
         const translation = this.state.context!.getWidth() / 25;
         switch (event.keyCode) {
             case 37:
@@ -161,7 +172,6 @@ export class UnconnectedCanvas extends React.Component<
             <canvas
                 ref={this.canvasRef}
                 tabIndex={-1}
-                onKeyDown={this.onKeyDown.bind(this)}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
