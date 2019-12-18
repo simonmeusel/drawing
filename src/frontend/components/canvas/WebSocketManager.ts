@@ -31,6 +31,7 @@ export class WebSocketManager {
         if (this.roomID == roomID) {
             return;
         }
+        this.roomID = roomID;
         this.webSocket = new WebSocket(this.baseURI + roomID);
         this.webSocket.addEventListener('open', () => {
             console.log('Web socket connected');

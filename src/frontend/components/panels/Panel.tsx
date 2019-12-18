@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
-import './Panel.scss';
 import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown';
 import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup';
+import './Panel.scss';
 
 export interface PanelProps {
     title: string;
