@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
 import './Panel.scss';
+import MdArrowDropdown from 'react-ionicons/lib/MdArrowDropdown';
+import MdArrowDropup from 'react-ionicons/lib/MdArrowDropup';
 
 export interface PanelProps {
     title: string;
@@ -52,7 +54,13 @@ export class Panel extends React.Component<PanelProps, PanelState> {
                                 aria-label="more options"
                                 onClick={this.toggle.bind(this)}
                             >
-                                <span className="icon">-</span>
+                                <span className="icon">
+                                    {this.state.collabsed ? (
+                                        <MdArrowDropdown />
+                                    ) : (
+                                        <MdArrowDropup />
+                                    )}
+                                </span>
                             </a>
                         </header>
                         <div
