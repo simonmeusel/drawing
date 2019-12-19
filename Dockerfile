@@ -1,5 +1,7 @@
 FROM alpine as builder
 
+ARG WEB_SOCKET_BASE_URI
+
 WORKDIR /app
 
 # Install build dependencies
@@ -9,6 +11,7 @@ RUN npm install
 
 # Build application
 COPY . ./
+RUN echo REACT_APP_WEB_SOCKET_BASE_URI=${WEB_SOCKET_BASE_URI} > .env
 RUN npm run build:prod
 
 FROM alpine
