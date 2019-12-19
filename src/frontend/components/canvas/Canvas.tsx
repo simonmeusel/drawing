@@ -12,6 +12,10 @@ import { MoveTool } from './tools/MoveTool';
 import { Tool } from './tools/Tool';
 import { WebSocketManager } from './WebSocketManager';
 
+const WEB_SOCKET_BASE_URI =
+    process.env.REACT_APP_WEB_SOCKET_BASE_URI ||
+    (location.protocol == 'http:' ? 'ws' : 'wss') + '://' + location.host + '/';
+
 interface CanvasProps {
     onDrawingChange?: (drawing: boolean) => void;
 }
@@ -41,10 +45,7 @@ export class UnconnectedCanvas extends React.Component<
         const context = new Context(canvasContext);
 
         const webSocketManager = new WebSocketManager(
-            (location.protocol == 'http:' ? 'ws' : 'wss') +
-                '://' +
-                location.host +
-                '/',
+            WEB_SOCKET_BASE_URI,
             context
         );
         webSocketManager.setRoomID(this.props.roomID);
