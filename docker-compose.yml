@@ -7,10 +7,16 @@ services:
     drawing:
         build:
             context: .
+            # Overwrite defaults:
+            # args:
+            #    WEB_SOCKET_BASE_URI: ws://localhost:8080/
         links:
             - 'mongo'
         environment:
-            MONGODB_CONNECTION_URI: mongodb://mongo/drawing
+            DRAWING_MONGODB_CONNECTION_URI: mongodb://mongo/drawing
+            # Overwrite defaults:
+            # DRAWING_HTTP_PORT: 8080
+            # DRAWING_SERVE_STATIC_FILES: true
         ports:
             - '8080:8080'
         restart: 'unless-stopped'

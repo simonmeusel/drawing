@@ -11,7 +11,8 @@ export let webSocketServer: WebSocketServer;
 
 async function start() {
     database = new Database(
-        process.env.MONGODB_CONNECTION_URI || 'mongodb://localhost:27017/db'
+        process.env.DRAWING_MONGODB_CONNECTION_URI ||
+            'mongodb://localhost:27017/db'
     );
     schemaManager = new SchemaManager();
     webSocketServer = new WebSocketServer();
@@ -23,12 +24,18 @@ async function start() {
     console.log('Connected to database');
 
     const app = express();
-    app.use(express.static(join('dist', 'frontend')));
+
+    if (
+        !['0', 'false'].includes(process.env.DRAWING_SERVE_STATIC_FILES || '')
+    ) {
+        app.use(express.static(join('dist', 'frontend')));
+    }
+
     const server = createServer(app);
 
     webSocketServer.initialize(server);
 
-    server.listen(8080);
+    server.listen(parseInt(process.env.DRAWING_HTTP_PORT || '8080'));
 
     console.log('Webserver listening on port 8080 (http://localhost:8080)');
 }
