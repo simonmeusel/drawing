@@ -1,10 +1,15 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
+import { MdArrowDropdown } from '@simonmeusel/react-ionicons/MdArrowDropdown';
+import { MdArrowDropup } from '@simonmeusel/react-ionicons/MdArrowDropup';
+import { MdHelpCircle } from '@simonmeusel/react-ionicons/MdHelpCircle';
 import './Panel.scss';
 
 export interface PanelProps {
     title: string;
     position: 'left' | 'right';
+    width?: string;
+    help?: JSX.Element;
 }
 
 export interface PanelState {
@@ -22,7 +27,36 @@ export class Panel extends React.Component<PanelProps, PanelState> {
         });
     }
 
+    getHelp() {
+        return (
+            <div className="dropdown is-hoverable">
+                <div className="dropdown-trigger">
+                    <span
+                        className="app-panel-icon icon"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu7"
+                    >
+                        <MdHelpCircle />
+                    </span>
+                </div>
+                <div className="dropdown-menu" id="dropdown-menu7" role="menu">
+                    <div className="dropdown-content">
+                        <div className="dropdown-item">{this.props.help}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     render() {
+        const cardStyle: React.CSSProperties = {
+            width: this.props.width,
+            maxWidth: this.props.width,
+            minWidth: this.props.width,
+            ...(this.props.position == 'right'
+                ? { right: '10px' }
+                : { left: '10px' }),
+        };
         return (
             <div className="app-panel">
                 <Draggable
@@ -33,17 +67,24 @@ export class Panel extends React.Component<PanelProps, PanelState> {
                     scale={1}
                     handle=".app-tool-panel-handle"
                 >
-                    <div className="card" style={(this.props.position == 'right') ? { right: '10px' } : {left: '10px'}}>
+                    <div className="card" style={cardStyle}>
                         <header className="app-tool-panel-handle card-header">
-                            <p className="card-header-title">
+                            <div className="card-header-title">
                                 {this.props.title}
-                            </p>
+                                {this.props.help && this.getHelp()}
+                            </div>
                             <a
                                 className="card-header-icon"
                                 aria-label="more options"
                                 onClick={this.toggle.bind(this)}
                             >
-                                <span className="icon">-</span>
+                                <span className="icon">
+                                    {this.state.collabsed ? (
+                                        <MdArrowDropdown />
+                                    ) : (
+                                        <MdArrowDropup />
+                                    )}
+                                </span>
                             </a>
                         </header>
                         <div

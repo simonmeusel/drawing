@@ -2,13 +2,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Canvas } from './components/canvas/Canvas';
-import { RoomIDPanel } from './components/panels/roomIDPanel/RoomIDPanel';
-import { ToolPanel } from './components/panels/toolPanel/ToolPanel';
+import { App } from './components/app/App';
 import './index.scss';
 import { reducer } from './store';
 import { saveState } from './store/localStorage';
-import { updateRoomID } from './store/roomID';
+import { onRoomIDUpdate } from './store/roomID';
 
 if (process.env.NODE_ENV === 'development') {
     if (navigator.serviceWorker) {
@@ -33,16 +31,12 @@ window.addEventListener('beforeunload', () => {
 });
 
 window.addEventListener('hashchange', () => {
-    updateRoomID(store);
+    onRoomIDUpdate(store);
 });
 
 ReactDOM.render(
     <Provider store={store}>
-        <ToolPanel />
-        <RoomIDPanel />
-        <div style={{ position: 'relative' }}>
-            <Canvas />
-        </div>
+        <App />
     </Provider>,
     document.getElementById('root')
 );

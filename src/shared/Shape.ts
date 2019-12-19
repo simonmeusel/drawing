@@ -1,10 +1,18 @@
 import { BoundingBox } from './BoundingBox';
+import { BasicShape } from './shapes/BasicShape';
+import { LinesShape } from './shapes/LinesShape';
 
-export type ShapeType = 'ellipse' | 'rectangle' | 'lines';
-
-export interface Shape {
+export interface GenericShape {
     id: string;
     boundingBox: BoundingBox;
-    type: ShapeType;
+    type: string;
     data?: any;
+}
+
+export type Shape = BasicShape | LinesShape;
+
+export type ShapeType = ReturnType<typeof getShapeType>;
+
+export function getShapeType(shape: Shape) {
+    return shape.type;
 }

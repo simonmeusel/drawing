@@ -30,9 +30,6 @@ export class Database {
         this.db = this.mongoClient.db(this.dbName);
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
-        // TODO: Remove
-        this.rawShapesCollection.deleteMany({});
-
         this.createIndexes();
     }
 
@@ -65,7 +62,7 @@ export class Database {
             };
             delete s._id;
             delete s.roomID;
-            return s;
+            return s as Shape;
         });
         return JSON.stringify(shapes);
     }

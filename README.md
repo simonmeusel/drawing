@@ -1,23 +1,26 @@
 # drawing
 
+## Usage
+
+-   Clone this repository
+-   Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+-   Run `docker-compose up --build` inside the repository folder to start MongoDB and the application
+-   Visit the website at [http://localhost:8080](http://localhost:8080)
+
+To reduce complexity, this application does not support HTTPS out of the box. When deploying this application, you should use a reverse proxy (for example [jwilder/nginx-proxy
+](https://github.com/jwilder/nginx-proxy)) to manage certificates and cipher configuration and additional security measures.
+
 ## Development
 
-### First possibility
-
--   Install [MongoDB](https://www.mongodb.com/), possibly using [Docker](https://hub.docker.com/_/mongo)
-    -   The application expects a MongoDB server at `mongodb://localhost:27017/db`
-    -   This can be changed by setting the `MONGODB_CONNECTION_URI` to different [connection string](https://docs.mongodb.com/manual/reference/connection-string/)
--   `npm install` dependencies
--   `npm start` the development server and the Frontend builder
--   Visit the local website at [http://localhost:8080](http://localhost:8080)
-
-### Second possibility
-
--   Doing everything with [Docker](https://hub.docker.com/_/mongo)
--   Go into the root folder and make sure that the following folders and files are avaible (they should be there, if they are not then something went wrong with cloning this project)
-    -   src [folder]
-    -   package.json, package-lock.json, tsconfig.json, docker-compose.yml, Dockerfile [files]
--   Then go to the root folder with the Terminal or GitBash
--   `docker build .` builds the docker image
--   `docker-compose up --build` starts the application
+-   Clone this repository
+-   Start [MongoDB](https://www.mongodb.com/)
+    -   Using Docker
+        -   Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+        -   Run `docker-compose up mongo` inside the repository folder to start MongoDB
+    -   [Directly](https://www.mongodb.com/download-center/community)
+-   Configure the [connection string](https://docs.mongodb.com/manual/reference/connection-string/)
+    -   By default this application expects a MongoDB server at `mongodb://localhost:27017/db`
+    -   This can be changed by setting the `MONGODB_CONNECTION_URI` environment variable
+-   Install development dependencies: `npm install`
+-   Start the development server and automated Frontend builder: `npm start`
 -   Visit the local website at [http://localhost:8080](http://localhost:8080)

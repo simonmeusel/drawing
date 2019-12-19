@@ -1,7 +1,7 @@
 import { IncomingMessage, Server } from 'http';
 import { Binary } from 'mongodb';
 import * as WebSocket from 'ws';
-import { database } from '.';
+import { database, schemaManager } from '.';
 import { BoundingBox, doBoundingBoxesOverlap } from '../shared/BoundingBox';
 import { Request } from '../shared/Request';
 import { BackendUUID } from './BackendUUID';
@@ -69,8 +69,13 @@ export class WebSocketServer {
                 return;
             }
 
-            // TODO: Validate request data
+            data = data.toString();
+            if (typeof data != 'string' || data.length > 16384) {
+                this.disconnectWebSocket(webSocket);
+                return;
+            }
             const request: Request = JSON.parse(data.toString());
+            schemaManager.validateData('Request', request);
 
             if (request.command == 'setBoundingBox') {
                 webSocket.boundingBox = request.boundingBox;

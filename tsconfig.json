@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es5",
         "forceConsistentCasingInFileNames": true,
         "module": "commonjs",
         "declaration": false,
@@ -16,9 +16,10 @@
         "strictNullChecks": true,
         "strictFunctionTypes": true,
         "strictPropertyInitialization": true,
+        "downlevelIteration": true,
+        "resolveJsonModule": true,
         "incremental": true,
         "esModuleInterop": true,
         "jsx": "react"
-    },
-    "include": ["src/**/*.ts", "src/**/*.tsx"]
+    }
 }

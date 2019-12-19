@@ -12,9 +12,14 @@ import { MoveTool } from './tools/MoveTool';
 import { Tool } from './tools/Tool';
 import { WebSocketManager } from './WebSocketManager';
 
+interface CanvasProps {
+    onDrawingChange?: (drawing: boolean) => void;
+}
+
 interface CanvasState {
     context?: Context;
     currentToolIndex?: number;
+    keyDownHandler?: () => void;
     resizeHandler?: () => void;
     shapeManager?: ShapeManager;
     tools?: Tool[];
@@ -22,7 +27,7 @@ interface CanvasState {
 }
 
 export class UnconnectedCanvas extends React.Component<
-    ReturnType<typeof mapStateToProps>,
+    ReturnType<typeof mapStateToProps> & CanvasProps,
     CanvasState
 > {
     private canvasRef = React.createRef<HTMLCanvasElement>();
@@ -50,11 +55,15 @@ export class UnconnectedCanvas extends React.Component<
             lines: new LinesRenderer(),
         });
 
+        const keyDownHandler = this.onKeyDown.bind(this);
+        window.addEventListener('keydown', keyDownHandler);
         const resizeHandler = this.resizeCanvas.bind(this);
+        window.addEventListener('resize', resizeHandler);
 
         this.setState({
             context,
             currentToolIndex: 0,
+            keyDownHandler,
             resizeHandler,
             shapeManager,
             tools: [
@@ -69,8 +78,6 @@ export class UnconnectedCanvas extends React.Component<
         context.screenChangeHandler = () => {
             this.state.webSocketManager!.setBoundingBox(this.context.screen);
         };
-
-        window.addEventListener('resize', resizeHandler);
     }
 
     componentWillUnmount() {
@@ -87,10 +94,14 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onMouseDown(event: React.MouseEvent) {
+        this.canvasRef.current?.focus();
+        if (this.props.onDrawingChange) {
+            this.props.onDrawingChange(true);
+        }
         this.setState({
             currentToolIndex: event.button,
         });
-        this.onToolEvent('onMouseDown', event);
+        this.onToolEvent('onMouseDown', event, event.button);
     }
 
     onMouseMove(event: React.MouseEvent) {
@@ -98,17 +109,19 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     onMouseUp(event: React.MouseEvent) {
+        if (this.props.onDrawingChange) {
+            this.props.onDrawingChange(false);
+        }
         this.onToolEvent('onMouseUp', event);
     }
 
     onToolEvent(
         type: 'onMouseDown' | 'onMouseMove' | 'onMouseUp',
-        event: React.MouseEvent
+        event: React.MouseEvent,
+        button: number = this.state.currentToolIndex!
     ) {
         event.preventDefault();
-        this.state.tools![
-            this.props.activeToolIndices[this.state.currentToolIndex!]
-        ][type](
+        this.state.tools![this.props.activeToolIndices[button]][type](
             this.state.context!.getPoint(event.clientX, event.clientY),
             this.props.toolProperties
         );
@@ -119,7 +132,14 @@ export class UnconnectedCanvas extends React.Component<
         this.state.shapeManager!.redraw();
     }
 
-    onKeyDown(event: React.KeyboardEvent) {
+    onKeyDown(event: KeyboardEvent) {
+        if (
+            event.target != document.body &&
+            event.target != this.canvasRef.current
+        ) {
+            return;
+        }
+
         const translation = this.state.context!.getWidth() / 25;
         switch (event.keyCode) {
             case 37:
@@ -150,9 +170,11 @@ export class UnconnectedCanvas extends React.Component<
         return (
             <canvas
                 ref={this.canvasRef}
+                tabIndex={-1}
                 onMouseDown={this.onMouseDown.bind(this)}
                 onMouseMove={this.onMouseMove.bind(this)}
                 onMouseUp={this.onMouseUp.bind(this)}
+                onMouseLeave={this.onMouseUp.bind(this)}
                 onWheel={this.onMouseWheel.bind(this)}
                 onContextMenu={event => event.preventDefault()}
             ></canvas>

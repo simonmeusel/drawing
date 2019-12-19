@@ -6,7 +6,7 @@ import { ToolChooser } from './toolChooser/ToolChooser';
 export class ToolPanel extends React.Component {
     render() {
         return (
-            <Panel title="Tools" position="left">
+            <Panel title="Tools" position="left" width="220px">
                 <ToolChooser />
                 <hr />
                 <ColorPicker />

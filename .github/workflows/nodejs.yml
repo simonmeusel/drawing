@@ -30,8 +30,8 @@ jobs:
                   git branch --delete --force gh-pages || true
                   git checkout -b gh-pages
                   git rm --cached -r .
-                  mv .git dist/.git
-                  cd dist
+                  mv .git dist/frontend/.git
+                  cd dist/frontend
                   git add .
                   git config --global user.email "ci@simonmeusel.de"
                   git config --global user.name "CI"

@@ -1,6 +1,6 @@
-import { Shape } from '../Shape';
+import { GenericShape } from '../Shape';
 
-export interface FilledShape extends Shape {
+export interface FilledShape extends GenericShape {
     data: {
         fillColor: string;
     };

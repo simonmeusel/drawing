@@ -1,28 +1,32 @@
 import express from 'express';
 import { createServer } from 'http';
+import { join } from 'path';
 import { Database } from './Database';
+import { SchemaManager } from './SchemaManager';
 import { WebSocketServer } from './WebSocketServer';
 
 export let database: Database;
+export let schemaManager: SchemaManager;
 export let webSocketServer: WebSocketServer;
 
 async function start() {
     database = new Database(
         process.env.MONGODB_CONNECTION_URI || 'mongodb://localhost:27017/db'
     );
+    schemaManager = new SchemaManager();
     webSocketServer = new WebSocketServer();
 
-    console.log('Connecting to database');
+    schemaManager.initialize();
 
+    console.log('Connecting to database');
     await database.connect();
+    console.log('Connected to database');
 
     const app = express();
-    app.use(express.static('dist'));
+    app.use(express.static(join('dist', 'frontend')));
     const server = createServer(app);
 
     webSocketServer.initialize(server);
-
-    console.log('Connected to database');
 
     server.listen(8080);
 

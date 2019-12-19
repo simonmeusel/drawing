@@ -1,7 +1,9 @@
 import { createBoundingBox } from '../../../../shared/BoundingBox';
 import { Point } from '../../../../shared/Point';
-import { ShapeType } from '../../../../shared/Shape';
-import { BasicShape } from '../../../../shared/shapes/BasicShape';
+import {
+    BasicShape,
+    BasicShapeType,
+} from '../../../../shared/shapes/BasicShape';
 import { UUID } from '../../../../shared/UUID';
 import { Context } from '../Context';
 import { ShapeManager } from '../ShapeManager';
@@ -14,12 +16,12 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
     constructor(
         shapeManager: ShapeManager,
         context: Context,
-        private type: ShapeType
+        private type: BasicShapeType
     ) {
         super(shapeManager, context);
     }
 
-    protected createStroke(point: Point, toolProperties: ToolProperties) {
+    protected createShape(point: Point, toolProperties: ToolProperties) {
         this.startingPoint = point;
         return {
             id: UUID.generateString(),
@@ -35,13 +37,13 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
         };
     }
 
-    protected updateStroke(
-        activeStroke: BasicShape,
+    protected updateShape(
+        activeShape: BasicShape,
         point: Point,
         toolProperties: ToolProperties
     ) {
         return {
-            ...activeStroke,
+            ...activeShape,
             data: {
                 strokeColor: toolProperties.strokeColor,
                 fillColor: toolProperties.fillColor,

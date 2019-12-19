@@ -12,33 +12,33 @@ export class ShapeManager {
         private context: Context,
         private shapeRenderers: Record<ShapeType, Renderer<any>>
     ) {
-        webSocketManager.onShapes = (strokes: Shape[]) => {
-            for (const stroke of strokes) {
-                this.updateStrokeWithoutSending(stroke);
+        webSocketManager.onShapes = (shapes: Shape[]) => {
+            for (const shape of shapes) {
+                this.updateShapeWithoutSending(shape);
             }
             this.redraw();
         };
     }
 
-    public updateStroke(stroke: Shape) {
-        this.updateStrokeWithoutSending(stroke);
-        this.webSocketManager.updateShape(stroke);
+    public updateShape(shape: Shape) {
+        this.updateShapeWithoutSending(shape);
+        this.webSocketManager.updateShape(shape);
     }
 
-    private updateStrokeWithoutSending(stroke: Shape) {
-        this.shapes[stroke.id] = stroke;
+    private updateShapeWithoutSending(shape: Shape) {
+        this.shapes[shape.id] = shape;
     }
 
-    public deleteStroke(stroke: Shape) {
-        this.deleteStrokeWithoutSending(stroke);
-        this.webSocketManager.deleteShape(stroke.id);
+    public deleteShape(shape: Shape) {
+        this.deleteShapeWithoutSending(shape);
+        this.webSocketManager.deleteShape(shape.id);
     }
 
-    public deleteStrokeWithoutSending(stroke: Shape) {
-        delete stroke[stroke.id];
+    public deleteShapeWithoutSending(shape: Shape) {
+        delete this.shapes[shape.id];
     }
 
-    public getStrokes() {
+    public getShapes() {
         return this.shapes;
     }
 
@@ -48,11 +48,11 @@ export class ShapeManager {
         }
         this.timeout = setTimeout(() => {
             this.timeout = undefined;
-            this.redrawStrokes();
+            this.redrawShapes();
         }, 0);
     }
 
-    private redrawStrokes() {
+    private redrawShapes() {
         this.context.clear();
         for (const shapeID in this.shapes) {
             const shape = this.shapes[shapeID];

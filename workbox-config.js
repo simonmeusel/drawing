@@ -1,6 +1,6 @@
 module.exports = {
-    globDirectory: 'dist/',
+    globDirectory: 'dist/frontend/',
     globPatterns: ['**/*.{css,js,html}'],
-    swDest: 'dist/sw.js',
+    swDest: 'dist/frontend/sw.js',
     importWorkboxFrom: 'local',
 };

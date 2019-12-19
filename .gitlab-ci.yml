@@ -10,5 +10,5 @@ test:
         - node --version
         - npm --version
         - npm install
-        # Build Frontend
+        # Build Frontend and Backend
         - npm run build:prod

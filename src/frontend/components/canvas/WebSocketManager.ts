@@ -1,6 +1,7 @@
 import { BoundingBox } from '../../../shared/BoundingBox';
 import { Request } from '../../../shared/Request';
 import { Shape } from '../../../shared/Shape';
+import { addRoomIDToBrowserHistory } from '../../store/roomID';
 import { Context } from './Context';
 
 export class WebSocketManager {
@@ -31,6 +32,8 @@ export class WebSocketManager {
         if (this.roomID == roomID) {
             return;
         }
+        this.roomID = roomID;
+        addRoomIDToBrowserHistory(roomID);
         this.webSocket = new WebSocket(this.baseURI + roomID);
         this.webSocket.addEventListener('open', () => {
             console.log('Web socket connected');

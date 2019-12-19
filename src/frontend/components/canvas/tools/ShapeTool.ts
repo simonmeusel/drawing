@@ -3,47 +3,47 @@ import { Shape } from '../../../../shared/Shape';
 import { Tool, ToolProperties } from './Tool';
 
 export abstract class ShapeTool<T extends Shape> extends Tool {
-    private activeStroke?: T;
+    private activeShape?: T;
 
     public onMouseDown(point: Point, toolProperties: ToolProperties) {
-        if (this.activeStroke) {
+        if (this.activeShape) {
             return;
         }
-        this.activeStroke = this.createStroke(point, toolProperties);
-        this.shapeManager.updateStroke(this.activeStroke);
+        this.activeShape = this.createShape(point, toolProperties);
+        this.shapeManager.updateShape(this.activeShape);
         this.shapeManager.redraw();
     }
 
     public onMouseMove(point: Point, toolProperties: ToolProperties) {
-        if (!this.activeStroke) {
+        if (!this.activeShape) {
             return;
         }
-        this.activeStroke = this.updateStroke(
-            this.activeStroke,
+        this.activeShape = this.updateShape(
+            this.activeShape,
             point,
             toolProperties
         );
-        this.shapeManager.updateStroke(this.activeStroke);
+        this.shapeManager.updateShape(this.activeShape);
         this.shapeManager.redraw();
     }
 
     public onMouseUp(point: Point, toolProperties: ToolProperties) {
-        if (!this.activeStroke) {
+        if (!this.activeShape) {
             return;
         }
         this.onMouseMove(point, toolProperties);
-        this.shapeManager.updateStroke(this.activeStroke);
+        this.shapeManager.updateShape(this.activeShape);
         this.shapeManager.redraw();
-        this.activeStroke = undefined;
+        this.activeShape = undefined;
     }
 
-    protected abstract createStroke(
+    protected abstract createShape(
         point: Point,
         toolProperties: ToolProperties
     ): T;
 
-    protected abstract updateStroke(
-        activeStroke: T,
+    protected abstract updateShape(
+        activeShape: T,
         point: Point,
         toolProperties: ToolProperties
     ): T;
