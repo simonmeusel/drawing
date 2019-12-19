@@ -15,6 +15,7 @@ jobs:
             - name: npm install, build, and test
               run: |
                   npm ci
+                  echo REACT_APP_WEB_SOCKET_BASE_URI=wss://api.drawing.simonmeusel.de/ > .env
                   npm run build:prod
               env:
                   CI: true
@@ -27,8 +28,8 @@ jobs:
                   chmod 600 ~/.ssh/id_rsa
                   export GITHUB_ID_RSA_PRIVATE_KEY=
                   git ls-remote origin refs/heads/master | grep "^$(git rev-parse HEAD)" || exit 0
-                  git branch --delete --force gh-pages || true
-                  git checkout -b gh-pages
+                  git checkout gh-pages
+                  git reset --hard gh-pages-root
                   git rm --cached -r .
                   mv .git dist/frontend/.git
                   cd dist/frontend
