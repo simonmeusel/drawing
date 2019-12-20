@@ -1,8 +1,8 @@
-import * as React from 'react';
-import Draggable from 'react-draggable';
 import { MdArrowDropdown } from '@simonmeusel/react-ionicons/MdArrowDropdown';
 import { MdArrowDropup } from '@simonmeusel/react-ionicons/MdArrowDropup';
 import { MdHelpCircle } from '@simonmeusel/react-ionicons/MdHelpCircle';
+import * as React from 'react';
+import Draggable from 'react-draggable';
 import './Panel.scss';
 
 export interface PanelProps {

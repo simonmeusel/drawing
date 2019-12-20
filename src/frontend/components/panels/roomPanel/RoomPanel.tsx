@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../../store';
+import { DispatchProps, RootState } from '../../../store';
 import { clearRoomHistory } from '../../../store/actions/rooms/clearRoomHistory';
 import { setRoomID } from '../../../store/actions/rooms/setRoomID';
 import { generateRoomID, getURLWithRoomID } from '../../../store/roomID';
 import { Panel } from '../Panel';
 
 export class UnconnectedRoomPanel extends React.Component<
-    ReturnType<typeof mapStateToProps> & {
-        dispatch: Dispatch<RootAction>;
-    },
+    ReturnType<typeof mapStateToProps> & DispatchProps,
     {}
 > {
     private textAreaRef = React.createRef<HTMLTextAreaElement>();

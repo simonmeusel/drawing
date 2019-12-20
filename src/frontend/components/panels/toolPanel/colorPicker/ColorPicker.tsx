@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { RootAction, RootState } from '../../../../store';
-import { setToolProperties } from '../../../../store/actions/toolProperties';
+import { DispatchProps, RootState } from '../../../../store';
+import { setToolProperties } from '../../../../store/actions/setToolProperties';
 import './ColorPicker.scss';
 
-export type ColorPickerProps = ReturnType<typeof mapStateToProps> & {
-    dispatch: Dispatch<RootAction>;
-};
+export type ColorPickerProps = ReturnType<typeof mapStateToProps> &
+    DispatchProps;
 
 export const tabs: {
     tab: Tab;

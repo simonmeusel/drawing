@@ -1,7 +1,7 @@
 import { RootState, RootStore } from '.';
 import { getRoomID } from './roomID';
 
-const saveDelay = 1000;
+const saveDelay = 10000;
 
 const timeouts = new Map<RootStore, any>();
 

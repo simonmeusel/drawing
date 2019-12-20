@@ -2,7 +2,7 @@ import { BoundingBox } from '../../../shared/BoundingBox';
 import { Request } from '../../../shared/Request';
 import { Shape } from '../../../shared/Shape';
 import { addRoomIDToBrowserHistory } from '../../store/roomID';
-import { Context } from './Context';
+import { Graphics } from './Graphics';
 
 export class WebSocketManager {
     private webSocket?: WebSocket;
@@ -20,7 +20,7 @@ export class WebSocketManager {
 
     constructor(
         private baseURI: string,
-        private context: Context,
+        private graphics: Graphics,
         private debounceDelay = 100
     ) {
         if (!baseURI.endsWith('/')) {
@@ -42,7 +42,7 @@ export class WebSocketManager {
         this.webSocket.addEventListener('message', event => {
             this.onMessage(event);
         });
-        this.context.screenChangeHandler = () => {
+        this.graphics.screenChangeHandler = () => {
             this.onScreenChange();
         };
         for (const shapeID in this.debouncedShapes) {
@@ -51,7 +51,7 @@ export class WebSocketManager {
     }
 
     public onScreenChange() {
-        this.setBoundingBox(this.context.screen);
+        this.setBoundingBox(this.graphics.sbb);
     }
 
     public onMessage(event: MessageEvent) {
