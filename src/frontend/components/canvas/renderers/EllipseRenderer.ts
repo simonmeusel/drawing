@@ -1,10 +1,10 @@
 import { BasicShape } from '../../../../shared/shapes/BasicShape';
-import { Context } from '../Context';
+import { Graphics } from '../Graphics';
 import { Renderer } from './Renderer';
 
 export class EllipseRenderer extends Renderer<BasicShape> {
-    public draw(context: Context, shape: BasicShape) {
-        context.drawEllipse(
+    public draw(graphics: Graphics, shape: BasicShape) {
+        graphics.drawEllipse(
             shape.boundingBox,
             shape.data.strokeColor,
             shape.data.fillColor

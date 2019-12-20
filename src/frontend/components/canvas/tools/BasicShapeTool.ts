@@ -6,7 +6,7 @@ import {
 } from '../../../../shared/shapes/BasicShape';
 import { UUID } from '../../../../shared/UUID';
 import { RootDispatch } from '../../../store';
-import { Context } from '../Context';
+import { Graphics } from '../Graphics';
 import { ShapeTool } from './ShapeTool';
 import { ToolProperties } from './Tool';
 
@@ -15,10 +15,10 @@ export class BasicShapeTool extends ShapeTool<BasicShape> {
 
     constructor(
         dispatch: RootDispatch,
-        context: Context,
+        graphics: Graphics,
         private type: BasicShapeType
     ) {
-        super(dispatch, context);
+        super(dispatch, graphics);
     }
 
     protected createShape(point: Point, toolProperties: ToolProperties) {

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { App } from './components/app/App';
 import './index.scss';
-import { reducer, createPersistentStore } from './store';
+import { createPersistentStore } from './store';
 import { saveState } from './store/localStorage';
 import { onRoomIDUpdate } from './store/roomID';
 

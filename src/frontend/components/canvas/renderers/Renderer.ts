@@ -1,6 +1,6 @@
 import { Shape } from '../../../../shared/Shape';
-import { Context } from '../Context';
+import { Graphics } from '../Graphics';
 
 export abstract class Renderer<T extends Shape> {
-    public abstract draw(context: Context, shape: T);
+    public abstract draw(graphics: Graphics, shape: T);
 }

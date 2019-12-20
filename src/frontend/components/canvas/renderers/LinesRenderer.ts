@@ -1,6 +1,6 @@
 import { Point } from '../../../../shared/Point';
 import { LinesShape } from '../../../../shared/shapes/LinesShape';
-import { Context } from '../Context';
+import { Graphics } from '../Graphics';
 import { Renderer } from './Renderer';
 
 export class LinesRenderer extends Renderer<LinesShape> {
@@ -9,11 +9,11 @@ export class LinesRenderer extends Renderer<LinesShape> {
     constructor() {
         super();
     }
-    public draw(context: Context, shape: LinesShape) {
+    public draw(graphics: Graphics, shape: LinesShape) {
         let lastPoint: Point | undefined;
         for (const point of this.smoothPoints(shape.data.points, this.m)) {
             if (lastPoint) {
-                context.drawLine(lastPoint, point, shape.data.strokeColor);
+                graphics.drawLine(lastPoint, point, shape.data.strokeColor);
             }
             lastPoint = point;
         }

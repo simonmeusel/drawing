@@ -1,4 +1,5 @@
 import { Point } from '../../../../shared/Point';
+import { moveScreen } from '../../../store/actions/screen/moveScreen';
 import { Tool } from './Tool';
 
 export class MoveTool extends Tool {
@@ -12,8 +13,12 @@ export class MoveTool extends Tool {
         if (!this.startingPoint) {
             return;
         }
-        this.context.translateX(this.startingPoint.x - point.x);
-        this.context.translateY(this.startingPoint.y - point.y);
+        this.dispatch(
+            moveScreen(
+                this.startingPoint.x - point.x,
+                this.startingPoint.y - point.y
+            )
+        );
     }
 
     onMouseUp() {
