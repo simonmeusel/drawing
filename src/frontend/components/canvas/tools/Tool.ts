@@ -1,6 +1,6 @@
 import { Point } from '../../../../shared/Point';
+import { RootDispatch } from '../../../store';
 import { Context } from '../Context';
-import { ShapeManager } from '../ShapeManager';
 
 export interface ToolProperties {
     strokeColor: string;
@@ -8,10 +8,7 @@ export interface ToolProperties {
 }
 
 export abstract class Tool {
-    constructor(
-        protected shapeManager: ShapeManager,
-        protected context: Context
-    ) {}
+    constructor(protected dispatch: RootDispatch, protected context: Context) {}
 
     abstract onMouseDown(point: Point, toolProperties: ToolProperties);
     abstract onMouseMove(point: Point, toolProperties: ToolProperties);

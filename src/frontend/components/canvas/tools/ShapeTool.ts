@@ -1,5 +1,6 @@
 import { Point } from '../../../../shared/Point';
 import { Shape } from '../../../../shared/Shape';
+import { updateShape } from '../../../store/actions/shapes/updateShape';
 import { Tool, ToolProperties } from './Tool';
 
 export abstract class ShapeTool<T extends Shape> extends Tool {
@@ -10,8 +11,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.activeShape = this.createShape(point, toolProperties);
-        this.shapeManager.updateShape(this.activeShape);
-        this.shapeManager.redraw();
+        this.dispatch(updateShape(this.activeShape!));
     }
 
     public onMouseMove(point: Point, toolProperties: ToolProperties) {
@@ -23,8 +23,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             point,
             toolProperties
         );
-        this.shapeManager.updateShape(this.activeShape);
-        this.shapeManager.redraw();
+        this.dispatch(updateShape(this.activeShape!));
     }
 
     public onMouseUp(point: Point, toolProperties: ToolProperties) {
@@ -32,8 +31,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.onMouseMove(point, toolProperties);
-        this.shapeManager.updateShape(this.activeShape);
-        this.shapeManager.redraw();
+        this.dispatch(updateShape(this.activeShape!));
         this.activeShape = undefined;
     }
 

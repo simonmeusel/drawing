@@ -14,8 +14,6 @@ export class MoveTool extends Tool {
         }
         this.context.translateX(this.startingPoint.x - point.x);
         this.context.translateY(this.startingPoint.y - point.y);
-
-        this.shapeManager.redraw();
     }
 
     onMouseUp() {

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../../store';
+import { ShapeType } from '../../../shared/Shape';
+import { DispatchProps, RootState } from '../../store';
 import { Context } from './Context';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
 import { LinesRenderer } from './renderers/LinesRenderer';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
-import { ShapeManager } from './ShapeManager';
+import { Renderer } from './renderers/Renderer';
 import { BasicShapeTool } from './tools/BasicShapeTool';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { MoveTool } from './tools/MoveTool';
@@ -24,17 +25,23 @@ interface CanvasState {
     context?: Context;
     currentToolIndex?: number;
     keyDownHandler?: () => void;
+    renderTimeout?: any;
     resizeHandler?: () => void;
-    shapeManager?: ShapeManager;
     tools?: Tool[];
     webSocketManager?: WebSocketManager;
 }
 
 export class UnconnectedCanvas extends React.Component<
-    ReturnType<typeof mapStateToProps> & CanvasProps,
+    ReturnType<typeof mapStateToProps> & CanvasProps & DispatchProps,
     CanvasState
 > {
+    state: CanvasState = {};
     private canvasRef = React.createRef<HTMLCanvasElement>();
+    private renderers: Record<ShapeType, Renderer<any>> = {
+        ellipse: new EllipseRenderer(),
+        lines: new LinesRenderer(),
+        rectangle: new RectangleRenderer(),
+    };
 
     componentDidMount() {
         const canvas = this.canvasRef.current!;
@@ -50,12 +57,6 @@ export class UnconnectedCanvas extends React.Component<
         );
         webSocketManager.setRoomID(this.props.roomID);
 
-        const shapeManager = new ShapeManager(webSocketManager, context, {
-            rectangle: new RectangleRenderer(),
-            ellipse: new EllipseRenderer(),
-            lines: new LinesRenderer(),
-        });
-
         const keyDownHandler = this.onKeyDown.bind(this);
         window.addEventListener('keydown', keyDownHandler);
         const resizeHandler = this.resizeCanvas.bind(this);
@@ -66,12 +67,11 @@ export class UnconnectedCanvas extends React.Component<
             currentToolIndex: 0,
             keyDownHandler,
             resizeHandler,
-            shapeManager,
             tools: [
-                new MoveTool(shapeManager, context),
-                new BasicShapeTool(shapeManager, context, 'rectangle'),
-                new BasicShapeTool(shapeManager, context, 'ellipse'),
-                new LinesShapeTool(shapeManager, context),
+                new MoveTool(this.props.dispatch, context),
+                new BasicShapeTool(this.props.dispatch, context, 'rectangle'),
+                new BasicShapeTool(this.props.dispatch, context, 'ellipse'),
+                new LinesShapeTool(this.props.dispatch, context),
             ],
             webSocketManager,
         });
@@ -91,7 +91,6 @@ export class UnconnectedCanvas extends React.Component<
         canvas.height = window.innerHeight;
 
         this.state.context!.zoom(1);
-        this.state.shapeManager!.redraw();
     }
 
     onMouseDown(event: React.MouseEvent) {
@@ -130,7 +129,6 @@ export class UnconnectedCanvas extends React.Component<
 
     onMouseWheel(event: React.WheelEvent) {
         this.state.context!.zoom(event.deltaY, event.clientX, event.clientY);
-        this.state.shapeManager!.redraw();
     }
 
     onKeyDown(event: KeyboardEvent) {
@@ -160,12 +158,29 @@ export class UnconnectedCanvas extends React.Component<
                 this.state.context!.translateY(-translation);
                 break;
         }
-        this.state.shapeManager!.redraw();
+    }
+
+    renderContext() {
+        this.state.renderTimeout = undefined;
+        if (!this.state.context) {
+            return;
+        }
+        this.state.context.clear();
+        for (const shape of Object.values(this.props.shapes)) {
+            this.renderers[shape.type].draw(this.state.context, shape);
+        }
     }
 
     render() {
         if (this.state && this.state.webSocketManager) {
             this.state.webSocketManager!.setRoomID(this.props.roomID);
+        }
+
+        if (!this.state.renderTimeout) {
+            this.state.renderTimeout = setTimeout(
+                this.renderContext.bind(this),
+                0
+            );
         }
 
         return (
@@ -185,6 +200,7 @@ export class UnconnectedCanvas extends React.Component<
 
 function mapStateToProps(state: RootState) {
     return {
+        shapes: state.document.shapes,
         toolProperties: state.toolProperties,
         activeToolIndices: {
             0: state.selectedTool,

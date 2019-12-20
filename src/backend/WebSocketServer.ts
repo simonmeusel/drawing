@@ -132,7 +132,7 @@ export class WebSocketServer {
     }
 
     private disconnectWebSocket(webSocket: ExtendedWebSocket) {
-        console.log('dc');
+        console.log('Disconnected websocket');
 
         webSocket.close(1003);
     }

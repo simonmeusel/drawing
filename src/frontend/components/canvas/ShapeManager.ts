@@ -1,3 +1,4 @@
+/*
 import { Shape, ShapeType } from '../../../shared/Shape';
 import { Context } from './Context';
 import { Renderer } from './renderers/Renderer';
@@ -60,3 +61,4 @@ export class ShapeManager {
         }
     }
 }
+*/

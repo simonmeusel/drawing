@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { App } from './components/app/App';
 import './index.scss';
-import { reducer } from './store';
+import { reducer, createPersistentStore } from './store';
 import { saveState } from './store/localStorage';
 import { onRoomIDUpdate } from './store/roomID';
 
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
-const store = createStore(reducer);
+const store = createPersistentStore();
 
 window.addEventListener('beforeunload', () => {
     saveState(store, false);
