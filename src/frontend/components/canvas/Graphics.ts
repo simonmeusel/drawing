@@ -4,9 +4,16 @@ import {
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
+import { Screen } from '../../store/initialState';
 
-export class Context {
-    public screen: BoundingBox;
+export class Graphics {
+    /**
+     * Screen bounding box
+     */
+    public sbb: BoundingBox = {
+        lowerLeftPoint: { x: 0, y: 0 },
+        upperRightPoint: { x: 0, y: 0 },
+    };
 
     private canvas: HTMLCanvasElement;
     private canvasWidthMultiplier: number = 1;
@@ -14,62 +21,39 @@ export class Context {
 
     public screenChangeHandler?: () => void;
 
-    constructor(private c: CanvasRenderingContext2D) {
+    constructor(private c: CanvasRenderingContext2D, initialScreen: Screen) {
         this.canvas = c.canvas;
-        this.screen = {
-            lowerLeftPoint: {
-                x: -1,
-                y: -this.canvas.clientHeight / this.canvas.clientWidth,
-            },
-            upperRightPoint: {
-                x: 1,
-                y: this.canvas.clientHeight / this.canvas.clientWidth,
-            },
-        };
-        this.recalculateRealWidthAndHeight();
+        this.setScreen(initialScreen);
     }
 
     public getWidth() {
-        return this.screen.upperRightPoint.x - this.screen.lowerLeftPoint.x;
+        return this.sbb.upperRightPoint.x - this.sbb.lowerLeftPoint.x;
     }
 
     public getHeight() {
-        return this.screen.upperRightPoint.y - this.screen.lowerLeftPoint.y;
+        return this.sbb.upperRightPoint.y - this.sbb.lowerLeftPoint.y;
+    }
+
+    public setScreen(screen: Screen) {
+        const aspectRatio = this.canvas.clientHeight / this.canvas.clientWidth;
+        const d = screen.width / 2;
+        this.sbb = {
+            lowerLeftPoint: {
+                x: -d + screen.centerPoint.x,
+                y: -aspectRatio * d + screen.centerPoint.y,
+            },
+            upperRightPoint: {
+                x: d + screen.centerPoint.x,
+                y: aspectRatio * d + screen.centerPoint.y,
+            },
+        };
+        this.recalculateRealWidthAndHeight();
     }
 
     private triggerScreenChangeHandler() {
         if (this.screenChangeHandler) {
             this.screenChangeHandler();
         }
-    }
-    /**
-     * Translate screen in x direction
-     */
-    translateX(canvasXTranslation: number) {
-        this.screen.lowerLeftPoint.x += canvasXTranslation;
-        this.screen.upperRightPoint.x += canvasXTranslation;
-
-        this.triggerScreenChangeHandler();
-    }
-
-    /**
-     * Translate screen in y direction
-     */
-    translateY(canvasYTranslation: number) {
-        this.screen.lowerLeftPoint.y += canvasYTranslation;
-        this.screen.upperRightPoint.y += canvasYTranslation;
-
-        this.triggerScreenChangeHandler();
-    }
-
-    /**
-     * Translate in both directions
-     */
-    translateXY(canvasXTranslation, canvasYTranslation) {
-        this.translateX(canvasXTranslation);
-        this.translateY(canvasYTranslation);
-
-        this.triggerScreenChangeHandler();
     }
 
     zoom(
@@ -97,12 +81,12 @@ export class Context {
         const newHeight =
             newWidth * (this.canvas.clientHeight / this.canvas.clientWidth);
 
-        this.screen.lowerLeftPoint = {
+        this.sbb.lowerLeftPoint = {
             x: anchorPoint.x - newWidth / 2,
             y: anchorPoint.y - newHeight / 2,
         };
 
-        this.screen.upperRightPoint = {
+        this.sbb.upperRightPoint = {
             x: anchorPoint.x + newWidth / 2,
             y: anchorPoint.y + newHeight / 2,
         };
@@ -123,11 +107,9 @@ export class Context {
      */
     getPoint(canvasX: number, canvasY: number): Point {
         return {
-            x:
-                this.screen.lowerLeftPoint.x +
-                canvasX / this.canvasWidthMultiplier,
+            x: this.sbb.lowerLeftPoint.x + canvasX / this.canvasWidthMultiplier,
             y:
-                this.screen.upperRightPoint.y -
+                this.sbb.upperRightPoint.y -
                 canvasY / this.canvasHeightMultiplier,
         };
     }
@@ -137,10 +119,9 @@ export class Context {
      */
     getCanvasCoordinates(point: Point): { x: number; y: number } {
         const x =
-            (point.x - this.screen.lowerLeftPoint.x) *
-            this.canvasWidthMultiplier;
+            (point.x - this.sbb.lowerLeftPoint.x) * this.canvasWidthMultiplier;
         const y =
-            (this.screen.upperRightPoint.y - point.y) *
+            (this.sbb.upperRightPoint.y - point.y) *
             this.canvasHeightMultiplier;
 
         return { x, y };
@@ -156,7 +137,7 @@ export class Context {
         strokeColor: string,
         fillColor: string
     ) {
-        if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
+        if (!doBoundingBoxesOverlap(boundingBox, this.sbb)) {
             return;
         }
         const lowerLeftCanvasPoint = this.getCanvasCoordinates(
@@ -184,7 +165,7 @@ export class Context {
         strokeColor: string,
         fillColor: string
     ) {
-        if (!doBoundingBoxesOverlap(boundingBox, this.screen)) {
+        if (!doBoundingBoxesOverlap(boundingBox, this.sbb)) {
             return;
         }
 
@@ -220,7 +201,7 @@ export class Context {
     }
 
     drawLine(p1: Point, p2: Point, strokeColor: string) {
-        if (!doBoundingBoxesOverlap(createBoundingBox(p1, p2), this.screen)) {
+        if (!doBoundingBoxesOverlap(createBoundingBox(p1, p2), this.sbb)) {
             return;
         }
 

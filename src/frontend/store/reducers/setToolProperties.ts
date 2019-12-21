@@ -1,5 +1,5 @@
 import { RootState } from '..';
-import { SetToolPropertiesAction } from '../actions/toolProperties';
+import { SetToolPropertiesAction } from '../actions/setToolProperties';
 
 export function reduceSetToolProperties(
     state: RootState,

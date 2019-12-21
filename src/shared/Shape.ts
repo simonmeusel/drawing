@@ -16,3 +16,7 @@ export type ShapeType = ReturnType<typeof getShapeType>;
 export function getShapeType(shape: Shape) {
     return shape.type;
 }
+
+export interface Shapes {
+    [roomID: string]: Shape;
+}
