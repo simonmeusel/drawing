@@ -55,9 +55,11 @@ export class UnconnectedCanvas extends React.Component<
 
         const webSocketManager = new WebSocketManager(
             WEB_SOCKET_BASE_URI,
+            this.props.dispatch,
             graphics
         );
         webSocketManager.setRoomID(this.props.roomID);
+        webSocketManager.setBoundingBox(graphics.sbb);
 
         const keyDownHandler = this.onKeyDown.bind(this);
         window.addEventListener('keydown', keyDownHandler);
@@ -77,12 +79,6 @@ export class UnconnectedCanvas extends React.Component<
             ],
             webSocketManager,
         });
-
-        graphics.screenChangeHandler = () => {
-            this.state.webSocketManager!.setBoundingBox(
-                this.state.graphics!.sbb
-            );
-        };
     }
 
     componentWillUnmount() {

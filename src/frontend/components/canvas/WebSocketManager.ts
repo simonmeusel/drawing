@@ -1,12 +1,13 @@
 import { BoundingBox } from '../../../shared/BoundingBox';
 import { Request } from '../../../shared/Request';
 import { Shape } from '../../../shared/Shape';
+import { RootDispatch } from '../../store';
+import { updateShape } from '../../store/actions/shapes/updateShape';
 import { addRoomIDToBrowserHistory } from '../../store/roomID';
 import { Graphics } from './Graphics';
 
 export class WebSocketManager {
     private webSocket?: WebSocket;
-    public onShapes?: (shapes: Shape[]) => void;
     private roomID?: string;
     private pendingRequests: Request[] = [];
 
@@ -20,6 +21,7 @@ export class WebSocketManager {
 
     constructor(
         private baseURI: string,
+        private dispatch: RootDispatch,
         private graphics: Graphics,
         private debounceDelay = 100
     ) {
@@ -42,9 +44,7 @@ export class WebSocketManager {
         this.webSocket.addEventListener('message', event => {
             this.onMessage(event);
         });
-        this.graphics.screenChangeHandler = () => {
-            this.onScreenChange();
-        };
+
         for (const shapeID in this.debouncedShapes) {
             this.discardShape(shapeID);
         }
@@ -55,9 +55,9 @@ export class WebSocketManager {
     }
 
     public onMessage(event: MessageEvent) {
-        if (this.onShapes) {
-            const shapes: Shape[] = JSON.parse(event.data);
-            this.onShapes(shapes);
+        const shapes: Shape[] = JSON.parse(event.data);
+        for (const shape of shapes) {
+            this.dispatch(updateShape(shape));
         }
     }
 

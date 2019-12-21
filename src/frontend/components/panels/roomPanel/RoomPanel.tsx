@@ -1,12 +1,12 @@
+import { MdSearch } from '@simonmeusel/react-ionicons/MdSearch';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { DispatchProps, RootState } from '../../../store';
 import { clearRoomHistory } from '../../../store/actions/rooms/clearRoomHistory';
 import { setRoomID } from '../../../store/actions/rooms/setRoomID';
+import { setScreen } from '../../../store/actions/screen/setScreen';
 import { generateRoomID, getURLWithRoomID } from '../../../store/roomID';
 import { Panel } from '../Panel';
-import { setScreen } from '../../../store/actions/screen/setScreen';
-import { MdSearch } from '@simonmeusel/react-ionicons/MdSearch';
 
 export class UnconnectedRoomPanel extends React.Component<
     ReturnType<typeof mapStateToProps> & DispatchProps,
