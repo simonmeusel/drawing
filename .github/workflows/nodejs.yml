@@ -33,6 +33,7 @@ jobs:
                   git reset --hard gh-pages-root
                   mv .git dist/frontend/.git
                   cd dist/frontend
+                  echo drawing.simonmeusel.de > CNAME
                   git add .
                   git config --global user.email "ci@simonmeusel.de"
                   git config --global user.name "CI"
