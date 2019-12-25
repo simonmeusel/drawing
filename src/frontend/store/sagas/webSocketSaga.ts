@@ -9,9 +9,7 @@ export function createWebSocketSaga(webSocketManager: WebSocketManager) {
     }
 
     function updateShape(action: UpdateShapeAction) {
-        console.log(action);
         if (action.sendToBackend) {
-            console.log(action);
             webSocketManager.updateShape(action.shape);
         }
     }
