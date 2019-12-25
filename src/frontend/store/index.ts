@@ -1,4 +1,4 @@
-import { createStore, Dispatch, Store, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore, Dispatch, Store } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'typesafe-actions';
 import { WebSocketManager } from '../api/WebSocketManager';

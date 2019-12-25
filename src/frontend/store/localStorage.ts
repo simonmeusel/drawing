@@ -1,9 +1,6 @@
 import { RootState, RootStore } from '.';
+import { GenericShape, Shape, Shapes } from '../../shared/Shape';
 import { getRoomID } from './roomID';
-import { initialDocument } from './initialState';
-import { Shapes, Shape, GenericShape } from '../../shared/Shape';
-import { BasicShape } from '../../shared/shapes/BasicShape';
-import { LinesShape } from '../../shared/shapes/LinesShape';
 
 const saveDelay = 10000;
 
