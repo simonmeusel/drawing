@@ -111,12 +111,12 @@ export class WebSocketServer {
                             doBoundingBoxesOverlap(
                                 rawShape.boundingBox,
                                 clientWebSocket.boundingBox!
-                            ) ||
+                            ) /* TODO fetch old bounding box from database
                             (request.oldBoundingBox &&
                                 doBoundingBoxesOverlap(
                                     request.oldBoundingBox,
                                     clientWebSocket.boundingBox!
-                                ))
+                                ))*/
                         ) {
                             clientWebSocket.send(
                                 database.serializeShape([rawShape])

@@ -4,6 +4,7 @@ import {
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
+import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
 
 export class Graphics {
@@ -19,7 +20,11 @@ export class Graphics {
     private canvasWidthMultiplier: number = 1;
     private canvasHeightMultiplier: number = 1;
 
-    constructor(private c: CanvasRenderingContext2D, initialScreen: Screen) {
+    constructor(
+        private c: CanvasRenderingContext2D,
+        initialScreen: Screen,
+        private webSocketManager: WebSocketManager
+    ) {
         this.canvas = c.canvas;
         this.setScreen(initialScreen);
     }
@@ -45,6 +50,7 @@ export class Graphics {
                 y: aspectRatio * d + screen.centerPoint.y,
             },
         };
+        this.webSocketManager.setScreenBoundingBox(this.sbb);
         this.recalculateRealWidthAndHeight();
     }
 

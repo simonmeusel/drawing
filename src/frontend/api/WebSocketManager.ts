@@ -1,28 +1,33 @@
-import { BoundingBox } from '../../../shared/BoundingBox';
-import { Request } from '../../../shared/Request';
-import { Shape } from '../../../shared/Shape';
-import { RootDispatch } from '../../store';
-import { updateShape } from '../../store/actions/shapes/updateShape';
-import { addRoomIDToBrowserHistory } from '../../store/roomID';
-import { Graphics } from './Graphics';
+import { BoundingBox, isBoundingBoxContainer } from '../../shared/BoundingBox';
+import { Request } from '../../shared/Request';
+import { Shape } from '../../shared/Shape';
+import { RootDispatch } from '../store';
+import { updateShape } from '../store/actions/shapes/updateShape';
+import { addRoomIDToBrowserHistory } from '../store/roomID';
+
+const WEB_SOCKET_BASE_URI =
+    process.env.REACT_APP_WEB_SOCKET_BASE_URI ||
+    (location.protocol == 'http:' ? 'ws' : 'wss') + '://' + location.host + '/';
 
 export class WebSocketManager {
     private webSocket?: WebSocket;
     private roomID?: string;
     private pendingRequests: Request[] = [];
+    public dispatch?: RootDispatch;
+    private screenBoundingBox: BoundingBox = {
+        lowerLeftPoint: { x: 0, y: 0 },
+        upperRightPoint: { x: 0, y: 0 },
+    };
 
     private debouncedShapes: {
         [shapeID: string]: {
             shape: Shape;
-            oldBoundingBox?: BoundingBox;
             timeout: any;
         };
     } = {};
 
     constructor(
-        private baseURI: string,
-        private dispatch: RootDispatch,
-        private graphics: Graphics,
+        private baseURI: string = WEB_SOCKET_BASE_URI,
         private debounceDelay = 100
     ) {
         if (!baseURI.endsWith('/')) {
@@ -38,8 +43,12 @@ export class WebSocketManager {
         addRoomIDToBrowserHistory(roomID);
         this.webSocket = new WebSocket(this.baseURI + roomID);
         this.webSocket.addEventListener('open', () => {
-            console.log('Web socket connected');
-            this.onScreenChange();
+            console.log(`Web socket for room ${roomID} connected`);
+            this.setScreenBoundingBox(this.screenBoundingBox);
+
+            for (const request of this.pendingRequests) {
+                this.sendRequest(request);
+            }
         });
         this.webSocket.addEventListener('message', event => {
             this.onMessage(event);
@@ -50,29 +59,22 @@ export class WebSocketManager {
         }
     }
 
-    public onScreenChange() {
-        this.setBoundingBox(this.graphics.sbb);
-    }
-
     public onMessage(event: MessageEvent) {
         const shapes: Shape[] = JSON.parse(event.data);
         for (const shape of shapes) {
-            this.dispatch(updateShape(shape));
+            this.dispatch!(updateShape(shape, false));
         }
     }
 
-    public updateShape(shape: Shape, oldBoundingBox?: BoundingBox) {
+    public updateShape(shape: Shape) {
         if (this.debouncedShapes[shape.id]) {
             this.debouncedShapes[shape.id].shape = shape;
         } else {
             this.debouncedShapes[shape.id] = {
                 shape: shape,
-                oldBoundingBox,
                 timeout: setTimeout(() => {
                     this.sendRequest({
                         command: 'updateShape',
-                        oldBoundingBox: this.debouncedShapes[shape.id]
-                            .oldBoundingBox,
                         shape: this.debouncedShapes[shape.id].shape,
                     });
                     delete this.debouncedShapes[shape.id];
@@ -96,7 +98,11 @@ export class WebSocketManager {
         }
     }
 
-    public setBoundingBox(boundingBox: BoundingBox) {
+    public setScreenBoundingBox(boundingBox: BoundingBox) {
+        if (isBoundingBoxContainer(this.screenBoundingBox, boundingBox)) {
+            return;
+        }
+        this.screenBoundingBox = boundingBox;
         this.sendRequest({
             command: 'setBoundingBox',
             boundingBox: boundingBox,

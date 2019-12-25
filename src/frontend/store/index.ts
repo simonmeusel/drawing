@@ -1,5 +1,7 @@
-import { createStore, Dispatch, Store } from 'redux';
+import { createStore, Dispatch, Store, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'typesafe-actions';
+import { WebSocketManager } from '../api/WebSocketManager';
 import {
     CLEAR_ROOM_HISTORY,
     ClearRoomHistoryAction,
@@ -31,6 +33,7 @@ import { reduceSetToolProperties } from './reducers/setToolProperties';
 import { reduceDeleteShape } from './reducers/shapes/deleteShape';
 import { reduceSetShapes } from './reducers/shapes/setShapes';
 import { reduceUpdateShape } from './reducers/shapes/updateShape';
+import { createWebSocketSaga } from './sagas/webSocketSaga';
 
 export { RootState };
 
@@ -66,11 +69,15 @@ export const reducer = createReducer<RootState, RootAction>(getInitialState())
     .handleType(MOVE_SCREEN, reduceMoveScreen)
     .handleType(ZOOM_SCREEN, reduceZoomScreen);
 
-export function createPersistentStore() {
-    const store = createStore(reducer);
+export function createPersistentStore(webSocketManager: WebSocketManager) {
+    const sagaMiddleware = createSagaMiddleware();
+
+    const store = createStore(reducer, applyMiddleware(sagaMiddleware));
     store.subscribe(() => {
         saveState(store);
     });
+
+    sagaMiddleware.run(createWebSocketSaga(webSocketManager));
 
     return store;
 }
