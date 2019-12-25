@@ -1,5 +1,9 @@
 import { RootState, RootStore } from '.';
 import { getRoomID } from './roomID';
+import { initialDocument } from './initialState';
+import { Shapes, Shape, GenericShape } from '../../shared/Shape';
+import { BasicShape } from '../../shared/shapes/BasicShape';
+import { LinesShape } from '../../shared/shapes/LinesShape';
 
 const saveDelay = 10000;
 
@@ -17,8 +21,38 @@ export function getPersistentState(state: RootState): RootState {
         }
     }
 
+    const greyedShapes: Shapes = {};
+
+    for (const id in state.document.shapes) {
+        let shape: GenericShape = state.document.shapes[id];
+
+        // Deep clone required parts
+        shape = {
+            ...shape,
+            data: {
+                ...shape.data,
+            },
+        } as GenericShape;
+
+        if (shape.data.strokeColor) {
+            shape.data.strokeColor = '#bbbbbb';
+        }
+        if (shape.data.fillColor) {
+            shape.data.fillColor = '#bbbbbb';
+        }
+
+        greyedShapes[id] = shape as Shape;
+    }
+
     // Overrides
-    state.roomID = getRoomID() || state.roomID;
+    state = {
+        ...state,
+        roomID: getRoomID() || state.roomID,
+        document: {
+            ...state.document,
+            shapes: greyedShapes,
+        },
+    };
 
     return state;
 }

@@ -4,6 +4,7 @@ import {
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
+import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
 
 export class Graphics {
@@ -19,9 +20,11 @@ export class Graphics {
     private canvasWidthMultiplier: number = 1;
     private canvasHeightMultiplier: number = 1;
 
-    public screenChangeHandler?: () => void;
-
-    constructor(private c: CanvasRenderingContext2D, initialScreen: Screen) {
+    constructor(
+        private c: CanvasRenderingContext2D,
+        initialScreen: Screen,
+        private webSocketManager: WebSocketManager
+    ) {
         this.canvas = c.canvas;
         this.setScreen(initialScreen);
     }
@@ -47,53 +50,8 @@ export class Graphics {
                 y: aspectRatio * d + screen.centerPoint.y,
             },
         };
+        this.webSocketManager.setScreenBoundingBox(this.sbb);
         this.recalculateRealWidthAndHeight();
-    }
-
-    private triggerScreenChangeHandler() {
-        if (this.screenChangeHandler) {
-            this.screenChangeHandler();
-        }
-    }
-
-    zoom(
-        factor: number,
-        centerX: number = this.canvas.clientWidth / 2,
-        centerY: number = this.canvas.clientHeight / 2
-    ) {
-        let zoomFactor = Math.pow(1.01, factor);
-
-        const translationFactor = Math.abs(factor);
-
-        // Calculate weighted average of canvas center point and mouse postion
-        centerX =
-            (centerX * translationFactor +
-                (this.canvas.clientWidth / 2) * 100) /
-            (100 + translationFactor);
-        centerY =
-            (centerY * translationFactor +
-                (this.canvas.clientHeight / 2) * 100) /
-            (100 + translationFactor);
-
-        const anchorPoint = this.getPoint(centerX, centerY);
-
-        const newWidth = this.getWidth() * zoomFactor;
-        const newHeight =
-            newWidth * (this.canvas.clientHeight / this.canvas.clientWidth);
-
-        this.sbb.lowerLeftPoint = {
-            x: anchorPoint.x - newWidth / 2,
-            y: anchorPoint.y - newHeight / 2,
-        };
-
-        this.sbb.upperRightPoint = {
-            x: anchorPoint.x + newWidth / 2,
-            y: anchorPoint.y + newHeight / 2,
-        };
-
-        this.recalculateRealWidthAndHeight();
-
-        this.triggerScreenChangeHandler();
     }
 
     recalculateRealWidthAndHeight() {

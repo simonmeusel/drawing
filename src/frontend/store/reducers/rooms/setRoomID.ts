@@ -1,5 +1,6 @@
 import { RootState } from '../..';
 import { SetRoomIDAction } from '../../actions/rooms/setRoomID';
+import { initialScreen } from '../../initialState';
 
 export const MAX_ROOM_ID_HISTORY_SIZE = 25;
 
@@ -19,5 +20,6 @@ export function reduceSetRoomID(
         ...state,
         roomID: action.roomID,
         roomIDHistory,
+        screen: initialScreen,
     };
 }

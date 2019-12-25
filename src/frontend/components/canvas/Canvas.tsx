@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ShapeType } from '../../../shared/Shape';
+import { WebSocketManager } from '../../api/WebSocketManager';
 import { DispatchProps, RootState } from '../../store';
 import { moveScreen } from '../../store/actions/screen/moveScreen';
 import { zoomScreen } from '../../store/actions/screen/zoomScreen';
@@ -13,14 +14,10 @@ import { BasicShapeTool } from './tools/BasicShapeTool';
 import { LinesShapeTool } from './tools/LinesShapeTool';
 import { MoveTool } from './tools/MoveTool';
 import { Tool } from './tools/Tool';
-import { WebSocketManager } from './WebSocketManager';
-
-const WEB_SOCKET_BASE_URI =
-    process.env.REACT_APP_WEB_SOCKET_BASE_URI ||
-    (location.protocol == 'http:' ? 'ws' : 'wss') + '://' + location.host + '/';
 
 interface CanvasProps {
     onDrawingChange?: (drawing: boolean) => void;
+    webSocketManager: WebSocketManager;
 }
 
 interface CanvasState {
@@ -30,7 +27,6 @@ interface CanvasState {
     renderTimeout?: any;
     resizeHandler?: () => void;
     tools?: Tool[];
-    webSocketManager?: WebSocketManager;
 }
 
 export class UnconnectedCanvas extends React.Component<
@@ -51,13 +47,11 @@ export class UnconnectedCanvas extends React.Component<
         canvas.height = window.innerHeight;
         const canvasContext = canvas.getContext('2d')!;
 
-        const graphics = new Graphics(canvasContext, this.props.screen);
-
-        const webSocketManager = new WebSocketManager(
-            WEB_SOCKET_BASE_URI,
-            graphics
+        const graphics = new Graphics(
+            canvasContext,
+            this.props.screen,
+            this.props.webSocketManager
         );
-        webSocketManager.setRoomID(this.props.roomID);
 
         const keyDownHandler = this.onKeyDown.bind(this);
         window.addEventListener('keydown', keyDownHandler);
@@ -75,14 +69,7 @@ export class UnconnectedCanvas extends React.Component<
                 new BasicShapeTool(this.props.dispatch, graphics, 'ellipse'),
                 new LinesShapeTool(this.props.dispatch, graphics),
             ],
-            webSocketManager,
         });
-
-        graphics.screenChangeHandler = () => {
-            this.state.webSocketManager!.setBoundingBox(
-                this.state.graphics!.sbb
-            );
-        };
     }
 
     componentWillUnmount() {
@@ -185,10 +172,6 @@ export class UnconnectedCanvas extends React.Component<
     }
 
     render() {
-        if (this.state && this.state.webSocketManager) {
-            this.state.webSocketManager!.setRoomID(this.props.roomID);
-        }
-
         if (!this.state.renderTimeout) {
             this.state.renderTimeout = setTimeout(
                 this.renderDocument.bind(this),

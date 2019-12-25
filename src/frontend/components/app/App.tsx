@@ -1,13 +1,18 @@
 import * as React from 'react';
+import { WebSocketManager } from '../../api/WebSocketManager';
 import { Canvas } from '../canvas/Canvas';
 import { RoomPanel } from '../panels/roomPanel/RoomPanel';
 import { ToolPanel } from '../panels/toolPanel/ToolPanel';
+
+export interface AppProps {
+    webSocketManager: WebSocketManager;
+}
 
 export interface AppState {
     drawing: boolean;
 }
 
-export class App extends React.Component<{}, AppState> {
+export class App extends React.Component<AppProps, AppState> {
     state = {
         drawing: false,
     };
@@ -37,7 +42,10 @@ export class App extends React.Component<{}, AppState> {
                     <RoomPanel />
                 </div>
                 <div style={{ position: 'relative' }}>
-                    <Canvas onDrawingChange={this.onDrawingChange.bind(this)} />
+                    <Canvas
+                        webSocketManager={this.props.webSocketManager}
+                        onDrawingChange={this.onDrawingChange.bind(this)}
+                    />
                 </div>
             </div>
         );
