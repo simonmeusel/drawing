@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { WebSocketManager } from './api/WebSocketManager';
 import { App } from './components/app/App';
 import './index.scss';
 import { createPersistentStore } from './store';
@@ -23,7 +24,10 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
-const store = createPersistentStore();
+const webSocketManager = new WebSocketManager();
+const store = createPersistentStore(webSocketManager);
+webSocketManager.dispatch = store.dispatch;
+webSocketManager.setRoomID(store.getState().roomID);
 
 window.addEventListener('beforeunload', () => {
     saveState(store, false);
@@ -35,7 +39,7 @@ window.addEventListener('hashchange', () => {
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <App webSocketManager={webSocketManager} />
     </Provider>,
     document.getElementById('root')
 );

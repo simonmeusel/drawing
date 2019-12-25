@@ -18,6 +18,15 @@ export interface RootState {
     screen: Screen;
 }
 
+export const initialScreen: Screen = {
+    centerPoint: { x: 0, y: 0 },
+    width: 1,
+};
+
+export const initialDocument = {
+    shapes: {},
+};
+
 export function getInitialState() {
     return getPersistentState({
         toolProperties: {
@@ -27,12 +36,7 @@ export function getInitialState() {
         selectedTool: 2,
         roomID: getOrGenerateRoomID(),
         roomIDHistory: [],
-        document: {
-            shapes: {},
-        },
-        screen: {
-            centerPoint: { x: 0, y: 0 },
-            width: 1,
-        },
+        document: initialDocument,
+        screen: initialScreen,
     });
 }

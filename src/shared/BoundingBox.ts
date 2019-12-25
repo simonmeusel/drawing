@@ -42,3 +42,36 @@ export function doBoundingBoxesOverlap(
         b2.upperRightPoint.y >= b1.lowerLeftPoint.y
     );
 }
+
+export function isPointInBoundingBox(
+    boundingBox: BoundingBox,
+    point: Point
+): boolean {
+    return doBoundingBoxesOverlap(boundingBox, {
+        lowerLeftPoint: point,
+        upperRightPoint: point,
+    });
+}
+
+/**
+ * Checks whether b2 is contained in b1
+ */
+export function isBoundingBoxContainer(
+    b1: BoundingBox,
+    b2: BoundingBox
+): boolean {
+    return (
+        isPointInBoundingBox(b1, b2.lowerLeftPoint) &&
+        isPointInBoundingBox(b1, b2.upperRightPoint)
+    );
+}
+
+/**
+ * Checks whether b2 is contained in b1 or equal to b1
+ */
+export function scaleBoundingBox(b1: BoundingBox, b2: BoundingBox): boolean {
+    return (
+        isPointInBoundingBox(b1, b2.lowerLeftPoint) &&
+        isPointInBoundingBox(b1, b2.upperRightPoint)
+    );
+}

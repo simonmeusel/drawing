@@ -4,7 +4,6 @@ import { Shape } from './Shape';
 export type Request =
     | {
           command: 'updateShape';
-          oldBoundingBox: BoundingBox | undefined;
           shape: Shape;
       }
     | {
