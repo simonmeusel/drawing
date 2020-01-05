@@ -4,7 +4,7 @@
 
 -   Real-time collaboration
 -   Vector-based drawing
--   Create and share of private rooms
+-   Create and share private rooms
 -   Offline use of the web application, prefetching and caching of all required resources
 -   Open source application, easy deployment due to containerized Backend
 -   Continuous deployment to GitHub Pages
