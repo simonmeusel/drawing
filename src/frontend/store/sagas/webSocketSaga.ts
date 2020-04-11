@@ -1,7 +1,12 @@
-import { takeEvery, takeLatest } from 'redux-saga/effects';
+import { takeEvery, takeLatest, throttle } from 'redux-saga/effects';
+import { defaultDebounceDelay } from '../..';
 import { WebSocketManager } from '../../api/WebSocketManager';
-import { SET_ROOM_ID, SetRoomIDAction } from '../actions/rooms/setRoomID';
-import { UPDATE_SHAPE, UpdateShapeAction } from '../actions/shapes/updateShape';
+import { SetRoomIDAction, SET_ROOM_ID } from '../actions/rooms/setRoomID';
+import {
+    SetMousePositionAction,
+    SET_MOUSE_POSITION,
+} from '../actions/setMousePosition';
+import { UpdateShapeAction, UPDATE_SHAPE } from '../actions/shapes/updateShape';
 
 export function createWebSocketSaga(webSocketManager: WebSocketManager) {
     function setRoomID(action: SetRoomIDAction) {
@@ -14,8 +19,22 @@ export function createWebSocketSaga(webSocketManager: WebSocketManager) {
         }
     }
 
-    return function*() {
+    function setMousePosition(action: SetMousePositionAction) {
+        if (action.sendToBackend) {
+            webSocketManager.setMousePosition(
+                action.mouseID,
+                action.mousePosition
+            );
+        }
+    }
+
+    return function* () {
         yield takeLatest(SET_ROOM_ID, setRoomID);
         yield takeEvery(UPDATE_SHAPE, updateShape);
+        yield throttle(
+            defaultDebounceDelay,
+            SET_MOUSE_POSITION,
+            setMousePosition
+        );
     };
 }

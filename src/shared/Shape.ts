@@ -1,6 +1,6 @@
 import { BoundingBox } from './BoundingBox';
 import { BasicShape } from './shapes/BasicShape';
-import { LinesShape } from './shapes/LinesShape';
+import { PencilShape } from './shapes/PencilShape';
 
 export interface GenericShape {
     id: string;
@@ -9,7 +9,7 @@ export interface GenericShape {
     data?: any;
 }
 
-export type Shape = BasicShape | LinesShape;
+export type Shape = BasicShape | PencilShape;
 
 export type ShapeType = ReturnType<typeof getShapeType>;
 

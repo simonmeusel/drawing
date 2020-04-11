@@ -1,5 +1,29 @@
 # drawing
 
+## Features
+
+-   Real-time collaboration
+-   Vector-based drawing
+-   Create and share private rooms
+-   Offline use of the web application, prefetching and caching of all required resources
+-   Open source application, easy deployment due to containerized Backend
+-   Continuous deployment to GitHub Pages
+
+## Technologies used
+
+This project is written in [TypeScript](https://www.typescriptlang.org/) and built with [WebPack](https://webpack.js.org/) and [Parcel](https://parceljs.org/).
+
+### Frontend
+
+-   User Interface rendering using [ReactJS](https://reactjs.org/)
+-   Management of application state using [Redux](https://redux.js.org/) and [Redux-Saga](https://redux-saga.js.org/)
+
+### Backend
+
+-   Web-socket-based API using [ws](https://www.npmjs.com/package/ws)
+-   Serving of static content using [Express](https://expressjs.com/)
+-   [Nginx](https://nginx.org/en/) as reverse proxy
+
 ## Usage
 
 -   Clone this repository
@@ -8,7 +32,7 @@
 -   Visit the website at [http://localhost:8080](http://localhost:8080)
 
 To reduce complexity, this application does not support HTTPS out of the box. When deploying this application, you should use a reverse proxy (for example [jwilder/nginx-proxy
-](https://github.com/jwilder/nginx-proxy)) to manage certificates and cipher configuration and additional security measures.
+](https://github.com/jwilder/nginx-proxy)) to manage certificates, cipher configuration and additional security measures.
 
 ## Development
 

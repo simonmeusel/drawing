@@ -1,8 +1,8 @@
 import { Point } from '../Point';
 import { StrokedShape } from './StrokedShape';
 
-export interface LinesShape extends StrokedShape {
-    type: 'lines';
+export interface PencilShape extends StrokedShape {
+    type: 'pencil';
     data: {
         points: Point[];
         strokeColor: string;

@@ -1,15 +1,15 @@
 import { Point } from '../../../../shared/Point';
-import { LinesShape } from '../../../../shared/shapes/LinesShape';
+import { PencilShape } from '../../../../shared/shapes/PencilShape';
 import { Graphics } from '../Graphics';
 import { Renderer } from './Renderer';
 
-export class LinesRenderer extends Renderer<LinesShape> {
+export class PencilRenderer extends Renderer<PencilShape> {
     public m = 1;
 
     constructor() {
         super();
     }
-    public draw(graphics: Graphics, shape: LinesShape) {
+    public draw(graphics: Graphics, shape: PencilShape) {
         let lastPoint: Point | undefined;
         for (const point of this.smoothPoints(shape.data.points, this.m)) {
             if (lastPoint) {

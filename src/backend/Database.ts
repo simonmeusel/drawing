@@ -9,6 +9,7 @@ import * as URI from 'urijs';
 import { BoundingBox } from '../shared/BoundingBox';
 import { Shape } from '../shared/Shape';
 import { BackendUUID } from './BackendUUID';
+import { migrate } from './migrate';
 import { RawShape } from './RawShape';
 
 export class Database {
@@ -31,6 +32,8 @@ export class Database {
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
         this.createIndexes();
+
+        await migrate(this.rawShapesCollection);
     }
 
     parseShape(shape: Shape | any, roomID: Binary): RawShape {
@@ -54,8 +57,8 @@ export class Database {
         );
     }
 
-    serializeShape(rawShape: RawShape[]): string {
-        const shapes: Shape[] = rawShape.map(rs => {
+    serializeShape(rawShape: RawShape[]) {
+        const shapes: Shape[] = rawShape.map((rs) => {
             const s = {
                 ...rs,
                 id: BackendUUID.convertBinaryToString(rs._id),
@@ -64,7 +67,7 @@ export class Database {
             delete s.roomID;
             return s as Shape;
         });
-        return JSON.stringify(shapes);
+        return shapes as any[];
     }
 
     async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {

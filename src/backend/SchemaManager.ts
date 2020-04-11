@@ -23,6 +23,9 @@ export class SchemaManager {
         }
 
         const validate = this.ajv.getSchema(schemaName + '.json');
+        if (!validate) {
+            throw new Error();
+        }
         const valid = validate(data);
 
         if (!valid) {

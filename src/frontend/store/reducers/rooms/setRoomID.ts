@@ -9,7 +9,7 @@ export function reduceSetRoomID(
     action: SetRoomIDAction
 ): RootState {
     let roomIDHistory = state.roomIDHistory
-        .filter(roomID => state.roomID != roomID)
+        .filter((roomID) => state.roomID != roomID)
         .concat([state.roomID]);
     // Remove elements if list gets too long
     roomIDHistory = roomIDHistory.slice(
