@@ -10,8 +10,8 @@ export function reduceMoveScreen(
         screen: {
             width: state.screen.width,
             centerPoint: {
-                x: state.screen.centerPoint.x + action.x * state.screen.width,
-                y: state.screen.centerPoint.y + action.y * state.screen.width,
+                x: state.screen.centerPoint.x + action.x,
+                y: state.screen.centerPoint.y + action.y,
             },
         },
     };

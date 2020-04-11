@@ -17,8 +17,8 @@ export class Graphics {
     };
 
     private canvas: HTMLCanvasElement;
-    private canvasWidthMultiplier: number = 1;
-    private canvasHeightMultiplier: number = 1;
+    public canvasWidthMultiplier: number = 1;
+    public canvasHeightMultiplier: number = 1;
 
     constructor(
         private c: CanvasRenderingContext2D,
