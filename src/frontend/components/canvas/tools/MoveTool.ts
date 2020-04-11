@@ -1,9 +1,8 @@
 import { Point } from '../../../../shared/Point';
 import { moveScreen } from '../../../store/actions/screen/moveScreen';
-import { Tool, ToolProperties, ToolMoveEvent } from './Tool';
+import { Tool, ToolMoveEvent, ToolProperties } from './Tool';
 
 export class MoveTool extends Tool {
-    private startingPoint?: Point;
     private startX: number | undefined;
     private startY: number | undefined;
 
