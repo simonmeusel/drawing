@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { WebSocketManager } from '../../api/WebSocketManager';
+import { WelcomeModal } from './welcomeModal/WelcomeModal';
 import { Canvas } from '../canvas/Canvas';
 import { RoomPanel } from '../panels/roomPanel/RoomPanel';
 import { ToolPanel } from '../panels/toolPanel/ToolPanel';
@@ -16,6 +17,7 @@ export class App extends React.Component<AppProps, AppState> {
     state = {
         drawing: false,
     };
+
 
     onDrawingChange(drawing: boolean) {
         this.setState({ drawing });
@@ -38,6 +40,7 @@ export class App extends React.Component<AppProps, AppState> {
                               }
                     }
                 >
+                    <WelcomeModal/>
                     <ToolPanel />
                     <RoomPanel />
                 </div>

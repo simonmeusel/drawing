@@ -31,7 +31,7 @@ export class Database {
         this.db = this.mongoClient.db(this.dbName);
         this.rawShapesCollection = this.db.collection<RawShape>('shapes');
 
-        this.createIndexes();
+        await this.createIndexes();
 
         await migrate(this.rawShapesCollection);
     }
@@ -75,7 +75,7 @@ export class Database {
         }
 
         // TODO: Only return shapes inside of bounding box
-        return await this.rawShapesCollection
+        return this.rawShapesCollection
             .find({
                 roomID,
             })
