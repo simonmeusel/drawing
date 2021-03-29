@@ -18,5 +18,5 @@ export function getShapeType(shape: Shape) {
 }
 
 export interface Shapes {
-    [roomID: string]: Shape;
+    [shapeID: string]: Shape;
 }

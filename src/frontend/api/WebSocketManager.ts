@@ -67,7 +67,7 @@ export class WebSocketManager {
         switch (data.command) {
             case 'updateShapes':
                 for (const shape of data.shapes) {
-                    this.dispatch!(updateShape(shape, false));
+                    this.dispatch!(updateShape(shape, false, false));
                 }
                 break;
             case 'setMousePosition':
