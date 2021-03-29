@@ -1,5 +1,5 @@
 import { Point } from '../../shared/Point';
-import { Shapes } from '../../shared/Shape';
+import { Shape, Shapes } from '../../shared/Shape';
 import { UUID } from '../../shared/UUID';
 import { ToolProperties } from '../components/canvas/tools/Tool';
 import { getPersistentState } from './localStorage';
@@ -17,6 +17,16 @@ export interface MousePositions {
     };
 }
 
+export type ShapeHistoryElement =
+    | {
+          oldShape?: Shape;
+          newShape: Shape;
+      }
+    | {
+          oldShape: Shape;
+          newShape?: Shape;
+      };
+
 export interface RootState {
     toolProperties: ToolProperties;
     selectedTool: number;
@@ -27,7 +37,11 @@ export interface RootState {
      */
     mouseID: string;
     mousePositions: MousePositions;
-    document: { shapes: Shapes };
+    document: {
+        shapes: Shapes;
+        undoHistory: ShapeHistoryElement[];
+        redoHistory: ShapeHistoryElement[];
+    };
     screen: Screen;
 }
 
@@ -36,8 +50,10 @@ export const initialScreen: Screen = {
     width: 1,
 };
 
-export const initialDocument = {
+export const initialDocument: RootState['document'] = {
     shapes: {},
+    undoHistory: [],
+    redoHistory: [],
 };
 
 export function getInitialState() {

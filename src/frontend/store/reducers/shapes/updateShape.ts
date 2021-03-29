@@ -13,6 +13,16 @@ export function reduceUpdateShape(
                 ...state.document.shapes,
                 [action.shape.id]: action.shape,
             },
+            undoHistory: state.document.undoHistory.concat(
+                action.addToHistory
+                    ? [
+                          {
+                              newShape: action.shape,
+                              oldShape: state.document.shapes[action.shape.id],
+                          },
+                      ]
+                    : []
+            ),
         },
     };
 }

@@ -11,7 +11,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.activeShape = this.createShape(point, toolProperties);
-        this.dispatch(updateShape(this.activeShape!));
+        this.dispatch(updateShape(this.activeShape!, false));
     }
 
     public onMouseMove(point: Point, toolProperties: ToolProperties) {
@@ -23,7 +23,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             point,
             toolProperties
         );
-        this.dispatch(updateShape(this.activeShape!));
+        this.dispatch(updateShape(this.activeShape!, false));
     }
 
     public onMouseUp(point: Point, toolProperties: ToolProperties) {
@@ -31,7 +31,7 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.onMouseMove(point, toolProperties);
-        this.dispatch(updateShape(this.activeShape!));
+        this.dispatch(updateShape(this.activeShape!, true));
         this.activeShape = undefined;
     }
 
