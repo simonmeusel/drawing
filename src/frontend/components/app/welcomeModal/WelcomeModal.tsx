@@ -4,13 +4,13 @@ import { RootState } from '../../../store';
 import { getURLWithRoomID } from '../../../store/roomID';
 import { CopyContainer } from '../../panels/roomPanel/CopyContainer';
 
-export interface AppState {
+export interface WelcomeModalState {
     isModalOpen: boolean;
 }
 
 export class UnconnectedWelcomeModal extends React.Component<
     ReturnType<typeof mapStateToProps>,
-    AppState
+    WelcomeModalState
 > {
     state = {
         isModalOpen:

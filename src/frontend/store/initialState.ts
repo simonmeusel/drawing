@@ -19,12 +19,16 @@ export interface MousePositions {
 
 export type ShapeHistoryElement =
     | {
-          oldShape?: Shape;
+          oldShape: undefined;
           newShape: Shape;
       }
     | {
           oldShape: Shape;
-          newShape?: Shape;
+          newShape: undefined;
+      }
+    | {
+          oldShape: Shape;
+          newShape: Shape;
       };
 
 export interface RootState {

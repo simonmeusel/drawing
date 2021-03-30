@@ -2,6 +2,8 @@ import { applyMiddleware, createStore, Dispatch, Store } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from 'typesafe-actions';
 import { WebSocketManager } from '../api/WebSocketManager';
+import { REDO, RedoAction } from './actions/history/redo';
+import { UNDO, UndoAction } from './actions/history/undo';
 import {
     ClearRoomHistoryAction,
     CLEAR_ROOM_HISTORY,
@@ -27,6 +29,8 @@ import { SetShapesAction, SET_SHAPES } from './actions/shapes/setShapes';
 import { UpdateShapeAction, UPDATE_SHAPE } from './actions/shapes/updateShape';
 import { getInitialState, RootState } from './initialState';
 import { saveState } from './localStorage';
+import { reduceRedo } from './reducers/history/redo';
+import { reduceUndo } from './reducers/history/undo';
 import { reduceClearRoomHistory } from './reducers/rooms/clearRoomHistory';
 import { reduceSetRoomID } from './reducers/rooms/setRoomID';
 import { reduceMoveScreen } from './reducers/screen/moveScreen';
@@ -53,7 +57,9 @@ export type RootAction =
     | ZoomScreenAction
     | SetScreenAction
     | MoveScreenAction
-    | SetMousePositionAction;
+    | SetMousePositionAction
+    | UndoAction
+    | RedoAction;
 
 export type RootDispatch = Dispatch<RootAction>;
 
@@ -74,7 +80,9 @@ export const reducer = createReducer<RootState, RootAction>(getInitialState())
     .handleType(SET_SCREEN, reduceSetScreen)
     .handleType(MOVE_SCREEN, reduceMoveScreen)
     .handleType(ZOOM_SCREEN, reduceZoomScreen)
-    .handleType(SET_MOUSE_POSITION, reduceSetMousePosition);
+    .handleType(SET_MOUSE_POSITION, reduceSetMousePosition)
+    .handleType(UNDO, reduceUndo)
+    .handleType(REDO, reduceRedo);
 
 export function createPersistentStore(webSocketManager: WebSocketManager) {
     const sagaMiddleware = createSagaMiddleware();
