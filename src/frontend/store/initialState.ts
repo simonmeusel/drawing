@@ -17,6 +17,9 @@ export interface MousePositions {
     };
 }
 
+/**
+ * If undo is pressed, the old shape has to be restored.
+ */
 export type ShapeHistoryElement =
     | {
           oldShape: undefined;
@@ -43,8 +46,11 @@ export interface RootState {
     mousePositions: MousePositions;
     document: {
         shapes: Shapes;
-        undoHistory: ShapeHistoryElement[];
-        redoHistory: ShapeHistoryElement[];
+        history: {
+            undoHistory: ShapeHistoryElement[];
+            redoHistory: ShapeHistoryElement[];
+            editedShapes: Shapes;
+        };
     };
     screen: Screen;
 }
@@ -54,10 +60,14 @@ export const initialScreen: Screen = {
     width: 1,
 };
 
-export const initialDocument: RootState['document'] = {
-    shapes: {},
+export const initialHistory: RootState['document']['history'] = {
     undoHistory: [],
     redoHistory: [],
+    editedShapes: {},
+};
+export const initialDocument: RootState['document'] = {
+    shapes: {},
+    history: initialHistory,
 };
 
 export function getInitialState() {

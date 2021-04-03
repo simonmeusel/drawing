@@ -6,35 +6,41 @@ import { reduceUpdateShape } from '../shapes/updateShape';
 
 export function reduceUndo(state: RootState): RootState {
     const historyElement =
-        state.document.undoHistory[state.document.undoHistory.length - 1];
+        state.document.history.undoHistory[
+            state.document.history.undoHistory.length - 1
+        ];
     if (!historyElement) {
         return state;
     }
     if (historyElement.newShape) {
-        state = reduceUpdateShape(
-            state,
-            updateShape(historyElement.newShape, false, true)
-        );
-    } else {
         state = reduceDeleteShape(
             state,
-            deleteShape(historyElement.oldShape!.id, false)
+            deleteShape(historyElement.newShape.id, false)
+        );
+    } else {
+        state = reduceUpdateShape(
+            state,
+            updateShape(historyElement.oldShape, false, true)
         );
     }
+
     return {
         ...state,
         document: {
             ...state.document,
-            undoHistory: state.document.undoHistory.slice(
-                0,
-                state.document.undoHistory.length - 1
-            ),
-            redoHistory: state.document.redoHistory.concat([
-                {
-                    oldShape: historyElement.newShape,
-                    newShape: historyElement.oldShape as any,
-                },
-            ]),
+            history: {
+                ...state.document.history,
+                undoHistory: state.document.history.undoHistory.slice(
+                    0,
+                    state.document.history.undoHistory.length - 1
+                ),
+                redoHistory: state.document.history.redoHistory.concat([
+                    {
+                        oldShape: historyElement.newShape,
+                        newShape: historyElement.oldShape as any,
+                    },
+                ]),
+            },
         },
     };
 }
