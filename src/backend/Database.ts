@@ -74,7 +74,6 @@ export class Database {
             throw new Error();
         }
 
-        // TODO: Only return shapes inside of bounding box
         return this.rawShapesCollection
             .find({
                 roomID,
@@ -102,12 +101,6 @@ export class Database {
                 ],
             })
             .toArray();
-        /*
-            b1.upperRightPoint.x >= b2.lowerLeftPoint.x &&
-            b2.upperRightPoint.x >= b1.lowerLeftPoint.x &&
-            b1.upperRightPoint.y >= b2.lowerLeftPoint.y &&
-            b2.upperRightPoint.y >= b1.lowerLeftPoint.y
-            */
     }
 
     async createIndexes() {
