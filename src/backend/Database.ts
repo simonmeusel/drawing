@@ -69,7 +69,7 @@ export class Database {
         });
     }
 
-    async findRawShapes(roomID: Binary, _boundingBox: BoundingBox) {
+    async findRawShapes(roomID: Binary, boundingBox: BoundingBox) {
         if (!this.rawShapesCollection) {
             throw new Error();
         }
@@ -78,8 +78,36 @@ export class Database {
         return this.rawShapesCollection
             .find({
                 roomID,
+                $and: [
+                    {
+                        'boundingBox.upperRightPoint.x': {
+                            $gte: boundingBox.lowerLeftPoint.x,
+                        },
+                    },
+                    {
+                        'boundingBox.lowerLeftPoint.x': {
+                            $lte: boundingBox.upperRightPoint.x,
+                        },
+                    },
+                    {
+                        'boundingBox.upperRightPoint.y': {
+                            $gte: boundingBox.lowerLeftPoint.y,
+                        },
+                    },
+                    {
+                        'boundingBox.lowerLeftPoint.y': {
+                            $lte: boundingBox.upperRightPoint.y,
+                        },
+                    },
+                ],
             })
             .toArray();
+        /*
+            b1.upperRightPoint.x >= b2.lowerLeftPoint.x &&
+            b2.upperRightPoint.x >= b1.lowerLeftPoint.x &&
+            b1.upperRightPoint.y >= b2.lowerLeftPoint.y &&
+            b2.upperRightPoint.y >= b1.lowerLeftPoint.y
+            */
     }
 
     async createIndexes() {
