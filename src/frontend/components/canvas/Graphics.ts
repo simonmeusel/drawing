@@ -8,6 +8,10 @@ import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
 import { ImageUrl } from './tools/Tool';
 
+export interface ImageHashMap {
+    [imageUrl: string] : HTMLImageElement
+}
+
 export class Graphics {
     /**
      * Screen bounding box
@@ -20,6 +24,8 @@ export class Graphics {
     private canvas: HTMLCanvasElement;
     public canvasWidthMultiplier: number = 1;
     public canvasHeightMultiplier: number = 1;
+
+    private imageHashMap: ImageHashMap = {};
 
     constructor(
         private c: CanvasRenderingContext2D,
@@ -179,8 +185,24 @@ export class Graphics {
     }
 
     drawImage(imageUrl: ImageUrl, p1: Point, p2: Point) {
-        let image = new Image();
-        image.src = imageUrl;
-        this.c.drawImage(image, p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+        if (!this.imageHashMap.hasOwnProperty(imageUrl)) {
+            const image = new Image();
+            image.src = imageUrl;
+            this.imageHashMap[imageUrl] = image;
+        }
+        const boundingBox = createBoundingBox(p1, p2);
+
+        const point1 = {
+            x: boundingBox.lowerLeftPoint.x,
+            y: boundingBox.upperRightPoint.y
+        }
+        const point2 = {
+            x: boundingBox.upperRightPoint.x,
+            y: boundingBox.lowerLeftPoint.y
+        }
+        const canvasPoint1 = this.getCanvasCoordinates(point1);
+        const canvasPoint2 = this.getCanvasCoordinates(point2);
+
+        this.c.drawImage(this.imageHashMap[imageUrl], canvasPoint1.x, canvasPoint1.y, canvasPoint2.x-canvasPoint1.x, canvasPoint2.y-canvasPoint1.y);
     }
 }
