@@ -1,6 +1,7 @@
 import { ShapeType } from '../../../shared/Shape';
 import { UnconnectedCanvas } from './Canvas';
 import { EllipseRenderer } from './renderers/EllipseRenderer';
+import { ImageRenderer } from './renderers/ImageRenderer';
 import { PencilRenderer } from './renderers/PencilRenderer';
 import { RectangleRenderer } from './renderers/RectangleRenderer';
 import { Renderer } from './renderers/Renderer';
@@ -11,6 +12,7 @@ export class CanvasRenderer {
         ellipse: new EllipseRenderer(),
         pencil: new PencilRenderer(),
         rectangle: new RectangleRenderer(),
+        image: new ImageRenderer(),
     };
 
     constructor(private canvas: UnconnectedCanvas) {}

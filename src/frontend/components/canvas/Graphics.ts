@@ -7,6 +7,8 @@ import { Point } from '../../../shared/Point';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
 
+export type Base64Encoded = string;
+
 export class Graphics {
     /**
      * Screen bounding box
@@ -171,5 +173,11 @@ export class Graphics {
         this.c.moveTo(canvasPoint1.x, canvasPoint1.y);
         this.c.lineTo(canvasPoint2.x, canvasPoint2.y);
         this.c.stroke();
+    }
+
+    drawImage(image_encoded: Base64Encoded, p1: Point, p2: Point) {
+        let image = new Image();
+        image.src = `data:image/png;base64,${image_encoded}`;
+        this.c.drawImage(image, p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
     }
 }

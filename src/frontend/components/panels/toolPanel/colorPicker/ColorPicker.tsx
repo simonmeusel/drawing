@@ -28,10 +28,8 @@ export interface ColorPickerState {
     selectedTab: Tab;
 }
 
-export class UnconnectedColorPicker extends React.Component<
-    ColorPickerProps,
-    ColorPickerState
-> {
+export class UnconnectedColorPicker extends React.Component<ColorPickerProps,
+    ColorPickerState> {
     state = { selectedTab: 'stroke' } as ColorPickerState;
 
     onColorChange(colorResult: ColorResult) {
@@ -41,7 +39,7 @@ export class UnconnectedColorPicker extends React.Component<
         this.props.dispatch(
             setToolProperties({
                 [this.state.selectedTab + 'Color']: color,
-            })
+            }),
         );
     }
 
@@ -76,19 +74,19 @@ export class UnconnectedColorPicker extends React.Component<
             >
                 <a>
                     <span
-                        className="icon app-color-picker-icon"
+                        className='icon app-color-picker-icon'
                         style={{
                             backgroundColor: this.getColor(t.tab),
                         }}
-                    ></span>
+                    />
                     {t.name}
                 </a>
             </li>
         ));
 
         return (
-            <div className="app-color-picker">
-                <div className="tabs is-boxed">
+            <div className='app-color-picker'>
+                <div className='tabs is-boxed'>
                     <ul>{tabElements}</ul>
                 </div>
 

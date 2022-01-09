@@ -20,6 +20,7 @@ import { SetRoomIDAction, SET_ROOM_ID } from './actions/rooms/setRoomID';
 import { MoveScreenAction, MOVE_SCREEN } from './actions/screen/moveScreen';
 import { SetScreenAction, SET_SCREEN } from './actions/screen/setScreen';
 import { ZoomScreenAction, ZOOM_SCREEN } from './actions/screen/zoomScreen';
+import { SetImportedImagePathAction, SET_IMPORTED_IMAGE_PATH } from './actions/setImportedImagePath';
 import {
     SetMousePositionAction,
     SET_MOUSE_POSITION,
@@ -44,6 +45,7 @@ import { reduceSetRoomID } from './reducers/rooms/setRoomID';
 import { reduceMoveScreen } from './reducers/screen/moveScreen';
 import { reduceSetScreen } from './reducers/screen/setScreen';
 import { reduceZoomScreen } from './reducers/screen/zoomScreen';
+import { reduceSetImportedImagePath } from './reducers/setImportedImagePath';
 import { reduceSetMousePosition } from './reducers/setMousePosition';
 import { reduceSetSelectedTool } from './reducers/setSelectedTool';
 import { reduceSetToolProperties } from './reducers/setToolProperties';
@@ -69,7 +71,8 @@ export type RootAction =
     | UndoAction
     | RedoAction
     | ShiftToRedoHistory
-    | SwapHistoriesAction;
+    | SwapHistoriesAction
+    | SetImportedImagePathAction;
 
 export type RootDispatch = Dispatch<RootAction>;
 
@@ -92,7 +95,8 @@ export const reducer = createReducer<RootState, RootAction>(getInitialState())
     .handleType(ZOOM_SCREEN, reduceZoomScreen)
     .handleType(SET_MOUSE_POSITION, reduceSetMousePosition)
     .handleType(SHIFT_TO_REDO_HISTORY, reduceShiftToRedoHistory)
-    .handleType(SWAP_HISTORIES, reduceSwapHistories);
+    .handleType(SWAP_HISTORIES, reduceSwapHistories)
+    .handleType(SET_IMPORTED_IMAGE_PATH, reduceSetImportedImagePath);
 
 export function createPersistentStore(webSocketManager: WebSocketManager) {
     const sagaMiddleware = createSagaMiddleware();

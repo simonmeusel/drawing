@@ -53,7 +53,10 @@ export interface RootState {
         };
     };
     screen: Screen;
+    importedImagePath: string;
 }
+
+export const importedImagePath = "/kekw.png";
 
 export const initialScreen: Screen = {
     centerPoint: { x: 0, y: 0 },
@@ -84,5 +87,6 @@ export function getInitialState() {
         mousePositions: {},
         document: initialDocument,
         screen: initialScreen,
+        importedImagePath: importedImagePath,
     });
 }
