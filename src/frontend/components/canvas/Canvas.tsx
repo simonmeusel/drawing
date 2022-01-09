@@ -61,7 +61,7 @@ export class UnconnectedCanvas extends React.Component<ReturnType<typeof mapStat
                 new BasicShapeTool(this.props.dispatch, graphics, 'rectangle'),
                 new BasicShapeTool(this.props.dispatch, graphics, 'ellipse'),
                 new PencilShapeTool(this.props.dispatch, graphics),
-                new DrawImageTool(this.props.dispatch, graphics, "/imported_image.png"),
+                new DrawImageTool(this.props.dispatch, graphics),
                 new ExportImageTool(this.props.dispatch, graphics),
             ],
         });

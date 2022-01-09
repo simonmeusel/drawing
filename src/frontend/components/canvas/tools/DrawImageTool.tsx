@@ -1,52 +1,38 @@
-import { BoundingBox, createBoundingBox } from '../../../../shared/BoundingBox';
+import { addPointToBoundingBox } from '../../../../shared/BoundingBox';
 import { Point } from '../../../../shared/Point';
-import { RootDispatch } from '../../../store';
-import { Graphics } from '../Graphics';
-import { Tool, ToolMoveEvent, ToolProperties } from './Tool';
+import { ImageShape } from '../../../../shared/shapes/ImageShape';
+import { UUID } from '../../../../shared/UUID';
+import { ShapeTool } from './ShapeTool';
+import { ToolProperties } from './Tool';
 
 /**
  * When one clicks on the tool you get the image Path into the tool
  * */
-export class DrawImageTool extends Tool {
-    constructor(
-        dispatch: RootDispatch,
-        graphics: Graphics,
-        private importedImagePath: string,
-    ) {
-        super(dispatch, graphics);
+export class DrawImageTool extends ShapeTool<ImageShape> {
+    protected createShape(point: Point, toolProperties: ToolProperties) {
+        const shape: ImageShape = {
+            id: UUID.generateString(),
+            type: 'image',
+            boundingBox: {
+                lowerLeftPoint: point,
+                upperRightPoint: point,
+            },
+            data: {
+                imageURL: toolProperties.imageUrl,
+            },
+        };
+        return shape;
     }
 
-    private startX?: number;
-    private startY?: number;
-    private imageImportStarted?: boolean;
-
-    onMouseDown(
-        _point: Point,
-        _toolProperties: ToolProperties,
-        event: ToolMoveEvent
+    protected updateShape(
+        activeShape: ImageShape,
+        point: Point,
+        _toolProperties: ToolProperties
     ) {
-        this.startX = event.clientX;
-        this.startY = event.clientY;
-        this.imageImportStarted = true;
-    }
-
-    onMouseMove(
-        _point: Point,
-        _toolProperties: ToolProperties,
-        event: ToolMoveEvent
-    ) {
-        if (this.startX == undefined || this.startY == undefined || !this.imageImportStarted) {
-            return;
-        }
-        // TODO update image shape
-        // @ts-ignore
-        let _imageBoundingBox: BoundingBox = createBoundingBox({x: this.startX, y: this.startY}, {x: event.clientX, y: event.clientY});
-        console.log(this.importedImagePath);
-    }
-
-    onMouseUp() {
-        // TODO draw picture on canvas
-        this.startX = undefined;
-        this.startY = undefined;
+        return {
+            ...activeShape,
+            boundingBox: addPointToBoundingBox(activeShape.boundingBox, point),
+            ...activeShape.data,
+        };
     }
 }

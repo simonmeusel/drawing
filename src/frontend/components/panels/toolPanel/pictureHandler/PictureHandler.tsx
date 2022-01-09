@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { DispatchProps, RootState } from '../../../../store';
-import { setImportedImagePath } from '../../../../store/actions/setImportedImagePath';
 import { setSelectedTool } from '../../../../store/actions/setSelectedTool';
-import "./PictureHandler.scss"
+import { setToolProperties } from '../../../../store/actions/setToolProperties';
+import './PictureHandler.scss';
 
 export class UnconnectedPictureHandler extends React.Component<
     ReturnType<typeof mapStateToProps> & DispatchProps,
     {}
 > {
+    state = {imageUrl: this.props.imageUrl};
+
     render() {
-        const inputRef = React.createRef<HTMLInputElement>();
         const picture_tools = [
             { value: 5, name: 'Export drawing' },
             { value: 6, name: 'Draw picture' },
@@ -18,25 +19,22 @@ export class UnconnectedPictureHandler extends React.Component<
 
         const uploadImageElement = (
             <>
-                <input id="input-file" ref={inputRef} className="file-input" type="file" />
-                <button onClick={event => this.clickInputField(event, inputRef)} className="input-button">
-                    Import picture here
-                </button>
+                <input value={this.state.imageUrl} className="text-input" type="text" onChange={event => this.changeInput(event)} />
             </>
         );
 
-        const buttonElements = picture_tools.map(picture_tool => (
+        const buttonElements = picture_tools.map(pictureTools => (
             <button
                 className={
                     'button is-link' +
-                    (this.props.selectedPictureTool == picture_tool.value
+                    (this.props.selectedTool == pictureTools.value
                         ? ''
                         : ' is-outlined')
                 }
-                key={picture_tool.value.toString()}
-                onClick={() => this.onClick(picture_tool.value)}
+                key={pictureTools.value.toString()}
+                onClick={() => this.onClick(pictureTools.value)}
             >
-                {picture_tool.name}
+                {pictureTools.name}
             </button>
         ));
         return (
@@ -51,18 +49,24 @@ export class UnconnectedPictureHandler extends React.Component<
         this.props.dispatch(setSelectedTool(toolNumber));
     }
 
-    handleUpload(_event: MouseEvent) {
-        this.props.dispatch(setImportedImagePath("imagePath"))
-    }
-
-    clickInputField(_event: React.MouseEvent<HTMLButtonElement>, inputRef: React.RefObject<HTMLInputElement>) {
-        console.log("clicking element");
-        inputRef.current?.click();
+    changeInput(event: React.ChangeEvent<HTMLInputElement>) {
+        const inputFieldValue: string = event.target.value;
+        this.setState({
+            imageUrl: inputFieldValue,
+        })
+        this.props.dispatch(
+            setToolProperties({
+                ['imageUrl']: inputFieldValue,
+            }),
+        );
     }
 }
 
 function mapStateToProps(state: RootState) {
-    return { selectedPictureTool: state.selectedTool };
+    return {
+        selectedTool: state.selectedTool,
+        imageUrl: state.toolProperties.imageUrl
+    };
 }
 
 export const PictureHandler = connect(mapStateToProps)(UnconnectedPictureHandler);

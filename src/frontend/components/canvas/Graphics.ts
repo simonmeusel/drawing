@@ -6,8 +6,7 @@ import {
 import { Point } from '../../../shared/Point';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
-
-export type Base64Encoded = string;
+import { ImageUrl } from './tools/Tool';
 
 export class Graphics {
     /**
@@ -29,6 +28,10 @@ export class Graphics {
     ) {
         this.canvas = c.canvas;
         this.setScreen(initialScreen);
+    }
+
+    public getPartialImage(_boundingBox: BoundingBox) {
+        // TODO get screenshot
     }
 
     public getWidth() {
@@ -175,9 +178,9 @@ export class Graphics {
         this.c.stroke();
     }
 
-    drawImage(image_encoded: Base64Encoded, p1: Point, p2: Point) {
+    drawImage(imageUrl: ImageUrl, p1: Point, p2: Point) {
         let image = new Image();
-        image.src = `data:image/png;base64,${image_encoded}`;
-        this.c.drawImage(image, p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
+        image.src = imageUrl;
+        this.c.drawImage(image, p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
     }
 }

@@ -32,7 +32,14 @@ export class CanvasRenderer {
         this.canvas.state.graphics.clear();
 
         for (const shape of Object.values(this.canvas.props.shapes)) {
-            this.renderers[shape.type].draw(this.canvas.state.graphics, shape);
+            try {
+                this.renderers[shape.type].draw(
+                    this.canvas.state.graphics,
+                    shape
+                );
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         this.renderMousePositions();

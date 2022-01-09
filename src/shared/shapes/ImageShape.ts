@@ -1,11 +1,10 @@
-import { Base64Encoded } from '../../frontend/components/canvas/Graphics';
-import { BoundingBox } from '../BoundingBox';
 import { GenericShape } from '../Shape';
+
+export type Base64Encoded = string;
 
 export interface ImageShape extends GenericShape {
     type: 'image';
     data: {
-        image_base64_encoded: Base64Encoded;
-        bounding_box: BoundingBox;
+        imageURL: Base64Encoded;
     };
 }

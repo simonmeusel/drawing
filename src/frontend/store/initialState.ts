@@ -56,7 +56,7 @@ export interface RootState {
     importedImagePath: string;
 }
 
-export const importedImagePath = "/kekw.png";
+export const importedImagePath = '/kekw.png';
 
 export const initialScreen: Screen = {
     centerPoint: { x: 0, y: 0 },
@@ -79,6 +79,7 @@ export function getInitialState() {
         toolProperties: {
             fillColor: '#cc0044ff',
             strokeColor: '#000000ff',
+            imageUrl: 'no image',
         },
         selectedTool: 2,
         roomID: generateRoomID(),

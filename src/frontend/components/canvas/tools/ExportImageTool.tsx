@@ -1,4 +1,4 @@
-import { BoundingBox, createBoundingBox } from '../../../../shared/BoundingBox';
+import { addPointToBoundingBox, BoundingBox, createBoundingBox } from '../../../../shared/BoundingBox';
 import { Point } from '../../../../shared/Point';
 import { Tool, ToolMoveEvent, ToolProperties } from './Tool';
 
@@ -7,40 +7,41 @@ import { Tool, ToolMoveEvent, ToolProperties } from './Tool';
  * and we do not store the drawn image shape to the redux store
  * */
 export class ExportImageTool extends Tool {
-    private startX?: number;
-    private startY?: number;
+    private imageBoundingBox?: BoundingBox;
+
     private imageExportStarted?: boolean;
 
     onMouseDown(
-        _point: Point,
+        point: Point,
         _toolProperties: ToolProperties,
-        event: ToolMoveEvent
+        _event: ToolMoveEvent
     ) {
-        if (this.imageExportStarted) {
+        if (this.imageExportStarted !== undefined) {
             return;
         }
-        this.startX = event.clientX;
-        this.startY = event.clientY;
+        this.imageBoundingBox = createBoundingBox(point, point);
         this.imageExportStarted = true;
     }
 
     onMouseMove(
-        _point: Point,
+        point: Point,
         _toolProperties: ToolProperties,
-        event: ToolMoveEvent
+        _event: ToolMoveEvent
     ) {
-        if (this.startX == undefined || this.startY == undefined || !this.imageExportStarted) {
+        if (this.imageBoundingBox === undefined || !this.imageExportStarted) {
             return;
         }
         // TODO draw a rectangle here with the corresponding bounding box.
-        // @ts-ignore
-        let _imageBoundingBox: BoundingBox = createBoundingBox({x: this.startX, y: this.startY}, {x: event.clientX, y: event.clientY});
-
+        this.imageBoundingBox = addPointToBoundingBox(this.imageBoundingBox, point);
     }
 
     onMouseUp() {
-        // TODO save image to clipboard or something
-        this.startX = undefined;
-        this.startY = undefined;
+        if (!this.imageBoundingBox) {
+            return;
+        }
+        this.graphics.getPartialImage(this.imageBoundingBox!);
+        // make everything undefined
+        this.imageBoundingBox = undefined;
+        this.imageExportStarted = false;
     }
 }
