@@ -114,7 +114,6 @@ export class UnconnectedCanvas extends React.Component<ReturnType<typeof mapStat
         event: React.MouseEvent,
         button: number = this.state.currentToolIndex!,
     ) {
-        console.log(this.state.tools);
         event.preventDefault();
         this.state.tools![this.props.activeToolIndices[button]][type](
             this.state.graphics!.getPoint(event.clientX, event.clientY),
