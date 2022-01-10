@@ -13,8 +13,8 @@ export class UnconnectedPictureHandler extends React.Component<
 
     render() {
         const picture_tools = [
-            { value: 5, name: 'Export drawing' },
-            { value: 6, name: 'Draw picture' },
+            { value: 4, name: 'Export drawing' },
+            { value: 5, name: 'Draw picture' },
         ];
 
         const uploadImageElement = (
