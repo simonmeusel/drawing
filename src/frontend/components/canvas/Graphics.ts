@@ -4,9 +4,9 @@ import {
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
+import { ImageUrl } from '../../../shared/shapes/ImageShape';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
-import { ImageUrl } from './tools/Tool';
 
 export interface ImageHashMap {
     [imageUrl: string] : HTMLImageElement

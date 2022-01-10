@@ -1,8 +1,7 @@
 import { Point } from '../../../../shared/Point';
+import { ImageUrl } from '../../../../shared/shapes/ImageShape';
 import { RootDispatch } from '../../../store';
 import { Graphics } from '../Graphics';
-
-export type ImageUrl = string; // maybe type validation with regex
 
 export interface ToolProperties {
     strokeColor: string;
