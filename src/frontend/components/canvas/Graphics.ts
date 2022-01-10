@@ -3,10 +3,10 @@ import {
     createBoundingBox,
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
-import { ImageUrl } from '../../../shared/ImageUrl';
 import { Point } from '../../../shared/Point';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
+import { ImageUrl } from './tools/Tool';
 
 export class Graphics {
     /**
