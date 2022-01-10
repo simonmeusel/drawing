@@ -1,9 +1,10 @@
-import { ImageUrl } from '../ImageUrl';
 import { GenericShape } from '../Shape';
+
+export type Base64Encoded = string;
 
 export interface ImageShape extends GenericShape {
     type: 'image';
     data: {
-        imageURL: ImageUrl;
+        imageURL: Base64Encoded;
     };
 }
