@@ -1,11 +1,12 @@
+import { Color } from '../../../../shared/Color';
 import { Point } from '../../../../shared/Point';
 import { ImageUrl } from '../../../../shared/shapes/ImageShape';
 import { RootDispatch } from '../../../store';
 import { Graphics } from '../Graphics';
 
 export interface ToolProperties {
-    strokeColor: string;
-    fillColor: string;
+    strokeColor: Color;
+    fillColor: Color;
     imageUrl: ImageUrl;
 }
 
