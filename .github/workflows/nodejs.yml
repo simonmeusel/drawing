@@ -33,4 +33,4 @@ jobs:
                   git config --global user.email "ci@simonmeusel.de"
                   git config --global user.name "CI"
                   git commit -m"Automatic build"
-                  git push origin gh-pages
+                  git push origin gh-pages --force
