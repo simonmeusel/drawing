@@ -31,8 +31,7 @@ This project is written in [TypeScript](https://www.typescriptlang.org/) and bui
 -   Run `docker-compose up --build` inside the repository folder to start MongoDB and the application
 -   Visit the website at [http://localhost:8080](http://localhost:8080)
 
-To reduce complexity, this application does not support HTTPS out of the box. When deploying this application, you should use a reverse proxy (for example [jwilder/nginx-proxy
-](https://github.com/jwilder/nginx-proxy)) to manage certificates, cipher configuration and additional security measures.
+To reduce complexity, this application does not support HTTPs out of the box. When deploying this application, you should use a reverse proxy to manage certificates, cipher configuration and additional security measures.
 
 ## Development
 
