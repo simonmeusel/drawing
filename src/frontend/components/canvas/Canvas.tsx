@@ -8,6 +8,8 @@ import { setMousePosition } from '../../store/actions/setMousePosition';
 import { CanvasRenderer } from './CanvasRenderer';
 import { Graphics } from './Graphics';
 import { BasicShapeTool } from './tools/BasicShapeTool';
+import { DrawImageTool } from './tools/DrawImageTool';
+import { ExportImageTool } from './tools/ExportImageTool';
 import { MoveTool } from './tools/MoveTool';
 import { PencilShapeTool } from './tools/PencilShapeTool';
 import { Tool } from './tools/Tool';
@@ -26,10 +28,8 @@ interface CanvasState {
     tools?: Tool[];
 }
 
-export class UnconnectedCanvas extends React.Component<
-    ReturnType<typeof mapStateToProps> & CanvasProps & DispatchProps,
-    CanvasState
-> {
+export class UnconnectedCanvas extends React.Component<ReturnType<typeof mapStateToProps> & CanvasProps & DispatchProps,
+    CanvasState> {
     state: CanvasState = {};
     private canvasRef = React.createRef<HTMLCanvasElement>();
 
@@ -42,7 +42,7 @@ export class UnconnectedCanvas extends React.Component<
         const graphics = new Graphics(
             canvasContext,
             this.props.screen,
-            this.props.webSocketManager
+            this.props.webSocketManager,
         );
 
         const keyDownHandler = this.onKeyDown.bind(this);
@@ -61,6 +61,8 @@ export class UnconnectedCanvas extends React.Component<
                 new BasicShapeTool(this.props.dispatch, graphics, 'rectangle'),
                 new BasicShapeTool(this.props.dispatch, graphics, 'ellipse'),
                 new PencilShapeTool(this.props.dispatch, graphics),
+                new ExportImageTool(this.props.dispatch, graphics),
+                new DrawImageTool(this.props.dispatch, graphics),
             ],
         });
     }
@@ -93,10 +95,10 @@ export class UnconnectedCanvas extends React.Component<
 
         const mousePosition = this.state.graphics!.getPoint(
             event.clientX,
-            event.clientY
+            event.clientY,
         );
         this.props.dispatch(
-            setMousePosition(this.props.mouseID, mousePosition)
+            setMousePosition(this.props.mouseID, mousePosition),
         );
     }
 
@@ -110,13 +112,13 @@ export class UnconnectedCanvas extends React.Component<
     onToolEvent(
         type: 'onMouseDown' | 'onMouseMove' | 'onMouseUp',
         event: React.MouseEvent,
-        button: number = this.state.currentToolIndex!
+        button: number = this.state.currentToolIndex!,
     ) {
         event.preventDefault();
         this.state.tools![this.props.activeToolIndices[button]][type](
             this.state.graphics!.getPoint(event.clientX, event.clientY),
             this.props.toolProperties,
-            event
+            event,
         );
     }
 
@@ -124,7 +126,7 @@ export class UnconnectedCanvas extends React.Component<
         const zoomFactor = Math.pow(1.01, event.deltaY);
         const anchorPoint = this.state.graphics!.getPoint(
             event.clientX,
-            event.clientY
+            event.clientY,
         );
         this.props.dispatch(zoomScreen(anchorPoint, zoomFactor));
     }
@@ -140,6 +142,7 @@ export class UnconnectedCanvas extends React.Component<
         const factor = 1 / 25;
         let x = 0;
         let y = 0;
+        // TODO refactor key code, because it is deprecated, https://developer.mozilla.org/en-US/docs/web/api/keyboardevent/keycode#browser_compatibility
         switch (event.keyCode) {
             case 37:
                 // Left arrow pressed
@@ -174,7 +177,7 @@ export class UnconnectedCanvas extends React.Component<
                 onMouseLeave={this.onMouseUp.bind(this)}
                 onWheel={this.onMouseWheel.bind(this)}
                 onContextMenu={(event) => event.preventDefault()}
-            ></canvas>
+            />
         );
     }
 }

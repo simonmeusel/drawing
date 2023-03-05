@@ -2,8 +2,7 @@
     position: absolute;
     width: 100vw;
     height: 100vh;
-    padding: 10px;
-    padding-bottom: 20px;
+    padding: 10px 10px 20px;
 
     .card {
         position: fixed;
@@ -11,7 +10,7 @@
     }
 
     .app-panel-collapsed-card-content {
-        height: 0px;
+        height: 0;
         padding: 0;
         overflow: hidden;
     }

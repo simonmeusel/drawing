@@ -5,13 +5,16 @@ import { Tool, ToolProperties } from './Tool';
 
 export abstract class ShapeTool<T extends Shape> extends Tool {
     private activeShape?: T;
+    private shapeVisibleToOthers?: boolean;
 
     public onMouseDown(point: Point, toolProperties: ToolProperties) {
         if (this.activeShape) {
             return;
         }
         this.activeShape = this.createShape(point, toolProperties);
-        this.dispatch(updateShape(this.activeShape!, false));
+        this.dispatch(
+            updateShape(this.activeShape!, false, this.shapeVisibleToOthers)
+        );
     }
 
     public onMouseMove(point: Point, toolProperties: ToolProperties) {
@@ -23,7 +26,9 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             point,
             toolProperties
         );
-        this.dispatch(updateShape(this.activeShape!, false));
+        this.dispatch(
+            updateShape(this.activeShape!, false, this.shapeVisibleToOthers)
+        );
     }
 
     public onMouseUp(point: Point, toolProperties: ToolProperties) {
@@ -31,7 +36,9 @@ export abstract class ShapeTool<T extends Shape> extends Tool {
             return;
         }
         this.onMouseMove(point, toolProperties);
-        this.dispatch(updateShape(this.activeShape!, true));
+        this.dispatch(
+            updateShape(this.activeShape!, true, this.shapeVisibleToOthers)
+        );
         this.activeShape = undefined;
     }
 

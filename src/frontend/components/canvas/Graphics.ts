@@ -4,8 +4,13 @@ import {
     doBoundingBoxesOverlap,
 } from '../../../shared/BoundingBox';
 import { Point } from '../../../shared/Point';
+import { ImageUrl } from '../../../shared/shapes/ImageShape';
 import { WebSocketManager } from '../../api/WebSocketManager';
 import { Screen } from '../../store/initialState';
+
+export interface ImageHashMap {
+    [imageUrl: string] : HTMLImageElement
+}
 
 export class Graphics {
     /**
@@ -20,6 +25,8 @@ export class Graphics {
     public canvasWidthMultiplier: number = 1;
     public canvasHeightMultiplier: number = 1;
 
+    private imageHashMap: ImageHashMap = {};
+
     constructor(
         private c: CanvasRenderingContext2D,
         initialScreen: Screen,
@@ -27,6 +34,10 @@ export class Graphics {
     ) {
         this.canvas = c.canvas;
         this.setScreen(initialScreen);
+    }
+
+    public getPartialImage(_boundingBox: BoundingBox) {
+        // TODO get screenshot
     }
 
     public getWidth() {
@@ -171,5 +182,27 @@ export class Graphics {
         this.c.moveTo(canvasPoint1.x, canvasPoint1.y);
         this.c.lineTo(canvasPoint2.x, canvasPoint2.y);
         this.c.stroke();
+    }
+
+    drawImage(imageUrl: ImageUrl, p1: Point, p2: Point) {
+        if (!this.imageHashMap.hasOwnProperty(imageUrl)) {
+            const image = new Image();
+            image.src = imageUrl;
+            this.imageHashMap[imageUrl] = image;
+        }
+        const boundingBox = createBoundingBox(p1, p2);
+
+        const point1 = {
+            x: boundingBox.lowerLeftPoint.x,
+            y: boundingBox.upperRightPoint.y
+        }
+        const point2 = {
+            x: boundingBox.upperRightPoint.x,
+            y: boundingBox.lowerLeftPoint.y
+        }
+        const canvasPoint1 = this.getCanvasCoordinates(point1);
+        const canvasPoint2 = this.getCanvasCoordinates(point2);
+
+        this.c.drawImage(this.imageHashMap[imageUrl], canvasPoint1.x, canvasPoint1.y, canvasPoint2.x-canvasPoint1.x, canvasPoint2.y-canvasPoint1.y);
     }
 }

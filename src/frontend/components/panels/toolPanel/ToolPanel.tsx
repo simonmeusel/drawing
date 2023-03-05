@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Panel } from '../Panel';
 import { ColorPicker } from './colorPicker/ColorPicker';
+import { PictureHandler } from './pictureHandler/PictureHandler';
 import { ToolChooser } from './toolChooser/ToolChooser';
 
 export class ToolPanel extends React.Component {
@@ -10,6 +11,8 @@ export class ToolPanel extends React.Component {
                 <ToolChooser />
                 <hr />
                 <ColorPicker />
+                <hr />
+                <PictureHandler />
             </Panel>
         );
     }
